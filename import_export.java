@@ -1,3 +1,6 @@
+import net.sf.json.JSONArray;
+import net.sf.json.JSONSerializer;
+import net.sf.json.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -7,6 +10,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 public class import_export {
     private final String fichiers_entree;
@@ -37,6 +44,30 @@ public class import_export {
         sortie.write( "{\n\"complet\":" + complet +"\n[\n{" + "]}");
         sortie.flush();
         sortie.close();
+    }
+
+    //Verification du format de la date respect le ISO 8601
+    private boolean verificationDate(int indice){
+        boolean valide = false;
+        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+        String date = activites.getJSONObject(indice).getString("date");
+        try{
+            LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
+            valide = true;
+        }catch (IllegalArgumentException erreur){
+            System.out.println("Une erreur est survenue lors du traitement de la date.");
+        }catch (DateTimeParseException erreur){
+            //retourne faux si la date n'est pas legale.
+        }
+        return valide;
+    }
+
+    private boolean cycleAccepter(){
+        boolean accepte = false;
+        if(jsonO.getString("cycle").equals("2020-2022")){
+            accepte = true;
+        }
+        return accepte;
     }
 
     public void recherche_erreur()
