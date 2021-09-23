@@ -3,10 +3,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 public class import_export {
     private final String fichiers_entree;
@@ -17,8 +19,10 @@ public class import_export {
     Number heure_supp;
     Number heure_minu = 0;
     String cycle;
-    String complet;
+    Boolean complet;
     JSONParser jsonP = new JSONParser();
+    JSONArray list1 = new JSONArray();
+    JSONObject obj = new JSONObject();
 
     public import_export(String entree, String sortie)
     {
@@ -34,17 +38,22 @@ public class import_export {
     public void exportation_erreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
-        sortie.write( "{\n\"complet\":" + complet +"\n[\n{" + "]}");
+
+        obj.put("Complet", complet);
+        obj.put("erreur", list1);
+
+        sortie.write(String.valueOf(obj));
         sortie.flush();
         sortie.close();
     }
 
     public void recherche_erreur()
     {
-        complet = " true, \n\"erreur\": ";
-        if (cycle != "2020-2022")
+        complet =  true;
+        if (cycle == "2020-2022")
         {
-            complet = " false, \n\"erreur\": ";
+            complet = false;
+            list1.add("Le cycle " + cycle + " n'est pas supporté. Il serra donc ignoré");
         }
 
         if(heure_minu == heure_supp)
@@ -53,9 +62,10 @@ public class import_export {
         }
 
 
+
     }
 
-    public void to_string()
+    /*public void to_string()
     {
         cycle = (String) jsonO.get("cycle");
         heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
@@ -76,5 +86,8 @@ public class import_export {
             System.out.println("Date : " + activies.get("date"));
 
     }
-}
+
+}*/
+
+
 }
