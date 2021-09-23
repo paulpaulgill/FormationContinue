@@ -1,8 +1,6 @@
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -60,6 +58,17 @@ public class import_export {
             //retourne faux si la date n'est pas legale.
         }
         return valide;
+    }
+
+    private int VerificationHeureTrf(){
+        int nbHeureTrf = 0;
+        if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
+            nbHeureTrf = 7;
+            //AJOUTER PARTIE POUR MSG ERREUR SUR DOCUMENT JSON
+        }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0 ){
+            nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
+        }
+        return nbHeureTrf;
     }
 
     private boolean cycleAccepter(){
