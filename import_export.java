@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 
+import java.util.ArrayList;
+
 public class import_export {
     private final String fichiers_entree;
     private final String fichiers_sortie;
@@ -22,9 +24,26 @@ public class import_export {
     Number heure_minu = 0;
     String cycle;
     Boolean complet;
+    String numero_de_permis;
+    boolean message = false;
     JSONParser jsonP = new JSONParser();
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
+    ArrayList<String> categories = new ArrayList<String>();
+
+    public void Categories()
+    {
+        categories.add("cours");
+        categories.add("atelier");
+        categories.add("séminaire");
+        categories.add("collogue");
+        categories.add("conférence");
+        categories.add("lecture dirigéé");
+        categories.add("présentation");
+        categories.add("groupe de discussion");
+        categories.add("projet de recherche");
+        categories.add("rédaction professionnelle");
+    }
 
     public import_export(String entree, String sortie)
     {
@@ -32,25 +51,25 @@ public class import_export {
         this.fichiers_sortie = sortie;
     }
 
-    public void chargement() throws IOException,ParseException
+    public void chargement() throws IOException, ParseException
     {
-        jsonO = (JSONObject)jsonP.parse(new FileReader(fichiers_entree));
+        jsonO = (JSONObject.fromObject(jsonP.parse(new FileReader(fichiers_entree))));
+
     }
 
     public void exportation_erreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
-
         obj.put("Complet", complet);
         obj.put("erreur", list1);
-
         sortie.write(String.valueOf(obj));
         sortie.flush();
         sortie.close();
+
     }
 
     //Verification du format de la date respect le ISO 8601
-    private boolean verificationDate(int indice){
+    public boolean verificationDate(int indice){
         boolean valide = false;
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         String date = activites.getJSONObject(indice).getString("date");
@@ -63,9 +82,10 @@ public class import_export {
             //retourne faux si la date n'est pas legale.
         }
         return valide;
+
     }
 
-    private int VerificationHeureTrf(){
+    public int VerificationHeureTrf(){
         int nbHeureTrf = 0;
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
@@ -74,47 +94,75 @@ public class import_export {
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
         }
         return nbHeureTrf;
+
     }
 
-    private boolean cycleAccepter(){
+    /*private boolean cycleAccepter(){
         boolean accepte = false;
         if(jsonO.getString("cycle").equals("2020-2022")){
             accepte = true;
         }
         return accepte;
-    }
+    }*/
 
-    public void recherche_erreur()
-    {
-        complet =  true;
-        if (cycle == "2020-2022")
-        {
-            complet = false;
-            list1.add("Le cycle " + cycle + " n'est pas supporté. Il serra donc ignoré");
+    public void verif_cycle() {
+        complet = true ;
+        if (!"2020-2022".equals(cycle)) {
+            if (message == false) {
+                list1.add(" false, \n\"erreur\": [\n \"Le cycle " + cycle + " n'est pas supporté\"");
+                complet = false;
+                message = true;
+            } else if (message == true) {
+                list1.add(",\n\"Le cycle " + cycle + " n'est pas supporté\"");
+                complet = false;
+            }
+
         }
 
-        if(heure_minu == heure_supp)
-        {
+    }
 
+    public void categories_reconnues(){
+        boolean comparaison = false;
+        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+        for (Object arrayObj : activites) {
+            comparaison = false;
+            JSONObject activites_categories = (JSONObject) arrayObj;
+            for (int i = 0 ; i < categories.size(); i++) {
+                for (int j = 0; j < activites.size(); j++) {
+                    if (categories.get(i).equals(activites_categories.get("categorie"))) {
+                        comparaison = true;
+                    } else ;
+                }
+            }
+            if (comparaison == false){
+                complet = false;
+                if(message == false)
+                {
+                    list1.add(" false, \n\"erreur\": [\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
+                            " catégorie non reconnue. Elle sera ignorée.\"");
+
+                } else if (message == true){
+                    list1.add(",\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
+                            " catégorie non reconnue. Elle sera ignorée.\"");
+                }
+
+            }
         }
-
-
 
     }
 
-    /*public void to_string()
+    public void to_string()
     {
         cycle = (String) jsonO.get("cycle");
         heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
-        String numero_de_permis = (String) jsonO.get("numero_de_permis");
-
+        numero_de_permis = (String) jsonO.get("numero_de_permis");
 
         System.out.println("Numero_de_permis : "+ numero_de_permis);
         System.out.println("Cycle : "+ cycle);
         System.out.println("Heures_transferees_du_cycle_precedent : " + heure_supp);
 
-        JSONArray tableau_activities = (JSONArray) jsonO.get("activites");
-        for (Object arrayObj : tableau_activities) {
+       JSONArray tableau_activites = (JSONArray) jsonO.get("activites");
+        for (Object arrayObj : tableau_activites) {
             JSONObject activies = (JSONObject) arrayObj;
             System.out.println("===========================");
             System.out.println("Description : " + activies.get("description"));
@@ -122,9 +170,6 @@ public class import_export {
             System.out.println("Heures : " + activies.get("heures") );
             System.out.println("Date : " + activies.get("date"));
 
+        }
     }
-
-}*/
-
-
 }
