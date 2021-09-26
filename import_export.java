@@ -69,7 +69,7 @@ public class import_export {
     }
 
     //Verification du format de la date respect le ISO 8601
-    public boolean verificationDate(int indice){
+    public boolean VerificationDate(int indice){
         boolean valide = false;
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         String date = activites.getJSONObject(indice).getString("date");
@@ -105,8 +105,7 @@ public class import_export {
         return accepte;
     }*/
 
-    public void verif_cycle() {
-        complet = true ;
+    public void VerificationCycle() {
         if (!"2020-2022".equals(cycle)) {
             if (message == false) {
                 list1.add(" false, \n\"erreur\": [\n \"Le cycle " + cycle + " n'est pas supporté\"");
@@ -121,11 +120,10 @@ public class import_export {
 
     }
 
-    public void categories_reconnues(){
-        boolean comparaison = false;
+    public void CategoriesReconnues(){
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         for (Object arrayObj : activites) {
-            comparaison = false;
+            boolean comparaison = false;
             JSONObject activites_categories = (JSONObject) arrayObj;
             for (int i = 0 ; i < categories.size(); i++) {
                 for (int j = 0; j < activites.size(); j++) {
@@ -140,6 +138,7 @@ public class import_export {
                 {
                     list1.add(" false, \n\"erreur\": [\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
                             " catégorie non reconnue. Elle sera ignorée.\"");
+                    message = true;
 
                 } else if (message == true){
                     list1.add(",\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
@@ -151,7 +150,29 @@ public class import_export {
 
     }
 
-    public void to_string()
+    public void Verification40Heures() {
+        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+        int sommeheures = 0;
+        sommeheures = jsonO.getInt("heures_transferees_du_cycle_precedent");
+        for(int i = 0 ; i < activites.size(); i++){
+            int heures = activites.getJSONObject(i).getInt("heures");
+            sommeheures += heures;
+        }
+        System.out.println(sommeheures);
+        if (sommeheures < 40 && message == false){
+            list1.add(" false, \n\"erreur\": [\n \"Les 40 heures de formation durant un cycle n'ont pas été respectées\"");
+            complet = false;
+            message = true;
+        } else if (sommeheures < 40 && message == true){
+            list1.add(",\n\"Les 40 heures de formation durant un cycle n'ont pas été respectées\"");
+            complet = false;
+        }
+
+
+
+    }
+
+    public void to_String()
     {
         cycle = (String) jsonO.get("cycle");
         heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
@@ -173,3 +194,5 @@ public class import_export {
         }
     }
 }
+
+
