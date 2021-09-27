@@ -117,7 +117,7 @@ public class import_export {
 
     private void genererMsgErreur(String msgPremier, String msgDeux, String msgTrois){
         if (message == false) {
-            list1.add(" false, \n\"erreur\": [\n\" " +msgPremier + msgDeux + msgTrois +"\"");
+            list1.add("\n\" " +msgPremier + msgDeux + msgTrois +"\"");
             complet = false;
             message = true;
         } else if (message == true) {
@@ -191,7 +191,7 @@ public class import_export {
                 complet = false;
                 if(message == false)
                 {
-                    list1.add(" false, \n\"erreur\": [\n \"L'activité " + activites_categories.get("description") +" est dans une" +
+                    list1.add("\n \"L'activité " + activites_categories.get("description") +" est dans une" +
                             " catégorie non reconnue. Elle sera ignorée.\"");
                     message = true;
 
