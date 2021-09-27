@@ -24,13 +24,13 @@
     {
       "description": "Participation à un groupe de discussion sur le partage des projets architecturaux de plus de 20 ans",
       "categorie": "groupe de discussion",
-      "heures": 6,
+      "heures": 17,
       "date": "2021-04-01"
     },
     {
       "description": "Visite d'établissements architecturaux",
       "categorie": "voyage",
-      "heures": 2,
+      "heures": 0,
       "date": "2021-02-02"
     }
   ]

@@ -84,6 +84,50 @@ public class import_export {
 
     }
 
+    private int confirmerHeure(int heureMax, int compteur, JSONArray activites){
+        int heure = activites.getJSONObject(compteur).getInt("heures");
+        if(heure > heureMax){
+             heure =+ heureMax;
+        }else if(heure < 1) {
+            heure = 0;
+            genererMsgErreur("Le nombre d'heure minimum est de 1. ",
+                    "L'activite " + "\"" + activites.getJSONObject(compteur).getString("description") + "\"", "sera ignoree");
+        }
+        return heure;
+    }
+
+    public int ignorerHeureTrop(int i){
+        int heureMax;
+        int heures = 0;
+        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+            if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
+                    (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
+                heureMax = 23;
+                heures = confirmerHeure(heureMax, i, activites);
+            } else if ((activites.getJSONObject(i).getString("categorie").equals("groupe de discussion")) ||
+                    (activites.getJSONObject(i).getString("categorie").equals("rédaction professionnelle"))) {
+                heureMax = 17;
+                heures = confirmerHeure(heureMax, i, activites);
+            } else {
+                heures = confirmerHeure(1000, i, activites);
+            }
+
+        return heures;
+    }
+
+    private void genererMsgErreur(String msgPremier, String msgDeux, String msgTrois){
+        if (message == false) {
+            list1.add(" false, \n\"erreur\": [\n\" " +msgPremier + msgDeux + msgTrois +"\"");
+            complet = false;
+            message = true;
+        } else if (message == true) {
+            list1.add(",\n\" " +msgPremier  + msgDeux + msgTrois +"\"");
+            complet = false;
+        }
+    }
+
+
+
 
     //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
     public boolean verificationDate(int indice){
@@ -102,16 +146,18 @@ public class import_export {
 
     }
 
-    public int VerificationHeureTrf(){
+    private int VerificationHeureTrf(){
         int nbHeureTrf = 0;
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
-            //AJOUTER PARTIE POUR MSG ERREUR SUR DOCUMENT JSON
+            genererMsgErreur("Le nombre d'heures transferees ne peut etre superieur a",
+                    "7","heures. Seulement 7 seront considerees." );
+
         }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0 ){
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
+
         }
         return nbHeureTrf;
-
     }
 
     /*private boolean cycleAccepter(){
@@ -124,15 +170,7 @@ public class import_export {
 
     public void VerificationCycle() {
         if (!"2020-2022".equals(cycle)) {
-            if (message == false) {
-                list1.add(" false, \n\"erreur\": [\n \"Le cycle " + cycle + " n'est pas supporté\"");
-                complet = false;
-                message = true;
-            } else if (message == true) {
-                list1.add(",\n\"Le cycle " + cycle + " n'est pas supporté\"");
-                complet = false;
-            }
-
+            genererMsgErreur("Le cycle ","\"" + cycle+ "\"" , "n'est pas supporte");
         }
 
     }
@@ -153,12 +191,12 @@ public class import_export {
                 complet = false;
                 if(message == false)
                 {
-                    list1.add(" false, \n\"erreur\": [\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
+                    list1.add(" false, \n\"erreur\": [\n \"L'activité " + activites_categories.get("description") +" est dans une" +
                             " catégorie non reconnue. Elle sera ignorée.\"");
                     message = true;
 
                 } else if (message == true){
-                    list1.add(",\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
+                    list1.add(",\n \"L'activité " + activites_categories.get("description") +" est dans une" +
                             " catégorie non reconnue. Elle sera ignorée.\"");
                 }
 
@@ -170,10 +208,10 @@ public class import_export {
     public void verification40Heures() {
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         int sommeheures = 0;
-        sommeheures = jsonO.getInt("heures_transferees_du_cycle_precedent");
+        sommeheures = VerificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
-            int heures = activites.getJSONObject(i).getInt("heures");
-            sommeheures += heures;
+            int heures = ignorerHeureTrop(i);
+            sommeheures = sommeheures + heures;
         }
         System.out.println(sommeheures);
         if (sommeheures < 40 && message == false){

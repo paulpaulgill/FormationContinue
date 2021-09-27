@@ -7,6 +7,7 @@ public class main {
 
         System.out.println(deux.verificationDate(1));
 
+
         //deux.recherche_erreur();
         deux.to_String();
 
@@ -18,6 +19,7 @@ public class main {
 
 
         deux.exportation_erreur();
+
     }
 }
 
