@@ -4,6 +4,7 @@ import net.sf.json.*;
 import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.json.simple.JSONStreamAware;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,7 +13,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-
 import java.util.ArrayList;
 
 public class import_export {
@@ -24,7 +24,7 @@ public class import_export {
     Number heure_supp;
     Number heure_minu = 0;
     String cycle;
-    Boolean complet;
+    Boolean complet = false;
     String numero_de_permis;
     boolean message = false;
     JSONParser jsonP = new JSONParser();
@@ -78,10 +78,9 @@ public class import_export {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
         obj.put("Complet", complet);
         obj.put("erreur", list1);
-        sortie.write(String.valueOf(obj));
+        sortie.write(obj.toString(3));
         sortie.flush();
         sortie.close();
-
     }
 
     private int confirmerHeure(int heureMax, int compteur, JSONArray activites){
@@ -91,7 +90,7 @@ public class import_export {
         }else if(heure < 1) {
             heure = 0;
             genererMsgErreur("Le nombre d'heure minimum est de 1. ",
-                    "L'activite " + "\"" + activites.getJSONObject(compteur).getString("description") + "\"", "sera ignoree");
+                    "L'activite "  + activites.getJSONObject(compteur).getString("description"), " sera ignoree");
         }
         return heure;
     }
@@ -116,18 +115,8 @@ public class import_export {
     }
 
     private void genererMsgErreur(String msgPremier, String msgDeux, String msgTrois){
-        if (message == false) {
-            list1.add("\n\" " +msgPremier + msgDeux + msgTrois +"\"");
-            complet = false;
-            message = true;
-        } else if (message == true) {
-            list1.add(",\n\" " +msgPremier  + msgDeux + msgTrois +"\"");
-            complet = false;
-        }
+        list1.add(msgPremier + msgDeux + msgTrois );
     }
-
-
-
 
     //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
     public boolean verificationDate(int indice){
@@ -148,31 +137,21 @@ public class import_export {
 
     private int VerificationHeureTrf(){
         int nbHeureTrf = 0;
-        if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
+        if(jsonO.getInt("heures_transferees_du_cycle_precedent") >= 7){
             nbHeureTrf = 7;
-            genererMsgErreur("Le nombre d'heures transferees ne peut etre superieur a",
-                    "7","heures. Seulement 7 seront considerees." );
-
-        }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0 ){
+            genererMsgErreur("Le nombre d'heures transférées ne peut être supérieur à ",
+                    "7"," heures. Seulement 7 heures seront considérées." );
+        }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") < 7
+                && jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0){
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
-
         }
         return nbHeureTrf;
     }
 
-    /*private boolean cycleAccepter(){
-        boolean accepte = false;
-        if(jsonO.getString("cycle").equals("2020-2022")){
-            accepte = true;
-        }
-        return accepte;
-    }*/
-
     public void VerificationCycle() {
         if (!"2020-2022".equals(cycle)) {
-            genererMsgErreur("Le cycle ","\"" + cycle+ "\"" , "n'est pas supporte");
+            genererMsgErreur("Le cycle ","\"" + cycle+ "\"" , " n'est pas supporte");
         }
-
     }
 
     public void categoriesReconnues(){
@@ -188,43 +167,25 @@ public class import_export {
                 }
             }
             if (comparaison == false){
-                complet = false;
-                if(message == false)
-                {
-                    list1.add("\n \"L'activité " + activites_categories.get("description") +" est dans une" +
-                            " catégorie non reconnue. Elle sera ignorée.\"");
-                    message = true;
-
-                } else if (message == true){
-                    list1.add(",\n \"L'activité " + activites_categories.get("description") +" est dans une" +
-                            " catégorie non reconnue. Elle sera ignorée.\"");
-                }
-
+                genererMsgErreur("L'activité ", activites_categories.getString("description"),
+                        " est dans une catégorie non reconnue. Elle sera ignorée");
             }
         }
-
     }
 
     public void verification40Heures() {
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
-        int sommeheures = 0;
-        sommeheures = VerificationHeureTrf();
+        int sommeheures = VerificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
             int heures = ignorerHeureTrop(i);
             sommeheures = sommeheures + heures;
         }
-        System.out.println(sommeheures);
-        if (sommeheures < 40 && message == false){
-            list1.add(" false, \n\"erreur\": [\n \"Les 40 heures de formation durant un cycle n'ont pas été respectées\"");
+        System.out.println(sommeheures); //A retirer plus tard
+        if (sommeheures < 40){
+            genererMsgErreur("Il manque ", Math.abs(40 - sommeheures) + //nb heure negatif a voir
+                    " heures", " de formation pour compléter le cycle.");
             complet = false;
-            message = true;
-        } else if (sommeheures < 40 && message == true){
-            list1.add(",\n\"Les 40 heures de formation durant un cycle n'ont pas été respectées\"");
-            complet = false;
-        }
-
-
-
+        }else{complet = true;}
     }
 
 
@@ -232,11 +193,9 @@ public class import_export {
         cycle = (String) jsonO.get("cycle");
         heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
         numero_de_permis = (String) jsonO.get("numero_de_permis");
-
         System.out.println("Numero_de_permis : "+ numero_de_permis);
         System.out.println("Cycle : "+ cycle);
         System.out.println("Heures_transferees_du_cycle_precedent : " + heure_supp);
-
        JSONArray tableau_activites = (JSONArray) jsonO.get("activites");
         for (Object arrayObj : tableau_activites) {
             JSONObject activies = (JSONObject) arrayObj;
@@ -245,10 +204,8 @@ public class import_export {
             System.out.println("Categorie : " + activies.get("categorie"));
             System.out.println("Heures : " + activies.get("heures") );
             System.out.println("Date : " + activies.get("date"));
-
         }
     }
-
 }
 
 
