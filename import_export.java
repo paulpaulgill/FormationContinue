@@ -13,6 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 
+import java.util.ArrayList;
+
 public class import_export {
     private final String fichiers_entree;
     private final String fichiers_sortie;
@@ -23,9 +25,26 @@ public class import_export {
     Number heure_minu = 0;
     String cycle;
     Boolean complet;
+    String numero_de_permis;
+    boolean message = false;
     JSONParser jsonP = new JSONParser();
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
+    ArrayList<String> categories = new ArrayList<String>();
+
+    public void Categories()
+    {
+        categories.add("cours");
+        categories.add("atelier");
+        categories.add("séminaire");
+        categories.add("collogue");
+        categories.add("conférence");
+        categories.add("lecture dirigéé");
+        categories.add("présentation");
+        categories.add("groupe de discussion");
+        categories.add("projet de recherche");
+        categories.add("rédaction professionnelle");
+    }
 
     public import_export(String entree, String sortie)
     {
@@ -34,8 +53,9 @@ public class import_export {
     }
 
     /**public void chargement() throws IOException,ParseException
-    {
-        jsonO = (JSONObject)jsonP.parse(new FileReader(fichiers_entree));
+     {
+        jsonO = (JSONObject.fromObject(jsonP.parse(new FileReader(fichiers_entree))));
+
     }
     */
     public boolean chargement() throws IOException, FormationContinueException{
@@ -52,19 +72,20 @@ public class import_export {
         }
         return succes;
     }
+
     public void exportation_erreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
-
         obj.put("Complet", complet);
         obj.put("erreur", list1);
-
         sortie.write(String.valueOf(obj));
         sortie.flush();
         sortie.close();
+
     }
 
-    //Verification du format de la date respect le ISO 8601 (A mettre private ^^our utilisation par autre methode)
+
+    //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
     public boolean verificationDate(int indice){
         boolean valide = false;
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
@@ -78,9 +99,10 @@ public class import_export {
             //retourne faux si la date n'est pas legale.
         }
         return valide;
+
     }
 
-    private int VerificationHeureTrf(){
+    public int VerificationHeureTrf(){
         int nbHeureTrf = 0;
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
@@ -92,45 +114,93 @@ public class import_export {
 
     }
 
-    private boolean cycleAccepter(){
+    /*private boolean cycleAccepter(){
         boolean accepte = false;
         if(jsonO.getString("cycle").equals("2020-2022")){
             accepte = true;
         }
         return accepte;
+    }*/
+
+    public void VerificationCycle() {
+        if (!"2020-2022".equals(cycle)) {
+            if (message == false) {
+                list1.add(" false, \n\"erreur\": [\n \"Le cycle " + cycle + " n'est pas supporté\"");
+                complet = false;
+                message = true;
+            } else if (message == true) {
+                list1.add(",\n\"Le cycle " + cycle + " n'est pas supporté\"");
+                complet = false;
+            }
+
+        }
+
     }
 
-    public void recherche_erreur()
-    {
-        complet =  true;
-        if (cycle == "2020-2022")
-        {
+    public void categoriesReconnues(){
+        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+        for (Object arrayObj : activites) {
+            boolean comparaison = false;
+            JSONObject activites_categories = (JSONObject) arrayObj;
+            for (int i = 0 ; i < categories.size(); i++) {
+                for (int j = 0; j < activites.size(); j++) {
+                    if (categories.get(i).equals(activites_categories.get("categorie"))) {
+                        comparaison = true;
+                    } else ;
+                }
+            }
+            if (comparaison == false){
+                complet = false;
+                if(message == false)
+                {
+                    list1.add(" false, \n\"erreur\": [\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
+                            " catégorie non reconnue. Elle sera ignorée.\"");
+                    message = true;
+
+                } else if (message == true){
+                    list1.add(",\n \"L'activité " + activites_categories.get("categorie") +" est dans une" +
+                            " catégorie non reconnue. Elle sera ignorée.\"");
+                }
+
+            }
+        }
+
+    }
+
+    public void verification40Heures() {
+        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+        int sommeheures = 0;
+        sommeheures = jsonO.getInt("heures_transferees_du_cycle_precedent");
+        for(int i = 0 ; i < activites.size(); i++){
+            int heures = activites.getJSONObject(i).getInt("heures");
+            sommeheures += heures;
+        }
+        System.out.println(sommeheures);
+        if (sommeheures < 40 && message == false){
+            list1.add(" false, \n\"erreur\": [\n \"Les 40 heures de formation durant un cycle n'ont pas été respectées\"");
             complet = false;
-            list1.add("Le cycle " + cycle + " n'est pas supporté. Il serra donc ignoré");
-        }
-
-        if(heure_minu == heure_supp)
-        {
-
+            message = true;
+        } else if (sommeheures < 40 && message == true){
+            list1.add(",\n\"Les 40 heures de formation durant un cycle n'ont pas été respectées\"");
+            complet = false;
         }
 
 
 
     }
 
-    public void to_string()
-    {
+
+    public void to_String() {
         cycle = (String) jsonO.get("cycle");
         heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
-        String numero_de_permis = (String) jsonO.get("numero_de_permis");
-
+        numero_de_permis = (String) jsonO.get("numero_de_permis");
 
         System.out.println("Numero_de_permis : "+ numero_de_permis);
         System.out.println("Cycle : "+ cycle);
         System.out.println("Heures_transferees_du_cycle_precedent : " + heure_supp);
 
-        JSONArray tableau_activities = (JSONArray) jsonO.get("activites");
-        for (Object arrayObj : tableau_activities) {
+       JSONArray tableau_activites = (JSONArray) jsonO.get("activites");
+        for (Object arrayObj : tableau_activites) {
             JSONObject activies = (JSONObject) arrayObj;
             System.out.println("===========================");
             System.out.println("Description : " + activies.get("description"));
@@ -138,9 +208,9 @@ public class import_export {
             System.out.println("Heures : " + activies.get("heures") );
             System.out.println("Date : " + activies.get("date"));
 
+        }
     }
 
 }
 
 
-}
