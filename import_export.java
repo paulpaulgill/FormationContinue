@@ -1,6 +1,7 @@
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.*;
+import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
@@ -32,11 +33,25 @@ public class import_export {
         this.fichiers_sortie = sortie;
     }
 
-    public void chargement() throws IOException,ParseException
+    /**public void chargement() throws IOException,ParseException
     {
         jsonO = (JSONObject)jsonP.parse(new FileReader(fichiers_entree));
     }
-
+    */
+    public boolean chargement() throws IOException, FormationContinueException{
+        boolean succes;
+        try{
+            String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
+            JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
+            this.jsonO = jsonObject;
+            succes = true;
+        }catch(FileNotFoundException erreur){
+            throw new FormationContinueException("Le fichier d'entree n'existe pas");
+        }catch (IOException erreur){
+            throw new FormationContinueException("Une erreure innatendue est survenue");
+        }
+        return succes;
+    }
     public void exportation_erreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
@@ -49,8 +64,8 @@ public class import_export {
         sortie.close();
     }
 
-    //Verification du format de la date respect le ISO 8601
-    private boolean verificationDate(int indice){
+    //Verification du format de la date respect le ISO 8601 (A mettre private ^^our utilisation par autre methode)
+    public boolean verificationDate(int indice){
         boolean valide = false;
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         String date = activites.getJSONObject(indice).getString("date");
@@ -74,6 +89,7 @@ public class import_export {
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
         }
         return nbHeureTrf;
+
     }
 
     private boolean cycleAccepter(){
@@ -102,7 +118,7 @@ public class import_export {
 
     }
 
-    /*public void to_string()
+    public void to_string()
     {
         cycle = (String) jsonO.get("cycle");
         heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
@@ -124,7 +140,7 @@ public class import_export {
 
     }
 
-}*/
+}
 
 
 }
