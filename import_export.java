@@ -4,7 +4,6 @@ import net.sf.json.*;
 import org.apache.commons.io.IOUtils;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.json.simple.JSONStreamAware;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -76,7 +75,7 @@ public class import_export {
     public void exportation_erreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
-        obj.put("Complet", complet);
+        obj.put("complet", complet);
         obj.put("erreur", list1);
         sortie.write(obj.toString(3));
         sortie.flush();
@@ -86,7 +85,7 @@ public class import_export {
     private int confirmerHeure(int heureMax, int compteur, JSONArray activites){
         int heure = activites.getJSONObject(compteur).getInt("heures");
         if(heure > heureMax){
-             heure =+ heureMax;
+             heure = heureMax;
         }else if(heure < 1) {
             heure = 0;
             genererMsgErreur("Le nombre d'heure minimum est de 1. ",
@@ -132,28 +131,32 @@ public class import_export {
             //retourne faux si la date n'est pas legale.
         }
         return valide;
-
     }
 
     private int VerificationHeureTrf(){
         int nbHeureTrf = 0;
-        if(jsonO.getInt("heures_transferees_du_cycle_precedent") >= 7){
+        if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
             genererMsgErreur("Le nombre d'heures transférées ne peut être supérieur à ",
                     "7"," heures. Seulement 7 heures seront considérées." );
-        }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") < 7
+        }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") <= 7
                 && jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0){
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
         }
         return nbHeureTrf;
     }
 
-    public void VerificationCycle() {
-        if (!"2020-2022".equals(cycle)) {
-            genererMsgErreur("Le cycle ","\"" + cycle+ "\"" , " n'est pas supporte");
+    public boolean verificationCycle() {
+        boolean accepte = true;
+        if (!("2020-2022".equals(cycle))) {
+            genererMsgErreur("Le cycle ", cycle , " n'est pas supporté");
+            complet = false;
+            accepte = false;
         }
+        return accepte;
     }
 
+    /**
     public void categoriesReconnues(){
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         for (Object arrayObj : activites) {
@@ -163,7 +166,7 @@ public class import_export {
                 for (int j = 0; j < activites.size(); j++) {
                     if (categories.get(i).equals(activites_categories.get("categorie"))) {
                         comparaison = true;
-                    } else ;
+                    }
                 }
             }
             if (comparaison == false){
@@ -171,21 +174,38 @@ public class import_export {
                         " est dans une catégorie non reconnue. Elle sera ignorée");
             }
         }
+
+    }*/
+    private boolean estActiviteValide(JSONObject obj){
+        boolean comparaison = false;
+        for (int i = 0 ; i < categories.size(); i++) {
+            if (categories.get(i).equals(obj.get("categorie"))) {
+                comparaison = true;
+            }
+        }
+        if (comparaison == false){
+            genererMsgErreur("L'activité ", obj.getString("description"),
+                    " est dans une catégorie non reconnue. Elle sera ignorée");
+        }
+        return comparaison;
     }
+
 
     public void verification40Heures() {
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         int sommeheures = VerificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
-            int heures = ignorerHeureTrop(i);
-            sommeheures = sommeheures + heures;
+            if(estActiviteValide(activites.getJSONObject(i))){
+                int heures = ignorerHeureTrop(i);
+                sommeheures = sommeheures + heures;
+            }
         }
         System.out.println(sommeheures); //A retirer plus tard
         if (sommeheures < 40){
             genererMsgErreur("Il manque ", Math.abs(40 - sommeheures) + //nb heure negatif a voir
                     " heures", " de formation pour compléter le cycle.");
             complet = false;
-        }else{complet = true;}
+        }else if(verificationCycle() == true ){complet = true;}
     }
 
 

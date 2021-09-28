@@ -13,8 +13,8 @@ public class main {
 
 
         deux.Categories();
-        deux.VerificationCycle();
-        deux.categoriesReconnues();
+        //deux.verificationCycle();
+        //deux.categoriesReconnues();
         deux.verification40Heures();
 
 
