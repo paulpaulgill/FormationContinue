@@ -31,18 +31,10 @@ public class import_export {
     JSONObject obj = new JSONObject();
     ArrayList<String> categories = new ArrayList<String>();
 
-    public void Categories()
+     public void Categories()
     {
-        categories.add("cours");
-        categories.add("atelier");
-        categories.add("séminaire");
-        categories.add("collogue");
-        categories.add("conférence");
-        categories.add("lecture dirigéé");
-        categories.add("présentation");
-        categories.add("groupe de discussion");
-        categories.add("projet de recherche");
-        categories.add("rédaction professionnelle");
+        categories.addAll(Arrays.asList("cours", "atelier","séminaire","collogue","conférence"
+        ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
     }
 
     public import_export(String entree, String sortie)
