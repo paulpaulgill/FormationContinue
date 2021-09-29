@@ -1,4 +1,3 @@
-
 public class main {
     public static void main(String args[]) throws Exception {
 
@@ -9,7 +8,7 @@ public class main {
 
 
         //deux.recherche_erreur();
-        deux.to_String();
+        //deux.to_String();
 
 
         deux.Categories();
