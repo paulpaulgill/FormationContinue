@@ -3,22 +3,12 @@ public class main {
 
         import_export deux = new import_export("declaration.json", "resultat.json");
         deux.chargement();
-
-        System.out.println(deux.verificationDate(1));
-
-
-        //deux.recherche_erreur();
-        //deux.to_String();
-
-
+       // System.out.println(deux.verificationDate(1));
         deux.Categories();
         //deux.verificationCycle();
         //deux.categoriesReconnues();
         deux.verification40Heures();
-
-
         deux.exportation_erreur();
-
     }
 }
 
