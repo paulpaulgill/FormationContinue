@@ -2,8 +2,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.*;
 import org.apache.commons.io.IOUtils;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class import_export {
     private final String fichiers_entree;
