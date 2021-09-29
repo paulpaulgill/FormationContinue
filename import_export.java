@@ -194,7 +194,7 @@ public class import_export {
                 sommeheures = sommeheures + heures;
             }
         }
-        System.out.println(sommeheures); //A retirer plus tard
+        //System.out.println(sommeheures);
         if (sommeheures < 40){
             genererMsgErreur("Il manque ", Math.abs(40 - sommeheures) + //nb heure negatif a voir
                     " heures", " de formation pour compléter le cycle.");
