@@ -18,15 +18,8 @@ public class import_export {
     private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
-    private JSONObject erreur2;
-    private final String erreur = "{'erreur ': }";
-    Number heure_supp;
-    Number heure_minu = 0;
     String cycle;
     Boolean complet = false;
-    String numero_de_permis;
-    boolean message = false;
-    JSONParser jsonP = new JSONParser();
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
     ArrayList<String> categories = new ArrayList<String>();
