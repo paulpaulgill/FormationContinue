@@ -51,12 +51,6 @@ public class import_export {
         this.fichiers_sortie = sortie;
     }
 
-    /**public void chargement() throws IOException,ParseException
-     {
-        jsonO = (JSONObject.fromObject(jsonP.parse(new FileReader(fichiers_entree))));
-
-    }
-    */
     public boolean chargement() throws IOException, FormationContinueException{
         boolean succes;
         try{
