@@ -209,23 +209,7 @@ public class import_export {
     }
 
 
-    public void to_String() {
-        cycle = (String) jsonO.get("cycle");
-        heure_supp =  (Number) jsonO.get("heures_transferees_du_cycle_precedent");
-        numero_de_permis = (String) jsonO.get("numero_de_permis");
-        System.out.println("Numero_de_permis : "+ numero_de_permis);
-        System.out.println("Cycle : "+ cycle);
-        System.out.println("Heures_transferees_du_cycle_precedent : " + heure_supp);
-       JSONArray tableau_activites = (JSONArray) jsonO.get("activites");
-        for (Object arrayObj : tableau_activites) {
-            JSONObject activies = (JSONObject) arrayObj;
-            System.out.println("===========================");
-            System.out.println("Description : " + activies.get("description"));
-            System.out.println("Categorie : " + activies.get("categorie"));
-            System.out.println("Heures : " + activies.get("heures") );
-            System.out.println("Date : " + activies.get("date"));
-        }
-    }
+    
 }
 
 
