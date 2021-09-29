@@ -22,6 +22,9 @@ public class import_export {
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
     ArrayList<String> categories = new ArrayList<String>();
+    boolean succes;
+    int heureMax;
+    int heures = 0;
 
      public void Categories()
     {
@@ -36,7 +39,6 @@ public class import_export {
     }
 
     public boolean chargement() throws IOException, FormationContinueException{
-        boolean succes;
         try{
             String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
             JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
@@ -73,8 +75,6 @@ public class import_export {
     }
 
     public int ignorerHeureTrop(int i){
-        int heureMax;
-        int heures = 0;
         JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
             if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
                     (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
@@ -86,8 +86,7 @@ public class import_export {
                 heures = confirmerHeure(heureMax, i, activites);
             } else {
                 heures = confirmerHeure(1000, i, activites);
-            }
-        return heures;
+            } return heures;
     }
 
     private void genererMsgErreur(String msgPremier, String msgDeux, String msgTrois){
