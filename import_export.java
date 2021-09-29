@@ -103,7 +103,6 @@ public class import_export {
             } else {
                 heures = confirmerHeure(1000, i, activites);
             }
-
         return heures;
     }
 
@@ -121,8 +120,7 @@ public class import_export {
             valide = true;
         }catch (IllegalArgumentException erreur){
             System.out.println("Une erreur est survenue lors du traitement de la date.");
-        }catch (DateTimeParseException erreur){
-            //retourne faux si la date n'est pas legale.
+        }catch (DateTimeParseException erreur){//retourne faux si la date n'est pas legale.   
         }
         return valide;
     }
@@ -168,7 +166,6 @@ public class import_export {
                         " est dans une catégorie non reconnue. Elle sera ignorée");
             }
         }
-
     }*/
     private boolean estActiviteValide(JSONObject obj){
         boolean comparaison = false;
@@ -201,9 +198,6 @@ public class import_export {
             complet = false;
         }else if(verificationCycle() == true ){complet = true;}
     }
-
-
-    
 }
 
 
