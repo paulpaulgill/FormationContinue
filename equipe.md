@@ -24,10 +24,10 @@ Compétences techniques :
 
 Personne 3: (Chef d'équipe)  
 Nom et Prénom : GIMALAC Antoine  
-Code Permanent :  
+Code Permanent :  GIMA24109701
 Adresse courriel : gimalac.antoine@courrier.uqam.ca  
 Moyen de communication : Messenger  
-Disponibilité :  
+Disponibilité :  Lundi, Mardi, Mercredi, Vendredi et fin de semaine
 Forces :  
 Faiblesses :  
 Compétences techniques :  
