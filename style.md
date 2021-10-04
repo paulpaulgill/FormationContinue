@@ -1,7 +1,7 @@
 # Style de l'équipe
 
 ## Format du code:
-### Nous avons décider que notre code allait respecté quelques règles:
+#### Nous avons décider que notre code allait respecté quelques règles:
 + Chaque opérateur doit être séparé d'un espace en avant et en arrière.
 + Tous les noms de nos variables et de méthodes doivent être en français.
     - Les nom des méthodes doivent respecter le style Java et commencent par une lettre minuscule et les autres mots débutent par une majuscule. Ex: `estValide`
