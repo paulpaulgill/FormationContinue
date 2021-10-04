@@ -6,12 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class import_export {
     private final String fichiers_entree;
@@ -25,6 +28,9 @@ public class import_export {
     boolean succes;
     int heureMax;
     int heures = 0;
+    final Date DATE_MAX = new Date(2022,04,01);
+    final Date DATE_MIN = new Date(2020,04,01);
+    JSONArray activites = new JSONArray();
 
      public void Categories()
     {
@@ -44,6 +50,7 @@ public class import_export {
             JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
             this.jsonO = jsonObject;
             succes = true;
+            activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         }catch(FileNotFoundException erreur){
             throw new FormationContinueException("Le fichier d'entree n'existe pas");
         }catch (IOException erreur){
@@ -75,7 +82,6 @@ public class import_export {
     }
 
     public int ignorerHeureTrop(int i){
-        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
             if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
                     (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
                 heureMax = 23;
@@ -96,16 +102,43 @@ public class import_export {
     //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
     public boolean verificationDate(int indice){
         boolean valide = false;
-        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         String date = activites.getJSONObject(indice).getString("date");
         try{
             LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
             valide = true;
         }catch (IllegalArgumentException erreur){
             System.out.println("Une erreur est survenue lors du traitement de la date.");
-        }catch (DateTimeParseException erreur){//retourne faux si la date n'est pas legale.   
-        }
+            System.exit(-1);
+        }catch (DateTimeParseException erreur){}//retourne faux si la date n'est pas legale.
         return valide;
+    }
+
+    private boolean estEntreDate(Date aTester){
+         return aTester.getTime() >= DATE_MIN.getTime() && aTester.getTime() <= DATE_MAX.getTime();
+    }
+
+    private void ecrireErrDate(String finMsg, int i){
+        genererMsgErreur("La date de l'activité ",
+                activites.getJSONObject(i).getString("description"),
+                finMsg);
+        activites.discard(i);
+    }
+
+    public void validerDate(){
+         try {
+             for (int i = 0; i < activites.size(); i++) {
+                 if (verificationDate(i) ){
+                     SimpleDateFormat date = new SimpleDateFormat("uuuu-MM-dd");
+                     String sDate = activites.getJSONObject(i).getString("date");
+                     Date dDate = date.parse(sDate);
+                     if(!estEntreDate(dDate)){
+                        ecrireErrDate("n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
+                     }
+                 }else{
+                     ecrireErrDate("ne respecte pas le format ISO 8601. Elle sera ignoré", i);
+                 }
+             }
+         }catch (ParseException err){}
     }
 
     private int VerificationHeureTrf(){
@@ -121,35 +154,16 @@ public class import_export {
         return nbHeureTrf;
     }
 
-    public boolean verificationCycle() {
-        boolean accepte = true;
-        if (!("2020-2022".equals(cycle))) {
-            genererMsgErreur("Le cycle ", cycle , " n'est pas supporté");
+    public boolean verificationCycle(){
+        boolean accepte = false;
+        if(jsonO.getString("cycle").equals("2020-2022")){
+            accepte = true;
+        }else{
             complet = false;
-            accepte = false;
         }
         return accepte;
     }
 
-    /**
-    public void categoriesReconnues(){
-        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
-        for (Object arrayObj : activites) {
-            boolean comparaison = false;
-            JSONObject activites_categories = (JSONObject) arrayObj;
-            for (int i = 0 ; i < categories.size(); i++) {
-                for (int j = 0; j < activites.size(); j++) {
-                    if (categories.get(i).equals(activites_categories.get("categorie"))) {
-                        comparaison = true;
-                    }
-                }
-            }
-            if (comparaison == false){
-                genererMsgErreur("L'activité ", activites_categories.getString("description"),
-                        " est dans une catégorie non reconnue. Elle sera ignorée");
-            }
-        }
-    }*/
     private boolean estActiviteValide(JSONObject obj){
         boolean comparaison = false;
         for (int i = 0 ; i < categories.size(); i++) {
@@ -166,7 +180,6 @@ public class import_export {
 
 
     public void verification40Heures() {
-        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         int sommeheures = VerificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
             if(estActiviteValide(activites.getJSONObject(i))){
@@ -174,7 +187,6 @@ public class import_export {
                 sommeheures = sommeheures + heures;
             }
         }
-        //System.out.println(sommeheures);
         if (sommeheures < 40){
             genererMsgErreur("Il manque ", Math.abs(40 - sommeheures) + //nb heure negatif a voir
                     " heures", " de formation pour compléter le cycle.");
@@ -183,17 +195,23 @@ public class import_export {
     }
 
     public void verification17Heurescategories (){
-        JSONArray activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
         int heure = jsonO.getInt("heures_transferees_du_cycle_precedent");
         for (int i = 0 ; i < activites.size(); i++){
-            if ((activites.getJSONObject(i).getString("categorie").equals("cours")) || (activites.getJSONObject(i).getString("categorie").equals("atelier")) || (activites.getJSONObject(i).getString("categorie").equals("séminaire")) || (activites.getJSONObject(i).getString("categorie").equals("collogue")) || (activites.getJSONObject(i).getString("categorie").equals("conférence")) || (activites.getJSONObject(i).getString("categorie").equals("lecture dirigée"))) {
+            if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
+                    (activites.getJSONObject(i).getString("categorie").equals("atelier")) ||
+                    (activites.getJSONObject(i).getString("categorie").equals("séminaire"))
+                    || (activites.getJSONObject(i).getString("categorie").equals("collogue"))
+                    || (activites.getJSONObject(i).getString("categorie").equals("conférence"))
+                    || (activites.getJSONObject(i).getString("categorie").equals("lecture dirigée"))) {
                 heure += Integer.parseInt(activites.getJSONObject(i).getString("heures"));
             }
         }
         if (heure < 17){
-            genererMsgErreur("Le nombre d'heures déclarées pour les catégories suivantes : cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : ", String.valueOf(heure)," heures. Le nombre d'heures déclarées est trop faible" );
+            genererMsgErreur(
+                    "Le nombre d'heures déclarées pour les catégories suivantes "+
+                            ": cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : ",
+                    String.valueOf(heure)," heures. Le nombre d'heures déclarées est trop faible" );
         }
-
     }
 }
 

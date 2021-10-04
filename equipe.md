@@ -4,12 +4,12 @@
 
 Personne 1:  
 Nom et Prénom : PLANTE Nicolas  
-Code Permanent :  
+Code Permanent :  PLAN83020108
 Adresse courriel : plante.nicolas.4@courrier.uqam.ca  
 Moyen de communication : Messenger  
-Disponibilité :  
-Forces :  
-Faiblesses :  
+Disponibilité : Après les cours, mardi, jeudi matin, vendredi soir et fin de semaine
+Forces :  Simplification du code et connaissance du code
+Faiblesses :  Première version du code n'est pas facile à comprendre
 Compétences techniques :  
 
 Personne 2:  
