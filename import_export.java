@@ -194,21 +194,21 @@ public class import_export {
         }else if(verificationCycle() == true ){complet = true;}
     }
 
+    public void voirCat(int i, int heure){
+        if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
+                (activites.getJSONObject(i).getString("categorie").equals("atelier")) ||
+                (activites.getJSONObject(i).getString("categorie").equals("séminaire"))
+                || (activites.getJSONObject(i).getString("categorie").equals("collogue"))
+                || (activites.getJSONObject(i).getString("categorie").equals("conférence"))
+                || (activites.getJSONObject(i).getString("categorie").equals("lecture dirigée"))) {
+            heure += Integer.parseInt(activites.getJSONObject(i).getString("heures"));
+        }
+    }
     public void verification17Heurescategories (){
         int heure = jsonO.getInt("heures_transferees_du_cycle_precedent");
-        for (int i = 0 ; i < activites.size(); i++){
-            if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
-                    (activites.getJSONObject(i).getString("categorie").equals("atelier")) ||
-                    (activites.getJSONObject(i).getString("categorie").equals("séminaire"))
-                    || (activites.getJSONObject(i).getString("categorie").equals("collogue"))
-                    || (activites.getJSONObject(i).getString("categorie").equals("conférence"))
-                    || (activites.getJSONObject(i).getString("categorie").equals("lecture dirigée"))) {
-                heure += Integer.parseInt(activites.getJSONObject(i).getString("heures"));
-            }
-        }
+        for (int i = 0 ; i < activites.size(); i++) {voirCat(i, heure);}
         if (heure < 17){
-            genererMsgErreur(
-                    "Le nombre d'heures déclarées pour les catégories suivantes "+
+            genererMsgErreur("Le nombre d'heures déclarées pour les catégories suivantes "+
                             ": cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : ",
                     String.valueOf(heure)," heures. Le nombre d'heures déclarées est trop faible" );
         }
