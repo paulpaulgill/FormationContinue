@@ -1,4 +1,4 @@
-##Equipe de travail
+##Équipe de travail
 
 ###Composition de l'équipe :
 
