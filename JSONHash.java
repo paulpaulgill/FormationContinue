@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class JSONHash {
-    private final String fichiers_entree;
+  private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
     String cycle;
@@ -31,14 +31,18 @@ public class JSONHash {
     final Date DATE_MAX = new Date(2022,04,01);
     final Date DATE_MIN = new Date(2020,04,01);
     JSONArray activites = new JSONArray();
+    int nbHeureTrf = 0;
+    boolean valide = false;
+    boolean accepte = false;
+    boolean comparaison = false;
 
-     public void Categories()
+    public void Categories()
     {
         categories.addAll(Arrays.asList("cours", "atelier","séminaire","collogue","conférence"
-        ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
+                ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
     }
 
-    public JSONHash(String entree, String sortie)
+    public import_export(String entree, String sortie)
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
@@ -80,7 +84,7 @@ public class JSONHash {
     private int confirmerHeure(int heureMax, int compteur, JSONArray activites){
         int heure = activites.getJSONObject(compteur).getInt("heures");
         if(heure > heureMax){
-             heure = heureMax;
+            heure = heureMax;
         }else if(heure < 1) {
             heure = 0;
             genererMsgErreur("Le nombre d'heure minimum est de 1. ",
@@ -90,17 +94,17 @@ public class JSONHash {
     }
 
     public int ignorerHeureTrop(int i){
-            if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
-                    (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
-                heureMax = 23;
-                heures = confirmerHeure(heureMax, i, activites);
-            } else if ((activites.getJSONObject(i).getString("categorie").equals("groupe de discussion")) ||
-                    (activites.getJSONObject(i).getString("categorie").equals("rédaction professionnelle"))) {
-                heureMax = 17;
-                heures = confirmerHeure(heureMax, i, activites);
-            } else {
-                heures = confirmerHeure(1000, i, activites);
-            } return heures;
+        if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
+                (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
+            heureMax = 23;
+            heures = confirmerHeure(heureMax, i, activites);
+        } else if ((activites.getJSONObject(i).getString("categorie").equals("groupe de discussion")) ||
+                (activites.getJSONObject(i).getString("categorie").equals("rédaction professionnelle"))) {
+            heureMax = 17;
+            heures = confirmerHeure(heureMax, i, activites);
+        } else {
+            heures = confirmerHeure(1000, i, activites);
+        } return heures;
     }
 
     private void genererMsgErreur(String msgPremier, String msgDeux, String msgTrois){
@@ -109,7 +113,6 @@ public class JSONHash {
 
     //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
     public boolean verificationDate(int indice){
-        boolean valide = false;
         String date = activites.getJSONObject(indice).getString("date");
         try{
             LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
@@ -122,7 +125,7 @@ public class JSONHash {
     }
 
     private boolean estEntreDate(Date aTester){
-         return aTester.getTime() >= DATE_MIN.getTime() && aTester.getTime() <= DATE_MAX.getTime();
+        return aTester.getTime() >= DATE_MIN.getTime() && aTester.getTime() <= DATE_MAX.getTime();
     }
 
     private void ecrireErrDate(String finMsg, int i){
@@ -133,24 +136,23 @@ public class JSONHash {
     }
 
     public void validerDate(){
-         try {
-             for (int i = 0; i < activites.size(); i++) {
-                 if (verificationDate(i) ){
-                     SimpleDateFormat date = new SimpleDateFormat("uuuu-MM-dd");
-                     String sDate = activites.getJSONObject(i).getString("date");
-                     Date dDate = date.parse(sDate);
-                     if(!estEntreDate(dDate)){
+        try {
+            for (int i = 0; i < activites.size(); i++) {
+                if (verificationDate(i) ){
+                    SimpleDateFormat date = new SimpleDateFormat("uuuu-MM-dd");
+                    String sDate = activites.getJSONObject(i).getString("date");
+                    Date dDate = date.parse(sDate);
+                    if(!estEntreDate(dDate)){
                         ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
-                     }
-                 }else{
-                     ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
-                 }
-             }
-         }catch (ParseException err){}
+                    }
+                }else{
+                    ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
+                }
+            }
+        }catch (ParseException err){}
     }
 
     private int verificationHeureTrf(){
-        int nbHeureTrf = 0;
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
             genererMsgErreur("Le nombre d'heures transférées ne peut être supérieur à ",
@@ -163,18 +165,15 @@ public class JSONHash {
     }
 
     public boolean verificationCycle(){
-        boolean accepte = false;
         if(jsonO.getString("cycle").equals("2020-2022")){
             accepte = true;
         }else{
             complet = false;
-
         }
         return accepte;
     }
 
     private boolean estActiviteValide(JSONObject obj){
-        boolean comparaison = false;
         for (int i = 0 ; i < categories.size(); i++) {
             if (categories.get(i).equals(obj.get("categorie"))) {
                 comparaison = true;
@@ -183,7 +182,7 @@ public class JSONHash {
         if (comparaison == false){
             genererMsgErreur("L'activité ", obj.getString("description"),
                     " est dans une catégorie non reconnue. Elle sera ignorée");
-            activites.discard(obj); 
+            activites.discard(obj);
         }
         return comparaison;
     }
