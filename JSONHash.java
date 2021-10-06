@@ -44,13 +44,9 @@ public class JSONHash {
         this.fichiers_sortie = sortie;
     }
 
-    public boolean chargement() throws IOException, FormationContinueException{
+    public void chargement() throws FormationContinueException{
         try{
-            String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
-            JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
-            this.jsonO = jsonObject;
-            succes = true;
-            activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
+            suiteChargement();
         }catch(FileNotFoundException erreur) {
             System.err.println("Le fichier donné est introuvable.");
             System.exit(-2);
@@ -60,7 +56,15 @@ public class JSONHash {
         }catch (IOException erreur){
             throw new FormationContinueException("Une erreure innatendue est survenue");
         }
-        return succes;
+    }
+
+    public void suiteChargement() throws IOException
+    {
+        String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
+        JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
+        this.jsonO = jsonObject;
+        succes = true;
+        activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
     }
 
     public void exportationErreur() throws FileNotFoundException
