@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class import_export {
+public class JSONHash {
     private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
@@ -38,7 +38,7 @@ public class import_export {
         ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
     }
 
-    public import_export(String entree, String sortie)
+    public JSONHash(String entree, String sortie)
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
@@ -59,7 +59,7 @@ public class import_export {
         return succes;
     }
 
-    public void exportation_erreur() throws FileNotFoundException
+    public void exportationErreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
         obj.put("complet", complet);
@@ -141,7 +141,7 @@ public class import_export {
          }catch (ParseException err){}
     }
 
-    private int VerificationHeureTrf(){
+    private int verificationHeureTrf(){
         int nbHeureTrf = 0;
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
@@ -180,7 +180,7 @@ public class import_export {
 
 
     public void verification40Heures() {
-        int sommeheures = VerificationHeureTrf();
+        int sommeheures = verificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
             if(estActiviteValide(activites.getJSONObject(i))){
                 int heures = ignorerHeureTrop(i);
@@ -205,7 +205,7 @@ public class import_export {
         }
     }
     public void verification17Heurescategories (){
-        int heure = jsonO.getInt("heures_transferees_du_cycle_precedent");
+        int heure = verificationHeureTrf();
         for (int i = 0 ; i < activites.size(); i++) {voirCat(i, heure);}
         if (heure < 17){
             genererMsgErreur("Le nombre d'heures déclarées pour les catégories suivantes "+
