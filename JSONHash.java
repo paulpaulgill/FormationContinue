@@ -51,8 +51,12 @@ public class JSONHash {
             this.jsonO = jsonObject;
             succes = true;
             activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
-        }catch(FileNotFoundException erreur){
-            throw new FormationContinueException("Le fichier d'entree n'existe pas");
+        }catch(FileNotFoundException erreur) {
+            System.err.println("Le fichier donné est introuvable.");
+            System.exit(-2);
+        }catch (JSONException erreur){
+            System.err.println("Ce n'est pas un fichier JSON bien formatté");
+            System.exit(-3);
         }catch (IOException erreur){
             throw new FormationContinueException("Une erreure innatendue est survenue");
         }
@@ -160,6 +164,7 @@ public class JSONHash {
             accepte = true;
         }else{
             complet = false;
+
         }
         return accepte;
     }
@@ -174,6 +179,7 @@ public class JSONHash {
         if (comparaison == false){
             genererMsgErreur("L'activité ", obj.getString("description"),
                     " est dans une catégorie non reconnue. Elle sera ignorée");
+            activites.discard(obj); 
         }
         return comparaison;
     }
