@@ -1,7 +1,7 @@
 public class main {
     public static void main(String args[]) throws Exception {
 
-        import_export deux = new import_export("declaration.json", "resultat.json");
+        import_export deux = new import_export(args[0], args[1]);
         deux.chargement();
         deux.validerDate();
         deux.Categories();
