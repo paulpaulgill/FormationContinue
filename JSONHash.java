@@ -42,7 +42,7 @@ public class JSONHash {
                 ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
     }
 
-    public import_export(String entree, String sortie)
+    public JSONHash(String entree, String sortie)
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
