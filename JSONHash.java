@@ -140,10 +140,10 @@ public class JSONHash {
                      String sDate = activites.getJSONObject(i).getString("date");
                      Date dDate = date.parse(sDate);
                      if(!estEntreDate(dDate)){
-                        ecrireErrDate("n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
+                        ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
                      }
                  }else{
-                     ecrireErrDate("ne respecte pas le format ISO 8601. Elle sera ignoré", i);
+                     ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
                  }
              }
          }catch (ParseException err){}
