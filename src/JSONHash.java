@@ -179,7 +179,7 @@ public class JSONHash {
                 comparaison = true;
             }
         }
-        if (comparaison == false){
+        if (!comparaison){
             genererMsgErreur("L'activité ", obj.getString("description"),
                     " est dans une catégorie non reconnue. Elle sera ignorée");
             activites.discard(obj);
@@ -200,7 +200,7 @@ public class JSONHash {
             genererMsgErreur("Il manque ", Math.abs(40 - sommeheures) + //nb heure negatif a voir
                     " heures", " de formation pour compléter le cycle.");
             complet = false;
-        }else if(verificationCycle() == true ){complet = true;}
+        }else if(verificationCycle()){complet = true;}
     }
 
     public void voirCat(int i, int heure){
