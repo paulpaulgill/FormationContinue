@@ -1,3 +1,4 @@
+package com.inf2050;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.*;
@@ -14,14 +15,12 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 
 public class JSONHash {
     private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
-    String cycle;
     Boolean complet = false;
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
@@ -57,11 +56,11 @@ public class JSONHash {
             System.err.println("Ce n'est pas un fichier JSON bien formatté");
             System.exit(-3);
         }catch (IOException erreur){
-            throw new FormationContinueException("Une erreure innatendue est survenue");
+            throw new FormationContinueException("Une erreur innatendue est survenue");
         }
     }
 
-    public void suiteChargement() throws IOException
+    private void suiteChargement() throws IOException
     {
         String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
         JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
@@ -92,7 +91,7 @@ public class JSONHash {
         return heure;
     }
 
-    public int ignorerHeureTrop(int i){
+    private int ignorerHeureTrop(int i){
         if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
             heureMax = 23;
@@ -107,7 +106,7 @@ public class JSONHash {
     }
 
     //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
-    public boolean verificationDate(int i){
+    private boolean verificationDate(int i){
         String date = activites.getJSONObject(i).getString("date");
         try{
             LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
@@ -124,7 +123,7 @@ public class JSONHash {
     }
 
     private void ecrireErrDate(String finMsg, int i){
-        list1.add("La date de l'activité" +
+        list1.add("La date de l'activité " +
                 activites.getJSONObject(i).getString("description") +
                 finMsg);
         activites.discard(i);
@@ -178,7 +177,6 @@ public class JSONHash {
         return comparaison;
     }
 
-
     public void verification40Heures() {
         int sommeheures = verificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
@@ -205,6 +203,7 @@ public class JSONHash {
         }
         return heure;
     }
+
     public void verification17Heurescategories (){
         int heure = verificationHeureTrf();
         for (int i = 0 ; i < activites.size(); i++) {
