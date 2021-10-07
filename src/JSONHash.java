@@ -34,8 +34,6 @@ public class JSONHash {
     JSONArray activites = new JSONArray();
     int nbHeureTrf = 0;
     boolean valide = false;
-    boolean accepte = false;
-    boolean comparaison = false;
 
     public void Categories()
     {
@@ -162,15 +160,11 @@ public class JSONHash {
     }
 
     public boolean verificationCycle(){
-        if(jsonO.getString("cycle").equals("2020-2022")){
-            accepte = true;
-        }else{
-            complet = false;
-        }
-        return accepte;
+        return jsonO.getString("cycle").equals("2020-2022");
     }
 
     private boolean estActiviteValide(JSONObject obj){
+        boolean comparaison = false;
         for (int i = 0 ; i < categories.size(); i++) {
             if (categories.get(i).equals(obj.get("categorie"))) {
                 comparaison = true;
