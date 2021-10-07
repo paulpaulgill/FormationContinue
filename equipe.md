@@ -22,7 +22,17 @@ Forces : Connaissance de Java et travail d'équipe
 Faiblesses : Simplification du code  
 Compétences techniques :   
 
-Personne 3: (Chef d'équipe)  
+Personne 3:  
+Nom et Prénom :  GILL Paul
+Code Permanent :   
+Adresse courriel :  
+Moyen de communication :   
+Disponibilité :   
+Forces :   
+Faiblesses :   
+Compétences techniques :  
+
+Personne 4 : (Chef d'équipe)  
 Nom et Prénom : GIMALAC Antoine  
 Code Permanent :  GIMA24109701
 Adresse courriel : gimalac.antoine@courrier.uqam.ca  
@@ -37,22 +47,20 @@ Compétences techniques :
 
 -Répartition des tâches dans l'équipe  
 Nous avons lister chaque chose à faire et nous nous sommes réparti les tâches en fonction des compétences de chacun.  
-(comment vous allez répartir les tâches dans l'équipe;)  
+
 
 -Méthode de  travail  
 Nous avons fixé des temps de travail en commun pour rassembler nos idées et travailler ensemble. Nous avons également travaillé chacun de notre coté après la répartition du travail.  
-(la méthode de travail que vous prévoyez utiliser;)  
+
 
 -Méthode de résolution de conflit  
-Lors d'un conflit, la méthode choisie est la discussion au sein de toutes les personnes du groupe afin de trouver une solution au conflit et de tous être en accord.  
-(la méthode de résolution de conflit que vous prévoyez utiliser;)  
+Lors d'un conflit, la méthode choisie est la discussion au sein de toutes les personnes du groupe afin de trouver une solution au conflit et de tous être en accord.   
+
 
 -Sanctions  
 En cas de non respect des engagements d'un membre, les sanctions seront un rappel à l'ordre et la mise en place d'une date limite pour le travail qu'il a à faire.    
-(les sanctions prévues pour un membre de l'équipe qui ne remplit pas ses engagements;)
 
 -Définition de "Terminé"   
-Le projet est considéré comme Terminé lorsque toutes les fonctionnalités du code sont écrites, sont fonctionelles et respectent le style du groupe ainsi que l'écriture complète de toutes les fichiers markdown.  
-(votre définition de "Terminé".)
+Le projet est considéré comme Terminé lorsque toutes les fonctionnalités du code sont écrites, sont fonctionelles et respectent le style du groupe ainsi que l'écriture complète de tous les fichiers markdown.  
 
 
