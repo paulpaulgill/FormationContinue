@@ -14,22 +14,23 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class JSONHash {
-  private final String fichiers_entree;
+    private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
     String cycle;
     Boolean complet = false;
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
-    ArrayList<String> categories = new ArrayList<String>();
+    ArrayList<String> categories = new ArrayList<>();
     boolean succes;
     int heureMax;
     int heures = 0;
-    final Date DATE_MAX = new Date(2022,04,01);
-    final Date DATE_MIN = new Date(2020,04,01);
+    final Date DATE_MAX = new Date(2022,04,1);
+    final Date DATE_MIN = new Date(2020,04,1);
     JSONArray activites = new JSONArray();
     int nbHeureTrf = 0;
     boolean valide = false;
@@ -87,8 +88,8 @@ public class JSONHash {
             heure = heureMax;
         }else if(heure < 1) {
             heure = 0;
-            genererMsgErreur("Le nombre d'heure minimum est de 1. ",
-                    "L'activite "  + activites.getJSONObject(compteur).getString("description"), " sera ignoree");
+            list1.add("Le nombre d'heure minimum est de 1. L'activite "
+                    + activites.getJSONObject(compteur).getString("description") + " sera ignoree");
         }
         return heure;
     }
@@ -107,13 +108,9 @@ public class JSONHash {
         } return heures;
     }
 
-    private void genererMsgErreur(String msgPremier, String msgDeux, String msgTrois){
-        list1.add(msgPremier + msgDeux + msgTrois );
-    }
-
     //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
-    public boolean verificationDate(int indice){
-        String date = activites.getJSONObject(indice).getString("date");
+    public boolean verificationDate(int i){
+        String date = activites.getJSONObject(i).getString("date");
         try{
             LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
             valide = true;
@@ -124,13 +121,13 @@ public class JSONHash {
         return valide;
     }
 
-    private boolean estEntreDate(Date aTester){
-        return aTester.getTime() >= DATE_MIN.getTime() && aTester.getTime() <= DATE_MAX.getTime();
+    private boolean estEntreDate(Date date){
+        return date.getTime() >= DATE_MIN.getTime() && date.getTime() <= DATE_MAX.getTime();
     }
 
     private void ecrireErrDate(String finMsg, int i){
-        genererMsgErreur("La date de l'activité ",
-                activites.getJSONObject(i).getString("description"),
+        list1.add("La date de l'activité" +
+                activites.getJSONObject(i).getString("description") +
                 finMsg);
         activites.discard(i);
     }
@@ -155,8 +152,8 @@ public class JSONHash {
     private int verificationHeureTrf(){
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
-            genererMsgErreur("Le nombre d'heures transférées ne peut être supérieur à ",
-                    "7"," heures. Seulement 7 heures seront considérées." );
+            list1.add("Le nombre d'heures transférées ne peut être supérieur à "+
+                    "7 heures. Seulement 7 heures seront considérées." );
         }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") <= 7
                 && jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0){
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
@@ -180,7 +177,7 @@ public class JSONHash {
             }
         }
         if (!comparaison){
-            genererMsgErreur("L'activité ", obj.getString("description"),
+            list1.add("L'activité " + obj.getString("description") +
                     " est dans une catégorie non reconnue. Elle sera ignorée");
             activites.discard(obj);
         }
@@ -197,13 +194,13 @@ public class JSONHash {
             }
         }
         if (sommeheures < 40){
-            genererMsgErreur("Il manque ", Math.abs(40 - sommeheures) + //nb heure negatif a voir
-                    " heures", " de formation pour compléter le cycle.");
+            list1.add("Il manque " + (40 - sommeheures) + //nb heure negatif a voir
+                    " heures" + " de formation pour compléter le cycle.");
             complet = false;
         }else if(verificationCycle()){complet = true;}
     }
 
-    public void voirCat(int i, int heure){
+    public int voirCat(int i, int heure){
         if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("atelier")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("séminaire"))
@@ -212,14 +209,17 @@ public class JSONHash {
                 || (activites.getJSONObject(i).getString("categorie").equals("lecture dirigée"))) {
             heure += Integer.parseInt(activites.getJSONObject(i).getString("heures"));
         }
+        return heure;
     }
     public void verification17Heurescategories (){
         int heure = verificationHeureTrf();
-        for (int i = 0 ; i < activites.size(); i++) {voirCat(i, heure);}
+        for (int i = 0 ; i < activites.size(); i++) {
+            heure = voirCat(i, heure);
+        }
         if (heure < 17){
-            genererMsgErreur("Le nombre d'heures déclarées pour les catégories suivantes "+
-                            ": cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : ",
-                    String.valueOf(heure)," heures. Le nombre d'heures déclarées est trop faible" );
+            list1.add("Le nombre d'heures déclarées pour les catégories suivantes "+
+                    ": cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : " +
+                    heure +" heures. Le nombre d'heures déclarées est trop faible" );
         }
     }
 }
