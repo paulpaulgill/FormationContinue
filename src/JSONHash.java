@@ -14,10 +14,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Calendar;
+import java.util.*;
 
 public class JSONHash {
     private final String fichiers_entree;
@@ -30,8 +27,8 @@ public class JSONHash {
     boolean succes;
     int heureMax;
     int heures = 0;
-    final Date DATE_MAX = new Date(2022,04,1);
-    final Date DATE_MIN = new Date(2020,04,1);
+    final Date DATE_MAX = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
+    final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     JSONArray activites = new JSONArray();
     int nbHeureTrf = 0;
     boolean valide = false;
@@ -134,11 +131,10 @@ public class JSONHash {
     public void validerDate(){
         try {
             for (int i = 0; i < activites.size(); i++) {
-                if (verificationDate(i) ){
-                    SimpleDateFormat date = new SimpleDateFormat("uuuu-MM-dd");
+                if (verificationDate(i)){
                     String sDate = activites.getJSONObject(i).getString("date");
-                    Date dDate = date.parse(sDate);
-                    if(!estEntreDate(dDate)){
+                    Date dDate = new SimpleDateFormat("yyyy-MM-dd").parse(sDate);
+                    if(!(estEntreDate(dDate))){
                         ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
                     }
                 }else{
