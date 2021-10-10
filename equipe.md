@@ -23,7 +23,7 @@ Faiblesses : Simplification du code
 Compétences techniques :   
 
 Personne 3:  
-Nom et Prénom :  GILL Paul
+Nom et Prénom :  GILL Paul  
 Code Permanent : GILP29079709  
 Adresse courriel :  gill.paul@courrier.uqam.ca  
 Moyen de communication :   Messenger  

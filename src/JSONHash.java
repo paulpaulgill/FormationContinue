@@ -200,13 +200,15 @@ public class JSONHash {
      * @return les heures a ajouter au total
      */
     private int verificationHeureTrf(){
-        if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
+        int nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
+        if (nbHeureTrf < 0){
+            nbHeureTrf = 0;
+            list1.add("Le nombre d'heures transférées ne peut être négatif. " +
+                    "0 heures seront considérées." );
+        }else if(nbHeureTrf > 7){
             nbHeureTrf = 7;
             list1.add("Le nombre d'heures transférées ne peut être supérieur à "+
                     "7 heures. Seulement 7 heures seront considérées." );
-        }else if(jsonO.getInt("heures_transferees_du_cycle_precedent") <= 7
-                && jsonO.getInt("heures_transferees_du_cycle_precedent") >= 0){
-            nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
         }
         return nbHeureTrf;
     }
