@@ -1,4 +1,3 @@
-package com.inf2050;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.*;
@@ -16,6 +15,7 @@ import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Calendar;
 
 public class JSONHash {
     private final String fichiers_entree;
