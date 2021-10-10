@@ -5,8 +5,9 @@ public class Main {
 
         JSONHash deux = new JSONHash(args[0], args[1]);
         deux.chargement();
-        deux.validerDate();
         deux.Categories();
+        deux.verificationCycle();
+        deux.validerDate();
         deux.verification17Heurescategories();
         deux.verification40Heures();
         deux.exportationErreur();
