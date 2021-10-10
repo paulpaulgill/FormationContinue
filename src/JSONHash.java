@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -18,7 +19,7 @@ public class JSONHash {
     private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
-    Boolean complet = false;
+    Boolean complet = true;
     JSONArray list1 = new JSONArray();
     JSONObject obj = new JSONObject();
     ArrayList<String> categories = new ArrayList<>();
@@ -29,7 +30,6 @@ public class JSONHash {
     final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     JSONArray activites = new JSONArray();
     int nbHeureTrf = 0;
-    boolean valide = false;
 
     public void Categories()
     {
@@ -40,8 +40,8 @@ public class JSONHash {
     /**
      * Constructeur de l'objet GestionJSON qui facilite le calcul et la manipulation
      * des données du fichier d'entrée.
-     * @param entree
-     * @param sortie
+     * @param entree le fichier d'entré
+     * @param sortie le fichier de sortie
      */
     public JSONHash(String entree, String sortie)
     {
@@ -73,7 +73,7 @@ public class JSONHash {
      */
     private void suiteChargement() throws IOException
     {
-        String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
+        String stringJson = IOUtils.toString(new FileReader(fichiers_entree, StandardCharsets.UTF_8));
         JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(stringJson);
         this.jsonO = jsonObject;
         succes = true;
@@ -85,9 +85,9 @@ public class JSONHash {
      * dans le fichier d'entré.
      * @throws FileNotFoundException
      */
-    public void exportationErreur() throws FileNotFoundException
+    public void exportationErreur() throws IOException
     {
-        PrintWriter sortie = new PrintWriter(fichiers_sortie);
+        PrintWriter sortie = new PrintWriter(fichiers_sortie, StandardCharsets.UTF_8);
         obj.put("complet", complet);
         obj.put("erreur", list1);
         sortie.write(obj.toString(3));
@@ -96,11 +96,12 @@ public class JSONHash {
     }
 
     /**
-     *
+     * Compare les heures de l'activité avec le max donné en param
      * @param heureMax  Le nombre d'heure maximum a comparé avec les heure de l'activité
      * @param i index de l'activité a comparé dans le JSONArray
      * @param activites JSONArray de toute les activités
-     * @return
+     * @return si les heures sont supérieur au heures max alors elle retourne
+     * la valeur max sinon elle retourne les heures original de l'activité
      */
     private int confirmerHeure(int heureMax, int i, JSONArray activites){
         int heure = activites.getJSONObject(i).getInt("heures");
@@ -141,6 +142,7 @@ public class JSONHash {
      * @return boolean true si valide et false si non valide
      */
     private boolean verificationDate(int i){
+        boolean valide = false;
         String date = activites.getJSONObject(i).getString("date");
         try{
             LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
@@ -148,7 +150,7 @@ public class JSONHash {
         }catch (IllegalArgumentException erreur){
             System.out.println("Une erreur est survenue lors du traitement de la date.");
             System.exit(-1);
-        }catch (DateTimeParseException erreur){}//retourne faux si la date n'est pas legale.
+        }catch (DateTimeParseException erreur){}
         return valide;
     }
 
@@ -211,10 +213,12 @@ public class JSONHash {
 
     /**
      *  valide le cycle. Seulement 2020-2022 est valide
-     * @return boolean true si valide et false si non valide
      */
-    public boolean verificationCycle(){
-        return jsonO.getString("cycle").equals("2020-2022");
+    public void verificationCycle(){
+        if (!jsonO.getString("cycle").equals("2020-2022")){
+            list1.add("Uniquement le cycle 2020-2022 est valide");
+            complet = false;
+        }
     }
 
     /**
@@ -254,7 +258,7 @@ public class JSONHash {
             list1.add("Il manque " + (40 - sommeheures) + //nb heure negatif a voir
                     " heures" + " de formation pour compléter le cycle.");
             complet = false;
-        }else if(verificationCycle()){complet = true;}
+        }
     }
 
     /**
@@ -263,7 +267,7 @@ public class JSONHash {
      * @param i index de l'activité
      * @param heure heure initiale a être additionner au heures dans la catégorie
      *              minimum 17 heures
-     * @return
+     * @return le total des heures précédente plus les nouvelles heures
      */
     public int voirCat(int i, int heure){
         if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
@@ -291,6 +295,7 @@ public class JSONHash {
             list1.add("Le nombre d'heures déclarées pour les catégories suivantes "+
                     ": cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : " +
                     heure +" heures. Le nombre d'heures déclarées est trop faible" );
+            complet = false;
         }
     }
 }
