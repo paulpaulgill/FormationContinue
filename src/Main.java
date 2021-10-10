@@ -9,7 +9,7 @@ public class Main {
         if (deux.complet)
             deux.validerDate();
         if (deux.complet)
-            deux.verification17Heurescategories();
+            deux.verification17HeuresCategories();
         if (deux.complet)
             deux.verification40Heures();
 

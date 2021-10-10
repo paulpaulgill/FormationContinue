@@ -29,7 +29,6 @@ public class JSONHash {
     final Date DATE_MAX = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
     final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     JSONArray activites = new JSONArray();
-    int nbHeureTrf = 0;
 
     public void Categories()
     {
@@ -60,10 +59,10 @@ public class JSONHash {
             System.err.println("Le fichier donné est introuvable.");
             System.exit(-2);
         }catch (JSONException erreur){
-            System.err.println("Ce n'est pas un fichier JSON bien formatté");
+            System.err.println("Ce n'est pas un fichier JSON bien formaté");
             System.exit(-3);
         }catch (IOException erreur){
-            throw new FormationContinueException("Une erreur innatendue est survenue");
+            throw new FormationContinueException("Une erreur inattendue est survenue");
         }
     }
 
@@ -81,7 +80,7 @@ public class JSONHash {
     }
 
     /**
-     * Écris dans le fichier resultat si le cycle est complet et les erreurs
+     * Écris dans le fichier résultat si le cycle est complet et les erreurs
      * dans le fichier d'entré.
      * @throws FileNotFoundException
      */
@@ -155,7 +154,7 @@ public class JSONHash {
     }
 
     /**
-     * Vérification de l'interval valide de l'activité.
+     * Vérification de l'intervalle valide de l'activité.
      * @param date  Date a vérifier
      * @return boolean true si valide et false si non valide
      */
@@ -288,7 +287,7 @@ public class JSONHash {
      * minimum de 17 heures est en dessous de 17 heures.
      * Sinon elle ajuste la variable de completion.
      */
-    public void verification17Heurescategories (){
+    public void verification17HeuresCategories(){
         int heure = verificationHeureTrf();
         for (int i = 0 ; i < activites.size(); i++) {
             heure = voirCat(i, heure);
