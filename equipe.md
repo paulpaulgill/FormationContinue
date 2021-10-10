@@ -25,11 +25,11 @@ Compétences techniques :
 Personne 3:  
 Nom et Prénom :  GILL Paul
 Code Permanent : GILP29079709  
-Adresse courriel :  gill.paul@courrier.uqam.ca
-Moyen de communication :   Messenger
-Disponibilité :   mercredi soir, samedi soir, vendredi, fin de semaine
-Forces :   Connaissance Java
-Faiblesses :   Je nettoie mon code au fur et à mesure.
+Adresse courriel :  gill.paul@courrier.uqam.ca  
+Moyen de communication :   Messenger  
+Disponibilité :   mercredi soir, samedi soir, vendredi, fin de semaine  
+Forces :   Connaissance Java  
+Faiblesses :   Je nettoie mon code au fur et à mesure.  
 Compétences techniques :  
 
 Personne 4 : (Chef d'équipe)  
