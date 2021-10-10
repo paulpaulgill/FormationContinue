@@ -28,7 +28,7 @@ ___
 ___
 ### Utilisation : 
 L'exécution de ce programme peut se faire via la compilation direct du programme dans le logiciel IntelliJ ou il peut s'effectuer dans la console du logiciel avec l'écriture :  
->java -jar inf2050-a21-projet-equipe5.jar declaration.json resultat.json  
+>java -jar FormationContinue.jar declaration.json resultat.json  
 + Le fichier d'entrée est declaration.json  
 + Le fichier de sortie est resultat.json  
-+ Le fichier jar est inf2050-a21-projet-equipe5.jar  
++ Le fichier jar est FormationContinue.jar  
