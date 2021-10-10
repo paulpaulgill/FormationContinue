@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class GestionJSON {
+public class JSONHash {
     private final String fichiers_entree;
     private final String fichiers_sortie;
     private JSONObject jsonO;
@@ -45,7 +45,7 @@ public class GestionJSON {
      * @param entree
      * @param sortie
      */
-    public GestionJSON(String entree, String sortie)
+    public JSONHash(String entree, String sortie)
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
