@@ -1,5 +1,3 @@
-package src;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.*;
@@ -39,12 +37,22 @@ public class JSONHash {
                 ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
     }
 
+    /**
+     * Constructeur de l'objet GestionJSON qui facilite le calcul et la manipulation
+     * des données du fichier d'entrée.
+     * @param entree
+     * @param sortie
+     */
     public JSONHash(String entree, String sortie)
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
     }
 
+    /**
+     * Lis le fichier JSON d'entrée et l'insert dans un objet JSON
+     * @throws FormationContinueException
+     */
     public void chargement() throws FormationContinueException{
         try{
             suiteChargement();
@@ -59,6 +67,10 @@ public class JSONHash {
         }
     }
 
+    /**
+     *  Nécessaire pour respect de 10 ligne par methode.
+     * @throws IOException
+     */
     private void suiteChargement() throws IOException
     {
         String stringJson = IOUtils.toString(new FileReader(fichiers_entree));
@@ -68,6 +80,11 @@ public class JSONHash {
         activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
     }
 
+    /**
+     * Écris dans le fichier resultat si le cycle est complet et les erreurs
+     * dans le fichier d'entré.
+     * @throws FileNotFoundException
+     */
     public void exportationErreur() throws FileNotFoundException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie);
@@ -78,18 +95,32 @@ public class JSONHash {
         sortie.close();
     }
 
-    private int confirmerHeure(int heureMax, int compteur, JSONArray activites){
-        int heure = activites.getJSONObject(compteur).getInt("heures");
+    /**
+     *
+     * @param heureMax  Le nombre d'heure maximum a comparé avec les heure de l'activité
+     * @param i index de l'activité a comparé dans le JSONArray
+     * @param activites JSONArray de toute les activités
+     * @return
+     */
+    private int confirmerHeure(int heureMax, int i, JSONArray activites){
+        int heure = activites.getJSONObject(i).getInt("heures");
         if(heure > heureMax){
             heure = heureMax;
         }else if(heure < 1) {
             heure = 0;
             list1.add("Le nombre d'heure minimum est de 1. L'activite "
-                    + activites.getJSONObject(compteur).getString("description") + " sera ignoree");
+                    + activites.getJSONObject(i).getString("description") + " sera ignoree");
         }
         return heure;
     }
 
+    /**
+     * Compare un activité pour determiner si il est dans la catégorie d'activité
+     * qui on une restriction d'heures. retourne le nombre d'heures déclaré si
+     * il n'a pas de restriction.
+     * @param i index de l'activité a évaluer
+     * @return nombre d'heure qui seras ajouté au total
+     */
     private int ignorerHeureTrop(int i){
         if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
@@ -104,7 +135,11 @@ public class JSONHash {
         } return heures;
     }
 
-    //Verification du format de la date respect le ISO 8601 (A mettre private pour utilisation par autre methode)
+    /**
+     * Verification du format de la date respect le ISO 8601
+     * @param i index de l'activité a évaluer
+     * @return boolean true si valide et false si non valide
+     */
     private boolean verificationDate(int i){
         String date = activites.getJSONObject(i).getString("date");
         try{
@@ -117,10 +152,21 @@ public class JSONHash {
         return valide;
     }
 
+    /**
+     * Vérification de l'interval valide de l'activité.
+     * @param date  Date a vérifier
+     * @return boolean true si valide et false si non valide
+     */
     private boolean estEntreDate(Date date){
         return date.getTime() >= DATE_MIN.getTime() && date.getTime() <= DATE_MAX.getTime();
     }
 
+    /**
+     * Ajoute une erreur a la liste d'erreur et supprime l'activité avec la date
+     * invalide
+     * @param finMsg fin du message qui change selon le type d'erreur
+     * @param i index de l'activité
+     */
     private void ecrireErrDate(String finMsg, int i){
         list1.add("La date de l'activité " +
                 activites.getJSONObject(i).getString("description") +
@@ -128,6 +174,9 @@ public class JSONHash {
         activites.discard(i);
     }
 
+    /**
+     * Valide la de toute les activités dans la liste des activités
+     */
     public void validerDate(){
         try {
             for (int i = 0; i < activites.size(); i++) {
@@ -144,6 +193,10 @@ public class JSONHash {
         }catch (ParseException err){}
     }
 
+    /**
+     * Vérifie si les heures transféré ne dépasse pas le maximum d'heures transférable
+     * @return les heures a ajouter au total
+     */
     private int verificationHeureTrf(){
         if(jsonO.getInt("heures_transferees_du_cycle_precedent") > 7){
             nbHeureTrf = 7;
@@ -156,10 +209,20 @@ public class JSONHash {
         return nbHeureTrf;
     }
 
+    /**
+     *  valide le cycle. Seulement 2020-2022 est valide
+     * @return boolean true si valide et false si non valide
+     */
     public boolean verificationCycle(){
         return jsonO.getString("cycle").equals("2020-2022");
     }
 
+    /**
+     * Vérifie si la catégorie de l'activité fait partie des la liste des
+     * catégorie valide
+     * @param obj l'activité a validé
+     * @return boolean true si valide et false si non valide
+     */
     private boolean estActiviteValide(JSONObject obj){
         boolean comparaison = false;
         for (int i = 0 ; i < categories.size(); i++) {
@@ -175,6 +238,10 @@ public class JSONHash {
         return comparaison;
     }
 
+    /**
+     * Vérifie si le nombre total d'heures est égal a 40 et ajuste la variable
+     * de completion selon le cas.
+     */
     public void verification40Heures() {
         int sommeheures = verificationHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
@@ -190,6 +257,14 @@ public class JSONHash {
         }else if(verificationCycle()){complet = true;}
     }
 
+    /**
+     * Calcul les heures des activités qui font partie des catégories qui ont un
+     * minimum de 17 heures
+     * @param i index de l'activité
+     * @param heure heure initiale a être additionner au heures dans la catégorie
+     *              minimum 17 heures
+     * @return
+     */
     public int voirCat(int i, int heure){
         if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("atelier")) ||
@@ -202,6 +277,11 @@ public class JSONHash {
         return heure;
     }
 
+    /**
+     * Vérifie si le total des heures des activités qui font partie des catégories qui ont un
+     * minimum de 17 heures est en dessous de 17 heures.
+     * Sinon elle ajuste la variable de completion.
+     */
     public void verification17Heurescategories (){
         int heure = verificationHeureTrf();
         for (int i = 0 ; i < activites.size(); i++) {

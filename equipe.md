@@ -1,6 +1,6 @@
-## Équipe de travail
+##Équipe de travail
 
-### Composition de l'équipe :
+###Composition de l'équipe :
 
 Personne 1:  
 Nom et Prénom : PLANTE Nicolas  
@@ -20,21 +20,21 @@ Moyen de communication : Messenger
 Disponibilité : Lundi, Mardi, Jeudi soir, Vendredi en journée et fin de semaine   
 Forces : Connaissance de Java et travail d'équipe  
 Faiblesses : Simplification du code  
-Compétences techniques : Programmation Java  
+Compétences techniques :   
 
 Personne 3:  
-Nom et Prénom :  GILL Paul  
-Code Permanent :   
-Adresse courriel :  
-Moyen de communication :   
-Disponibilité :   
-Forces :   
-Faiblesses :   
+Nom et Prénom :  GILL Paul
+Code Permanent : GILP29079709  
+Adresse courriel :  gill.paul@courrier.uqam.ca
+Moyen de communication :   Messenger
+Disponibilité :   mercredi soir, samedi soir, vendredi, fin de semaine
+Forces :   Connaissance Java
+Faiblesses :   Je nettoie mon code au fur et à mesure.
 Compétences techniques :  
 
 Personne 4 : (Chef d'équipe)  
 Nom et Prénom : GIMALAC Antoine  
-Code Permanent :  GIMA24109701  
+Code Permanent :  GIMA24109701
 Adresse courriel : gimalac.antoine@courrier.uqam.ca  
 Moyen de communication : Messenger  
 Disponibilité :  Lundi, Mardi, Mercredi, Vendredi et fin de semaine  
@@ -43,7 +43,7 @@ Faiblesses :
 Compétences techniques :  
 
 
-### Charte de l'équipe :  
+###Charte de l'équipe :  
 
 -Répartition des tâches dans l'équipe  
 Nous avons lister chaque chose à faire et nous nous sommes réparti les tâches en fonction des compétences de chacun.  
