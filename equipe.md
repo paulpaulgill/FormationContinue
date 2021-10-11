@@ -1,6 +1,6 @@
-##Équipe de travail
+## Équipe de travail
 
-###Composition de l'équipe :
+### Composition de l'équipe :
 
 Personne 1:  
 Nom et Prénom : PLANTE Nicolas  
@@ -20,7 +20,7 @@ Moyen de communication : Messenger
 Disponibilité : Lundi, Mardi, Jeudi soir, Vendredi en journée et fin de semaine   
 Forces : Connaissance de Java et travail d'équipe  
 Faiblesses : Simplification du code  
-Compétences techniques :   
+Compétences techniques : Programmation JAVA    
 
 Personne 3:  
 Nom et Prénom :  GILL Paul  
@@ -43,7 +43,7 @@ Faiblesses :
 Compétences techniques :  
 
 
-###Charte de l'équipe :  
+### Charte de l'équipe :  
 
 -Répartition des tâches dans l'équipe  
 Nous avons lister chaque chose à faire et nous nous sommes réparti les tâches en fonction des compétences de chacun.  
