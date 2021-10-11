@@ -38,8 +38,8 @@ Code Permanent :  GIMA24109701
 Adresse courriel : gimalac.antoine@courrier.uqam.ca  
 Moyen de communication : Messenger  
 Disponibilité :  Lundi, Mardi, Mercredi, Vendredi et fin de semaine  
-Forces :  
-Faiblesses :  
+Forces :  Simplification et nettoyage du code
+Faiblesses :  compréhesion du code au début
 Compétences techniques :  
 
 
