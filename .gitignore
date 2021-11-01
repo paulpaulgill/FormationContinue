@@ -5,4 +5,5 @@
 META-INF/
 out/
 *.iml
+target/
 

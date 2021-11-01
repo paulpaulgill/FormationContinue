@@ -1,0 +1,7 @@
+{
+   "complet": true,
+   "erreur":    [
+      "La date de l'activité Cours sur la déontologie ne respecte pas le format ISO 8601. Elle sera ignoré",
+      "L'activité Visite d'établissements architecturaux est dans une catégorie non reconnue. Elle sera ignorée"
+   ]
+}
