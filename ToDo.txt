@@ -1,0 +1,19 @@
+-Séparation en classe: Une classe mère Profession abstraite qui a les trois profession comme enfant.
+            Ces classes devront contenir principalement que des constantes qui sont propres à chaque profession. ex: cycle
+            Possible de faire une enum pour les lettres du permis?
+        	Séparer JSONHash -> En classe JSON et Validation.
+-Classe architecture doit contenir les mêmes nb heure que le TP1 sauf pour ce qui est du cycle.
+
+AUTRES DÉTAILS
+-changer le nom des méthodes (débuter par un verbe)
+-un minimum de 80% du code doit avoir un test avec JUnit 5
+-chaque classe et méthode ne doivent faire qu'une seule chose
+
+NOUVELLES FONCTIONNALITÉS
+-s'assurer que la description de chaque activité a au moins 20 caractères
+-si la structure du fichier JSON n'est pas respecté, fin programme et msg d'erreur dans fichier en le précisant et sur la console.
+-Le nombre d'heure d'une seule journée ne doit pas dépasser 10h sinon msg erreur et ne considérer que 10h.
+-La date doit tenir compte des années bissextiles.
+-Nombre d'heure doit être un nombre entier positif
+-vérifier première lettre du numéro de permis et 4 chiffres qui suivent
+
