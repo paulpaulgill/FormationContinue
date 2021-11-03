@@ -15,7 +15,6 @@
             <version>5.7.0-M1</version>
             <scope>test</scope>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.agent -->
         <dependency>
             <groupId>org.jacoco</groupId>
@@ -23,6 +22,23 @@
             <version>0.8.5</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+
+
+
+
     </dependencies>
     <properties>
         <maven.compiler.source>15</maven.compiler.source>

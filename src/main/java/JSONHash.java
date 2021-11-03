@@ -1,6 +1,4 @@
 import net.sf.json.*;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONSerializer;
 import org.apache.commons.io.IOUtils;
 
 import java.io.FileNotFoundException;
