@@ -5,6 +5,8 @@ public class Main {
         declaration.chargement();
         declaration.Categories();
         if (declaration.getComplet())
+            declaration.verifierTypeOrdre();
+        if (declaration.getComplet())
             declaration.verifierCycle();
         if (declaration.getComplet())
             declaration.validerDate();

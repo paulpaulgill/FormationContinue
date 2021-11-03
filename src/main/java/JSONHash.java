@@ -206,13 +206,17 @@ public class JSONHash {
      */
     public void verifierCycle(){
         if (!jsonO.getString("cycle").equals(ordre.cycle) ||
-                !(ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.cycle2) ||
-                !(ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.cycle3)){
-            list1.add("Uniquement le cycle " + ordre.cycle + " est valide");
+                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.cycle2) ||
+                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.cycle3)){
+            list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
     }
 
+    /**
+     * Vient verifier de quel type d'ordre il s'agit et instancie de quel type
+     * de profession la variable ordre sera.
+     */
     public void verifierTypeOrdre(){
         if (jsonO.getString("ordre").equals("architectes")){
             ordre = new Architectes();
