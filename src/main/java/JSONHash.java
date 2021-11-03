@@ -205,9 +205,9 @@ public class JSONHash {
      *  valide le cycle selon le type d'ordre.
      */
     public void verifierCycle(){
-        if (!jsonO.getString("cycle").equals(ordre.cycle) ||
-                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.cycle2) ||
-                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.cycle3)){
+        if (!jsonO.getString("cycle").equals(ordre.getCycle()) ||
+                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.getCycle2()) ||
+                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3())){
             list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
@@ -263,8 +263,8 @@ public class JSONHash {
                 sommeheures = sommeheures + heures;
             }
         }
-        if (sommeheures < 40){
-            list1.add("Il manque " + (40 - sommeheures) + //nb heure negatif a voir
+        if (sommeheures < ordre.getHeureMin()){
+            list1.add("Il manque " + (ordre.getHeureMin() - sommeheures) + //nb heure negatif a voir
                     " heures" + " de formation pour compléter le cycle.");
             complet = false;
         }

@@ -1,5 +1,6 @@
 public abstract class Profession {
-    protected String cycle;
-    protected String cycle2;// = "2018-2020";
-    protected String cycle3;// = "2016-2018";
+    abstract String getCycle();
+    abstract String getCycle2();
+    abstract String getCycle3();
+    abstract int getHeureMin();
 }
