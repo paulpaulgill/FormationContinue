@@ -5,15 +5,15 @@ public class Main {
         declaration.chargement();
         declaration.Categories();
         if (declaration.getComplet())
-            declaration.verificationCycle();
+            declaration.verifierCycle();
         if (declaration.getComplet())
             declaration.validerDate();
         if (declaration.getComplet())
-            declaration.verification17HeuresCategories();
+            declaration.verifierHeuresMinCategories();
         if (declaration.getComplet())
-            declaration.verification40Heures();
+            declaration.verifierHeuresMin();
 
-        declaration.exportationErreur();
+        declaration.exporterErreur();
     }
 }
 

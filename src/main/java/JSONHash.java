@@ -27,6 +27,7 @@ public class JSONHash {
     private final Date DATE_MAX = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
     private final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     private JSONArray activites = new JSONArray();
+    private Profession ordre;
 
     public void Categories()
     {
@@ -73,7 +74,7 @@ public class JSONHash {
      * dans le fichier d'entré.
      * @throws FileNotFoundException
      */
-    public void exportationErreur() throws IOException
+    public void exporterErreur() throws IOException
     {
         PrintWriter sortie = new PrintWriter(fichiers_sortie, StandardCharsets.UTF_8);
         obj.put("complet", complet);
@@ -128,7 +129,7 @@ public class JSONHash {
      * @param i index de l'activité a évaluer
      * @return boolean true si valide et false si non valide
      */
-    private boolean verificationDate(int i){
+    private boolean verifierDate(int i){
         boolean valide = false;
         String date = activites.getJSONObject(i).getString("date");
         try{
@@ -169,7 +170,7 @@ public class JSONHash {
     public void validerDate(){
         try {
             for (int i = 0; i < activites.size(); i++) {
-                if (verificationDate(i)){
+                if (verifierDate(i)){
                     String sDate = activites.getJSONObject(i).getString("date");
                     Date dDate = new SimpleDateFormat("yyyy-MM-dd").parse(sDate);
                     if(!(estEntreDate(dDate))){
@@ -186,7 +187,7 @@ public class JSONHash {
      * Vérifie si les heures transféré ne dépasse pas le maximum d'heures transférable
      * @return les heures a ajouter au total
      */
-    private int verificationHeureTrf(){
+    private int verifierHeureTrf(){
         int nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
         if (nbHeureTrf < 0){
             nbHeureTrf = 0;
@@ -201,11 +202,26 @@ public class JSONHash {
     }
 
     /**
-     *  valide le cycle. Seulement 2020-2022 est valide
+     *  valide le cycle selon le type d'ordre.
      */
-    public void verificationCycle(){
-        if (!jsonO.getString("cycle").equals("2020-2022")){
-            list1.add("Uniquement le cycle 2020-2022 est valide");
+    public void verifierCycle(){
+        if (!jsonO.getString("cycle").equals(ordre.cycle) ||
+                !(ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.cycle2) ||
+                !(ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.cycle3)){
+            list1.add("Uniquement le cycle " + ordre.cycle + " est valide");
+            complet = false;
+        }
+    }
+
+    public void verifierTypeOrdre(){
+        if (jsonO.getString("ordre").equals("architectes")){
+            ordre = new Architectes();
+        }else if (jsonO.getString("ordre").equals("géologues")){
+            ordre = new Geologues();
+        }else if (jsonO.getString("ordre").equals("psychologues")){
+            ordre = new Psychologues();
+        }else{
+            list1.add("L'ordre entré n'est pas valide");
             complet = false;
         }
     }
@@ -235,8 +251,8 @@ public class JSONHash {
      * Vérifie si le nombre total d'heures est égal a 40 et ajuste la variable
      * de completion selon le cas.
      */
-    public void verification40Heures() {
-        int sommeheures = verificationHeureTrf();
+    public void verifierHeuresMin() {
+        int sommeheures = verifierHeureTrf();
         for(int i = 0 ; i < activites.size(); i++){
             if(estActiviteValide(activites.getJSONObject(i))){
                 int heures = ignorerHeureTrop(i);
@@ -275,8 +291,8 @@ public class JSONHash {
      * minimum de 17 heures est en dessous de 17 heures.
      * Sinon elle ajuste la variable de completion.
      */
-    public void verification17HeuresCategories(){
-        int heure = verificationHeureTrf();
+    public void verifierHeuresMinCategories(){
+        int heure = verifierHeureTrf();
         for (int i = 0 ; i < activites.size(); i++) {
             heure = voirCat(i, heure);
         }
