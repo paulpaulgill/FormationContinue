@@ -1,3 +1,4 @@
+import net.sf.json.JSONObject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,5 +24,13 @@ class JSONHashTest {
         p3 = null;
     }
 
+    /*
+    @Test
+    public void testerVerifierCycle(){
+        p1 = null;
+        JSONObject j  = new JSONObject();
+        assertEquals(p1 instanceof Architectes , JSONHash.verifierTypeOrdre().);
+    }
+    */
 
 }
