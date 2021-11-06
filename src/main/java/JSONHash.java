@@ -206,8 +206,8 @@ public class JSONHash {
      */
     public void verifierCycle(){
         if (!jsonO.getString("cycle").equals(ordre.getCycle()) ||
-                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.getCycle2()) ||
-                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3())){
+                (!(ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle2())) ||
+                (!(ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3()))){
             list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
