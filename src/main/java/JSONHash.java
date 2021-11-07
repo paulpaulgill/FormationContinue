@@ -321,6 +321,16 @@ public class JSONHash {
                 }
             }
         }
+
+    public void verifierFormatPermis(){
+        if (!Character.isUpperCase(jsonO.getString("numero_de_permis").charAt(0))
+            && (jsonO.getString("numero_de_permis").charAt(0)!=('A')
+                || jsonO.getString("numero_de_permis").charAt(0)!=('R')
+                || jsonO.getString("numero_de_permis").charAt(0)!=('S')
+                || jsonO.getString("numero_de_permis").charAt(0)!=('Z'))){
+            list1.add("Le numéro de permis doit commencer par une lettre majuscule (A,R,S ouZ)"); //suivie de 4 chiffres"
+        }
+    }
 }
 
 
