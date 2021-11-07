@@ -14,6 +14,8 @@ public class Main {
             declaration.verifierHeuresMinCategories();
         if (declaration.getComplet())
             declaration.verifierHeuresMin();
+        if(declaration.getComplet())
+            declaration.verifierTailleDescription();
 
         declaration.exporterErreur();
     }

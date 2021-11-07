@@ -209,6 +209,7 @@ public class JSONHash {
             list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
+        String val = jsonO.getString("cycle");
     }
 
     /**
@@ -305,6 +306,23 @@ public class JSONHash {
             complet = false;
         }
     }
+
+    /**
+     * Vérifie si la description des activités on une longeur de plus de 20 caractères
+     * Sinon elle ajuste la variable de completion.
+     */
+    public void verifierTailleDescription(){
+            for (int i = 0; i < activites.size(); i++) {
+                String Description = activites.getJSONObject(i).getString("description");
+                if (Description.length() <= 20){
+                    complet = false;
+                    list1.add("L'activité " + obj.getString("description") +
+                            " doit contenir une description avec plus de 20 caractère");
+                }
+            }
+        }
 }
+
+
 
 
