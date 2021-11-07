@@ -23,14 +23,13 @@ public class JSONHash {
     private JSONObject obj = new JSONObject();
     private ArrayList<String> categories = new ArrayList<>();
     private final Date DATE_MAX = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
-    private final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
+    private final Date DATE_MIN = new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     private JSONArray activites = new JSONArray();
     private Profession ordre;
 
-    public void Categories()
-    {
-        categories.addAll(Arrays.asList("cours", "atelier","séminaire","collogue","conférence"
-                ,"lecture dirigée","présentation","groupe de discussion","projet de recherche","rédaction professionnelle"));
+    public void Categories() {
+        categories.addAll(Arrays.asList("cours", "atelier", "séminaire", "collogue", "conférence"
+                , "lecture dirigée", "présentation", "groupe de discussion", "projet de recherche", "rédaction professionnelle"));
     }
 
     public Boolean getComplet() {
@@ -40,29 +39,30 @@ public class JSONHash {
     /**
      * Constructeur de l'objet GestionJSON qui facilite le calcul et la manipulation
      * des données du fichier d'entrée.
+     *
      * @param entree le fichier d'entré
      * @param sortie le fichier de sortie
      */
-    public JSONHash(String entree, String sortie)
-    {
+    public JSONHash(String entree, String sortie) {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
     }
 
     /**
      * Lis le fichier JSON d'entrée et l'insert dans un objet JSON
+     *
      * @throws FormationContinueException
      */
-    public void chargement() throws FormationContinueException{
-        try{
+    public void chargement() throws FormationContinueException {
+        try {
             String stringJson = IOUtils.toString(new FileReader(fichiers_entree, StandardCharsets.UTF_8));
             this.jsonO = (JSONObject) JSONSerializer.toJSON(stringJson);
             activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
-        }catch(FileNotFoundException erreur) {
+        } catch (FileNotFoundException erreur) {
             throw new FormationContinueException("Le fichier donné est introuvable.");
-        }catch (JSONException erreur){
+        } catch (JSONException erreur) {
             throw new FormationContinueException("Ce n'est pas un fichier JSON bien formaté");
-        }catch (IOException erreur){
+        } catch (IOException erreur) {
             throw new FormationContinueException("Une erreur inattendue est survenue");
         }
     }
@@ -70,10 +70,10 @@ public class JSONHash {
     /**
      * Écris dans le fichier résultat si le cycle est complet et les erreurs
      * dans le fichier d'entré.
+     *
      * @throws FileNotFoundException
      */
-    public void exporterErreur() throws IOException
-    {
+    public void exporterErreur() throws IOException {
         PrintWriter sortie = new PrintWriter(fichiers_sortie, StandardCharsets.UTF_8);
         obj.put("complet", complet);
         obj.put("erreur", list1);
@@ -84,17 +84,18 @@ public class JSONHash {
 
     /**
      * Compare les heures de l'activité avec le max donné en param
+     *
      * @param heureMax  Le nombre d'heure maximum a comparé avec les heure de l'activité
-     * @param i index de l'activité a comparé dans le JSONArray
+     * @param i         index de l'activité a comparé dans le JSONArray
      * @param activites JSONArray de toute les activités
      * @return si les heures sont supérieur au heures max alors elle retourne
      * la valeur max sinon elle retourne les heures original de l'activité
      */
-    private int confirmerHeure(int heureMax, int i, JSONArray activites){
+    private int confirmerHeure(int heureMax, int i, JSONArray activites) {
         int heure = activites.getJSONObject(i).getInt("heures");
-        if(heure > heureMax){
+        if (heure > heureMax) {
             heure = heureMax;
-        }else if(heure < 1) {
+        } else if (heure < 1) {
             heure = 0;
             list1.add("Le nombre d'heure minimum est de 1. L'activite "
                     + activites.getJSONObject(i).getString("description") + " sera ignoree");
@@ -106,10 +107,11 @@ public class JSONHash {
      * Compare un activité pour determiner si il est dans la catégorie d'activité
      * qui on une restriction d'heures. retourne le nombre d'heures déclaré si
      * il n'a pas de restriction.
+     *
      * @param i index de l'activité a évaluer
      * @return nombre d'heure qui seras ajouté au total
      */
-    private int ignorerHeureTrop(int i){
+    private int ignorerHeureTrop(int i) {
         int heures;
         if ((activites.getJSONObject(i).getString("categorie").equals("présentation")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("projet de recherche"))) {
@@ -119,43 +121,48 @@ public class JSONHash {
             heures = confirmerHeure(17, i, activites);
         } else {
             heures = confirmerHeure(1000, i, activites);
-        } return heures;
+        }
+        return heures;
     }
 
     /**
      * Verification du format de la date respect le ISO 8601
+     *
      * @param i index de l'activité a évaluer
      * @return boolean true si valide et false si non valide
      */
-    private boolean verifierDate(int i){
+    private boolean verifierDate(int i) {
         boolean valide = false;
         String date = activites.getJSONObject(i).getString("date");
-        try{
+        try {
             LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
             valide = true;
-        }catch (IllegalArgumentException erreur){
+        } catch (IllegalArgumentException erreur) {
             System.out.println("Une erreur est survenue lors du traitement de la date.");
             System.exit(-1);
-        }catch (DateTimeParseException erreur){}
+        } catch (DateTimeParseException erreur) {
+        }
         return valide;
     }
 
     /**
      * Vérification de l'intervalle valide de l'activité.
-     * @param date  Date a vérifier
+     *
+     * @param date Date a vérifier
      * @return boolean true si valide et false si non valide
      */
-    private boolean estEntreDate(Date date){
+    private boolean estEntreDate(Date date) {
         return date.getTime() >= DATE_MIN.getTime() && date.getTime() <= DATE_MAX.getTime();
     }
 
     /**
      * Ajoute une erreur a la liste d'erreur et supprime l'activité avec la date
      * invalide
+     *
      * @param finMsg fin du message qui change selon le type d'erreur
-     * @param i index de l'activité
+     * @param i      index de l'activité
      */
-    private void ecrireErrDate(String finMsg, int i){
+    private void ecrireErrDate(String finMsg, int i) {
         list1.add("La date de l'activité " +
                 activites.getJSONObject(i).getString("description") +
                 finMsg);
@@ -165,47 +172,49 @@ public class JSONHash {
     /**
      * Valide la de toute les activités dans la liste des activités
      */
-    public void validerDate(){
+    public void validerDate() {
         try {
             for (int i = 0; i < activites.size(); i++) {
-                if (verifierDate(i)){
+                if (verifierDate(i)) {
                     String sDate = activites.getJSONObject(i).getString("date");
                     Date dDate = new SimpleDateFormat("yyyy-MM-dd").parse(sDate);
-                    if(!(estEntreDate(dDate))){
+                    if (!(estEntreDate(dDate))) {
                         ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
                     }
-                }else{
+                } else {
                     ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
                 }
             }
-        }catch (ParseException err){}
+        } catch (ParseException err) {
+        }
     }
 
     /**
      * Vérifie si les heures transféré ne dépasse pas le maximum d'heures transférable
+     *
      * @return les heures a ajouter au total
      */
-    private int verifierHeureTrf(){
+    private int verifierHeureTrf() {
         int nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
-        if (nbHeureTrf < 0){
+        if (nbHeureTrf < 0) {
             nbHeureTrf = 0;
             list1.add("Le nombre d'heures transférées ne peut être négatif. " +
-                    "0 heures seront considérées." );
-        }else if(nbHeureTrf > 7){
+                    "0 heures seront considérées.");
+        } else if (nbHeureTrf > 7) {
             nbHeureTrf = 7;
-            list1.add("Le nombre d'heures transférées ne peut être supérieur à "+
-                    "7 heures. Seulement 7 heures seront considérées." );
+            list1.add("Le nombre d'heures transférées ne peut être supérieur à " +
+                    "7 heures. Seulement 7 heures seront considérées.");
         }
         return nbHeureTrf;
     }
 
     /**
-     *  valide le cycle selon le type d'ordre.
+     * valide le cycle selon le type d'ordre.
      */
-    public void verifierCycle(){
+    public void verifierCycle() {
         if (!jsonO.getString("cycle").equals(ordre.getCycle()) ||
-                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.getCycle2()) ||
-                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3())){
+                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle2()) ||
+                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3())) {
             list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
@@ -216,14 +225,14 @@ public class JSONHash {
      * Vient verifier de quel type d'ordre il s'agit et instancie de quel type
      * de profession la variable ordre sera.
      */
-    public void verifierTypeOrdre(){
-        if (jsonO.getString("ordre").equals("architectes")){
+    public void verifierTypeOrdre() {
+        if (jsonO.getString("ordre").equals("architectes")) {
             ordre = new Architectes();
-        }else if (jsonO.getString("ordre").equals("géologues")){
+        } else if (jsonO.getString("ordre").equals("géologues")) {
             ordre = new Geologues();
-        }else if (jsonO.getString("ordre").equals("psychologues")){
+        } else if (jsonO.getString("ordre").equals("psychologues")) {
             ordre = new Psychologues();
-        }else{
+        } else {
             list1.add("L'ordre entré n'est pas valide");
             complet = false;
         }
@@ -232,17 +241,18 @@ public class JSONHash {
     /**
      * Vérifie si la catégorie de l'activité fait partie des la liste des
      * catégorie valide
+     *
      * @param obj l'activité a validé
      * @return boolean true si valide et false si non valide
      */
-    private boolean estActiviteValide(JSONObject obj){
+    private boolean estActiviteValide(JSONObject obj) {
         boolean comparaison = false;
-        for (int i = 0 ; i < categories.size(); i++) {
+        for (int i = 0; i < categories.size(); i++) {
             if (categories.get(i).equals(obj.get("categorie"))) {
                 comparaison = true;
             }
         }
-        if (!comparaison){
+        if (!comparaison) {
             list1.add("L'activité " + obj.getString("description") +
                     " est dans une catégorie non reconnue. Elle sera ignorée");
             activites.discard(obj);
@@ -256,13 +266,13 @@ public class JSONHash {
      */
     public void verifierHeuresMin() {
         int sommeheures = verifierHeureTrf();
-        for(int i = 0 ; i < activites.size(); i++){
-            if(estActiviteValide(activites.getJSONObject(i))){
+        for (int i = 0; i < activites.size(); i++) {
+            if (estActiviteValide(activites.getJSONObject(i))) {
                 int heures = ignorerHeureTrop(i);
                 sommeheures = sommeheures + heures;
             }
         }
-        if (sommeheures < ordre.getHeureMin()){
+        if (sommeheures < ordre.getHeureMin()) {
             list1.add("Il manque " + (ordre.getHeureMin() - sommeheures) + //nb heure negatif a voir
                     " heures" + " de formation pour compléter le cycle.");
             complet = false;
@@ -272,12 +282,13 @@ public class JSONHash {
     /**
      * Calcul les heures des activités qui font partie des catégories qui ont un
      * minimum de 17 heures
-     * @param i index de l'activité
+     *
+     * @param i     index de l'activité
      * @param heure heure initiale a être additionner au heures dans la catégorie
      *              minimum 17 heures
      * @return le total des heures précédente plus les nouvelles heures
      */
-    public int voirCat(int i, int heure){
+    public int voirCat(int i, int heure) {
         if ((activites.getJSONObject(i).getString("categorie").equals("cours")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("atelier")) ||
                 (activites.getJSONObject(i).getString("categorie").equals("séminaire"))
@@ -294,15 +305,15 @@ public class JSONHash {
      * minimum de 17 heures est en dessous de 17 heures.
      * Sinon elle ajuste la variable de completion.
      */
-    public void verifierHeuresMinCategories(){
+    public void verifierHeuresMinCategories() {
         int heure = verifierHeureTrf();
-        for (int i = 0 ; i < activites.size(); i++) {
+        for (int i = 0; i < activites.size(); i++) {
             heure = voirCat(i, heure);
         }
-        if (heure < 17){
-            list1.add("Le nombre d'heures déclarées pour les catégories suivantes "+
+        if (heure < 17) {
+            list1.add("Le nombre d'heures déclarées pour les catégories suivantes " +
                     ": cours, atelier, séminaire, colloque, conférence, lecture dirigée est de : " +
-                    heure +" heures. Le nombre d'heures déclarées est trop faible" );
+                    heure + " heures. Le nombre d'heures déclarées est trop faible");
             complet = false;
         }
     }
@@ -311,48 +322,44 @@ public class JSONHash {
      * Vérifie si la description des activités on une longeur de plus de 20 caractères
      * Sinon elle ajuste la variable de completion.
      */
-    public void verifierTailleDescription(){
-            for (int i = 0; i < activites.size(); i++) {
-                String Description = activites.getJSONObject(i).getString("description");
-                if (Description.length() <= 20){
-                    complet = false;
-                    list1.add("L'activité " + obj.getString("description") +
-                            " doit contenir une description avec plus de 20 caractère");
-                }
+    public void verifierTailleDescription() {
+        for (int i = 0; i < activites.size(); i++) {
+            String Description = activites.getJSONObject(i).getString("description");
+            if (Description.length() <= 20) {
+                complet = false;
+                list1.add("L'activité " + obj.getString("description") +
+                        " doit contenir une description avec plus de 20 caractère");
             }
         }
+    }
 
-    public void verifierFormatPermis(){
-        if (!verifierPremiereLettrePermis()){
-            list1.add("Le numéro de permis doit commencer par une lettre majuscule (A,R,S ouZ)");
+    public void verifierFormatPermis() throws FormationContinueException {
+        String numero_de_permis = jsonO.getString("numero_de_permis");
+        if (!verifierPremiereLettrePermis(numero_de_permis)) {
+            list1.add("Le numéro de permis doit commencer par une lettre majuscule (A,R,S ou Z)");
         }
-        if (!verifier4chiffresPermis()){
+        if (!verifier4chiffresPermis(numero_de_permis)) {
             list1.add("Le numéro de permis doit être une lettre majuscule suivie de 4 chiffres");
         }
     }
-    private Boolean verifierPremiereLettrePermis(){
+
+    protected static Boolean verifierPremiereLettrePermis(String numero_de_permis) throws FormationContinueException {
         boolean premiere_lettre = true;
-        if (!Character.isUpperCase(jsonO.getString("numero_de_permis").charAt(0))
-                || (jsonO.getString("numero_de_permis").charAt(0)!=('A')
-                || jsonO.getString("numero_de_permis").charAt(0)!=('R')
-                || jsonO.getString("numero_de_permis").charAt(0)!=('S')
-                || jsonO.getString("numero_de_permis").charAt(0)!=('Z'))){
-            premiere_lettre = false;
-        }
+            if (!Character.isUpperCase((numero_de_permis).charAt(0))
+                    || !((numero_de_permis.charAt(0) == ('A') || numero_de_permis.charAt(0) == ('R')
+                    || numero_de_permis.charAt(0) == ('S') || numero_de_permis.charAt(0) == ('Z')))) {
+                premiere_lettre = false;
+            }
         return premiere_lettre;
     }
 
-    private Boolean verifier4chiffresPermis(){
+    protected static Boolean verifier4chiffresPermis(String numero_de_permis) throws FormationContinueException {
         boolean chiffres = true;
-        if (jsonO.getString("numero_de_permis").length()!=5){
-            chiffres = false;
-        }
-        if (!Character.isDigit(jsonO.getString("numero_de_permis").charAt(1))
-                || !Character.isDigit(jsonO.getString("numero_de_permis").charAt(2))
-                || !Character.isDigit(jsonO.getString("numero_de_permis").charAt(3))
-                || !Character.isDigit(jsonO.getString("numero_de_permis").charAt(4))){
-            chiffres = false;
-        }
+            if (numero_de_permis.length() != 5 || (!Character.isDigit(numero_de_permis.charAt(1))
+                    || !Character.isDigit(numero_de_permis.charAt(2)) || !Character.isDigit(numero_de_permis.charAt(3))
+                    || !Character.isDigit(numero_de_permis.charAt(4)))) {
+                chiffres = false;
+            }
         return chiffres;
     }
 }
