@@ -323,13 +323,37 @@ public class JSONHash {
         }
 
     public void verifierFormatPermis(){
+        if (!verifierPremiereLettrePermis()){
+            list1.add("Le numéro de permis doit commencer par une lettre majuscule (A,R,S ouZ)");
+        }
+        if (!verifier4chiffresPermis()){
+            list1.add("Le numéro de permis doit être une lettre majuscule suivie de 4 chiffres");
+        }
+    }
+    private Boolean verifierPremiereLettrePermis(){
+        boolean premiere_lettre = true;
         if (!Character.isUpperCase(jsonO.getString("numero_de_permis").charAt(0))
-            && (jsonO.getString("numero_de_permis").charAt(0)!=('A')
+                || (jsonO.getString("numero_de_permis").charAt(0)!=('A')
                 || jsonO.getString("numero_de_permis").charAt(0)!=('R')
                 || jsonO.getString("numero_de_permis").charAt(0)!=('S')
                 || jsonO.getString("numero_de_permis").charAt(0)!=('Z'))){
-            list1.add("Le numéro de permis doit commencer par une lettre majuscule (A,R,S ouZ)"); //suivie de 4 chiffres"
+            premiere_lettre = false;
         }
+        return premiere_lettre;
+    }
+
+    private Boolean verifier4chiffresPermis(){
+        boolean chiffres = true;
+        if (jsonO.getString("numero_de_permis").length()!=5){
+            chiffres = false;
+        }
+        if (!Character.isDigit(jsonO.getString("numero_de_permis").charAt(1))
+                || !Character.isDigit(jsonO.getString("numero_de_permis").charAt(2))
+                || !Character.isDigit(jsonO.getString("numero_de_permis").charAt(3))
+                || !Character.isDigit(jsonO.getString("numero_de_permis").charAt(4))){
+            chiffres = false;
+        }
+        return chiffres;
     }
 }
 
