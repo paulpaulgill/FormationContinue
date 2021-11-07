@@ -333,7 +333,7 @@ public class JSONHash {
         }
     }
 
-    public void verifierFormatPermis() throws FormationContinueException {
+    public void verifierFormatPermis(){
         String numero_de_permis = jsonO.getString("numero_de_permis");
         if (!verifierPremiereLettrePermis(numero_de_permis)) {
             list1.add("Le numéro de permis doit commencer par une lettre majuscule (A,R,S ou Z)");
@@ -343,7 +343,7 @@ public class JSONHash {
         }
     }
 
-    protected static Boolean verifierPremiereLettrePermis(String numero_de_permis) throws FormationContinueException {
+    protected boolean verifierPremiereLettrePermis(String numero_de_permis){
         boolean premiere_lettre = true;
             if (!Character.isUpperCase((numero_de_permis).charAt(0))
                     || !((numero_de_permis.charAt(0) == ('A') || numero_de_permis.charAt(0) == ('R')
@@ -353,7 +353,7 @@ public class JSONHash {
         return premiere_lettre;
     }
 
-    protected static Boolean verifier4chiffresPermis(String numero_de_permis) throws FormationContinueException {
+    protected boolean verifier4chiffresPermis(String numero_de_permis){
         boolean chiffres = true;
             if (numero_de_permis.length() != 5 || (!Character.isDigit(numero_de_permis.charAt(1))
                     || !Character.isDigit(numero_de_permis.charAt(2)) || !Character.isDigit(numero_de_permis.charAt(3))
@@ -363,14 +363,33 @@ public class JSONHash {
         return chiffres;
     }
 
-    public void verifierheuresactivites() {
-        int heure;
-        for (int i = 0; i < activites.size(); i++){
-            heure = activites.getJSONObject(i).getInt("heures");
-            if (!Character.isDigit(heure) || heure<0){
-                list1.add("Le nombre d'heures de toutes les activités doivent être des entiers positifs");
+    public void verifierHeuresActivites() throws FormationContinueException {
+        boolean positif = true;
+            for (int i = 0; i < activites.size(); i++) {
+                if (!verifierHeure(i) && positif == true) {
+                    positif = false;
+                    list1.add("Le nombre d'heures de toutes les activités doivent être des entiers positifs");
+                }
             }
+    }
+
+    private boolean verifierHeure(int i) throws FormationContinueException {
+        boolean positif = true;
+        try {
+            int heure = activites.getJSONObject(i).getInt("heures");
+            positif = estEntierpositif(heure);
+        }catch (Exception erreur) {
+            throw new FormationContinueException("Le format des heures d'activités n'est pas correct");
         }
+        return positif;
+    }
+
+    protected boolean estEntierpositif(int heure){
+        boolean positif = true;
+        if (heure<0){
+            positif = false;
+        }
+        return positif;
     }
 }
 
