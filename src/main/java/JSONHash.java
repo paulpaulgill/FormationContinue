@@ -17,7 +17,7 @@ import java.util.*;
 public class JSONHash {
     private final String fichiers_entree;
     private final String fichiers_sortie;
-    private JSONObject jsonO;
+    protected JSONObject jsonO;
     private Boolean complet = true;
     private JSONArray list1 = new JSONArray();
     private JSONObject obj = new JSONObject();
@@ -25,7 +25,7 @@ public class JSONHash {
     private final Date DATE_MAX = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
     private final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     private JSONArray activites = new JSONArray();
-    private Profession ordre;
+    protected Profession ordre;
 
     public void Categories()
     {
@@ -47,6 +47,10 @@ public class JSONHash {
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
+    }
+
+    public JSONArray getList1() {
+        return list1;
     }
 
     /**
@@ -206,9 +210,14 @@ public class JSONHash {
      *  valide le cycle selon le type d'ordre.
      */
     public void verifierCycle(){
-        if (!jsonO.getString("cycle").equals(ordre.getCycle()) ||
-                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.getCycle2()) ||
-                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3())){
+        if(ordre instanceof Architectes){
+            if(!(jsonO.getString("cycle").equals(ordre.getCycle()) ||
+                    jsonO.getString("cycle").equals(ordre.getCycle2()) ||
+                    jsonO.getString("cycle").equals(ordre.getCycle3()))){
+                list1.add("Le cycle entré n'est pas valide");
+                complet = false;
+            }
+        }else if (!jsonO.getString("cycle").equals(ordre.getCycle())){
             list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
