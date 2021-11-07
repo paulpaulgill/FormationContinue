@@ -156,15 +156,76 @@ class JSONHashTest {
         assertEquals(p2 instanceof Psychologues, h.ordre instanceof Psychologues);
     }
 
-    @Disabled
+
     @Test
-    public void testVerifierHeuresMinCategories(){
-        
+    public void testVerifierHeuresMinCategoriesArchitecte(){
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        obj.put("heures_transferees_du_cycle_precedent","0");
+        JSONHash h = new JSONHash(obj.toString(), obj2.toString());
+        h.jsonO = (JSONObject) JSONSerializer.toJSON(obj.toString());
+        h.ordre = new Architectes();
+        h.verifierHeuresMin();
+        //false car nbheure = 0 donc list un contient
+        assertEquals(false, h.getList1().isEmpty());
     }
 
-    @Disabled
     @Test
-    public void testVerifierHeureTrf(){
+    public void testVerifierHeuresMinCategoriesGeo(){
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        obj.put("heures_transferees_du_cycle_precedent","0");
+        JSONHash h = new JSONHash(obj.toString(), obj2.toString());
+        h.jsonO = (JSONObject) JSONSerializer.toJSON(obj.toString());
+        h.ordre = new Geologues();
+        h.verifierHeuresMin();
+        //false car nbheure = 0 donc list un contient
+        assertEquals(false, h.getList1().isEmpty());
+    }
 
+    @Test
+    public void testVerifierHeuresMinCategoriesPsy(){
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        obj.put("heures_transferees_du_cycle_precedent","0");
+        JSONHash h = new JSONHash(obj.toString(), obj2.toString());
+        h.jsonO = (JSONObject) JSONSerializer.toJSON(obj.toString());
+        h.ordre = new Psychologues();
+        h.verifierHeuresMin();
+        //false car nbheure = 0 donc list un contient
+        assertEquals(false, h.getList1().isEmpty());
+    }
+
+
+    @Test
+    public void testVerifierHeureTrfArchitecte(){
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        obj.put("heures_transferees_du_cycle_precedent","4");
+        JSONHash h = new JSONHash(obj.toString(), obj2.toString());
+        h.jsonO = (JSONObject) JSONSerializer.toJSON(obj.toString());
+        h.ordre = new Architectes();
+        assertEquals(4,h.verifierHeureTrf());
+    }
+    @Test
+    public void testVerifierHeureTrfArchitecteHeureTrop(){
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        obj.put("heures_transferees_du_cycle_precedent","10");
+        JSONHash h = new JSONHash(obj.toString(), obj2.toString());
+        h.jsonO = (JSONObject) JSONSerializer.toJSON(obj.toString());
+        h.ordre = new Architectes();
+        assertEquals(7,h.verifierHeureTrf());
+    }
+
+    @Test
+    public void testVerifierHeureTrfPasArchitecte(){
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        obj.put("heures_transferees_du_cycle_precedent","4");
+        JSONHash h = new JSONHash(obj.toString(), obj2.toString());
+        h.jsonO = (JSONObject) JSONSerializer.toJSON(obj.toString());
+        h.ordre = new Psychologues();
+        assertEquals(0,h.verifierHeureTrf());
     }
 }

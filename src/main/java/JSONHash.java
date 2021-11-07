@@ -189,7 +189,7 @@ public class JSONHash {
      * Vérifie si les heures transféré ne dépasse pas le maximum d'heures transférable
      * @return les heures a ajouter au total
      */
-    private int verifierHeureTrf(){
+    protected int verifierHeureTrf(){
         int nbHeureTrf = 0;
         if(ordre instanceof Architectes){
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
