@@ -362,6 +362,16 @@ public class JSONHash {
             }
         return chiffres;
     }
+
+    public void verifierheuresactivites() {
+        int heure;
+        for (int i = 0; i < activites.size(); i++){
+            heure = activites.getJSONObject(i).getInt("heures");
+            if (!Character.isDigit(heure) || heure<0){
+                list1.add("Le nombre d'heures de toutes les activités doivent être des entiers positifs");
+            }
+        }
+    }
 }
 
 
