@@ -52,7 +52,6 @@ class JSONHashTest {
         assertEquals(p1 instanceof Architectes , JSONHash.verifierTypeOrdre().);
     }
     */
-    @Tag("Format du permis")
 
     @Test
     @DisplayName("La première lettre du permis est A,R,S ou Z et la première lettre du permis est une majuscule")
@@ -102,7 +101,6 @@ class JSONHashTest {
         assertEquals(false,json.verifier4chiffresPermis(egal5faux));
     }
 
-    @Tag("Format heures des activités")
 
     @Test
     @DisplayName("L'heure de l'activité est négative")
@@ -115,7 +113,5 @@ class JSONHashTest {
     void entierpositif(){
         assertEquals(true,json.estEntierpositif(positif));
     }
-
-
 
 }
