@@ -1,19 +1,40 @@
 -Séparation en classe: Une classe mère Profession abstraite qui a les trois profession comme enfant.
             Ces classes devront contenir principalement que des constantes qui sont propres à chaque profession. ex: cycle
-            Possible de faire une enum pour les lettres du permis?
         	Séparer JSONHash -> En classe JSON et Validation.
--Classe architecture doit contenir les mêmes nb heure que le TP1 sauf pour ce qui est du cycle.
 
 AUTRES DÉTAILS
--changer le nom des méthodes (débuter par un verbe)
+-Travailler exclusivement avec des branches
+-changer le nom des méthodes (débuter par un verbe)             DONE
 -un minimum de 80% du code doit avoir un test avec JUnit 5
 -chaque classe et méthode ne doivent faire qu'une seule chose
+-Faire le workflow.md           DONE
 
 NOUVELLES FONCTIONNALITÉS
+-Reconnaitre les types ordre                DONE
 -s'assurer que la description de chaque activité a au moins 20 caractères
 -si la structure du fichier JSON n'est pas respecté, fin programme et msg d'erreur dans fichier en le précisant et sur la console.
--Le nombre d'heure d'une seule journée ne doit pas dépasser 10h sinon msg erreur et ne considérer que 10h.
--La date doit tenir compte des années bissextiles.
+-Le nombre d'heure d'une seule journée ne doit pas dépasser 10h sinon msg erreur dans fichier et ne considérer que 10h.
+-La date doit tenir compte des années bissextiles.              DONE
 -Nombre d'heure doit être un nombre entier positif
 -vérifier première lettre du numéro de permis et 4 chiffres qui suivent
+-Le champs trf heure ne doit pas exiter (ou etre pris en compte) pour geo et psy        DONE
+-Confirmer les dates valides pour chaque cycle.
+-Nombre heures au total dans chaque catégorie           DONE
 
+
+GEOLOGUE
+55 heures au total      DONE
+MINIMUM DE: 22h par cycle dans la catégorie cours
+            3h dans projet de recherche
+            1h pour groupe de discussion
+Pas de trf d'heure      DONE
+
+PSYCHOLOGUE
+90 heures au total      DONE
+MINIMUM DE: 25h par cycle dans la catégorie cours
+Pas de trf d'heure      DONE
+MAXIMUM DE: 15h dans la catégorie conférence. Au delà, pas de msg d'erreur mais on compte un max de 15h.
+
+ARCHITECTE
+42 heures au total         DONE
+Même conditions que TP1.
