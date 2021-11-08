@@ -17,7 +17,7 @@ import java.util.*;
 public class JSONHash {
     private final String fichiers_entree;
     private final String fichiers_sortie;
-    private JSONObject jsonO;
+    protected JSONObject jsonO;
     private Boolean complet = true;
     private JSONArray list1 = new JSONArray();
     private JSONObject obj = new JSONObject();
@@ -25,7 +25,7 @@ public class JSONHash {
     private final Date DATE_MAX = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
     private final Date DATE_MIN =  new GregorianCalendar(2020, Calendar.APRIL, 1).getTime();
     private JSONArray activites = new JSONArray();
-    private Profession ordre;
+    protected Profession ordre;
 
     public void Categories()
     {
@@ -43,17 +43,21 @@ public class JSONHash {
      * @param entree le fichier d'entré
      * @param sortie le fichier de sortie
      */
-    public JSONHash(String entree, String sortie)
+    public JSONHash( String entree, String sortie )
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
+    }
+
+    public JSONArray getList1() {
+        return list1;
     }
 
     /**
      * Lis le fichier JSON d'entrée et l'insert dans un objet JSON
      * @throws FormationContinueException
      */
-    public void chargement() throws FormationContinueException{
+    public void chargement() throws FormationContinueException {
         try{
             String stringJson = IOUtils.toString(new FileReader(fichiers_entree, StandardCharsets.UTF_8));
             this.jsonO = (JSONObject) JSONSerializer.toJSON(stringJson);
@@ -185,16 +189,19 @@ public class JSONHash {
      * Vérifie si les heures transféré ne dépasse pas le maximum d'heures transférable
      * @return les heures a ajouter au total
      */
-    private int verifierHeureTrf(){
-        int nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
-        if (nbHeureTrf < 0){
-            nbHeureTrf = 0;
-            list1.add("Le nombre d'heures transférées ne peut être négatif. " +
-                    "0 heures seront considérées." );
-        }else if(nbHeureTrf > 7){
-            nbHeureTrf = 7;
-            list1.add("Le nombre d'heures transférées ne peut être supérieur à "+
-                    "7 heures. Seulement 7 heures seront considérées." );
+    protected int verifierHeureTrf() {
+        int nbHeureTrf = 0;
+        if (ordre instanceof Architectes) {
+            nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
+            if (nbHeureTrf < 0){
+                nbHeureTrf = 0;
+                list1.add("Le nombre d'heures transférées ne peut être négatif. " +
+                        "0 heures seront considérées." );
+            } else if (nbHeureTrf > 7){
+                nbHeureTrf = 7;
+                list1.add("Le nombre d'heures transférées ne peut être supérieur à "+
+                        "7 heures. Seulement 7 heures seront considérées." );
+            }
         }
         return nbHeureTrf;
     }
@@ -203,9 +210,14 @@ public class JSONHash {
      *  valide le cycle selon le type d'ordre.
      */
     public void verifierCycle(){
-        if (!jsonO.getString("cycle").equals(ordre.getCycle()) ||
-                (ordre instanceof Architectes) &&!jsonO.getString("cycle").equals(ordre.getCycle2()) ||
-                (ordre instanceof Architectes) && !jsonO.getString("cycle").equals(ordre.getCycle3())){
+        if(ordre instanceof Architectes){
+            if(!(jsonO.getString("cycle").equals(ordre.getCycle()) ||
+                    jsonO.getString("cycle").equals(ordre.getCycle2()) ||
+                    jsonO.getString("cycle").equals(ordre.getCycle3()))){
+                list1.add("Le cycle entré n'est pas valide");
+                complet = false;
+            }
+        }else if (!jsonO.getString("cycle").equals(ordre.getCycle())){
             list1.add("Le cycle entré n'est pas valide");
             complet = false;
         }
