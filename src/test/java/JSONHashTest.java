@@ -158,7 +158,7 @@ class JSONHashTest {
 
 
     @Test
-    public void testVerifierHeuresMinCategoriesArchitecte(){
+    public void testVerifierHeuresMinArchitecte(){
         JSONObject obj = new JSONObject();
         JSONObject obj2 = new JSONObject();
         obj.put("heures_transferees_du_cycle_precedent","0");
@@ -171,7 +171,7 @@ class JSONHashTest {
     }
 
     @Test
-    public void testVerifierHeuresMinCategoriesGeo(){
+    public void testVerifierHeuresMinGeo(){
         JSONObject obj = new JSONObject();
         JSONObject obj2 = new JSONObject();
         obj.put("heures_transferees_du_cycle_precedent","0");
@@ -184,7 +184,7 @@ class JSONHashTest {
     }
 
     @Test
-    public void testVerifierHeuresMinCategoriesPsy(){
+    public void testVerifierHeuresMinPsy(){
         JSONObject obj = new JSONObject();
         JSONObject obj2 = new JSONObject();
         obj.put("heures_transferees_du_cycle_precedent","0");

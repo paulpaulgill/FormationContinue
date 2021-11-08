@@ -43,7 +43,7 @@ public class JSONHash {
      * @param entree le fichier d'entré
      * @param sortie le fichier de sortie
      */
-    public JSONHash(String entree, String sortie)
+    public JSONHash( String entree, String sortie )
     {
         this.fichiers_entree = entree;
         this.fichiers_sortie = sortie;
@@ -57,7 +57,7 @@ public class JSONHash {
      * Lis le fichier JSON d'entrée et l'insert dans un objet JSON
      * @throws FormationContinueException
      */
-    public void chargement() throws FormationContinueException{
+    public void chargement() throws FormationContinueException {
         try{
             String stringJson = IOUtils.toString(new FileReader(fichiers_entree, StandardCharsets.UTF_8));
             this.jsonO = (JSONObject) JSONSerializer.toJSON(stringJson);
@@ -189,15 +189,15 @@ public class JSONHash {
      * Vérifie si les heures transféré ne dépasse pas le maximum d'heures transférable
      * @return les heures a ajouter au total
      */
-    protected int verifierHeureTrf(){
+    protected int verifierHeureTrf() {
         int nbHeureTrf = 0;
-        if(ordre instanceof Architectes){
+        if (ordre instanceof Architectes) {
             nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
             if (nbHeureTrf < 0){
                 nbHeureTrf = 0;
                 list1.add("Le nombre d'heures transférées ne peut être négatif. " +
                         "0 heures seront considérées." );
-            }else if(nbHeureTrf > 7){
+            } else if (nbHeureTrf > 7){
                 nbHeureTrf = 7;
                 list1.add("Le nombre d'heures transférées ne peut être supérieur à "+
                         "7 heures. Seulement 7 heures seront considérées." );
