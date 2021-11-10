@@ -1,3 +1,6 @@
+package Util;
+
+import Profession.Profession;
 import net.sf.json.*;
 import org.apache.commons.io.IOUtils;
 
@@ -199,7 +202,7 @@ public class JSONHash {
      *
      * @return les heures a ajouter au total
      */
-    private int verifierHeureTrf() {
+    protected int verifierHeureTrf() {
         int nbHeureTrf = jsonO.getInt("heures_transferees_du_cycle_precedent");
         if (nbHeureTrf < 0) {
             nbHeureTrf = 0;

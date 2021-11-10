@@ -1,4 +1,8 @@
-public class Architectes extends Profession{
+package Profession;
+
+import Profession.Profession;
+
+public class Architectes extends Profession {
     private final String cycle = "2020-2022";
     private final String cycle2 = "2018-2020";
     private final String cycle3 = "2016-2018";

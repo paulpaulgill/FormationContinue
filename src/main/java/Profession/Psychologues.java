@@ -1,4 +1,8 @@
-public class Psychologues extends Profession{
+package Profession;
+
+import Profession.Profession;
+
+public class Psychologues extends Profession {
     public final String cycle = "2018-2023";
     public final int heureMin = 90;
 

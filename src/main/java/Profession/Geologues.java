@@ -1,4 +1,8 @@
-public class Geologues extends Profession{
+package Profession;
+
+import Profession.Profession;
+
+public class Geologues extends Profession {
     private final String cycle = "2018-2021";
     public final int heureMin = 55;
 

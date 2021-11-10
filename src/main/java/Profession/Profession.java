@@ -1,3 +1,5 @@
+package Profession;
+
 public abstract class Profession {
     abstract String getCycle();
     abstract String getCycle2();

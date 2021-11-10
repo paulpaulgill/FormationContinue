@@ -1,6 +1,6 @@
--Séparation en classe: Une classe mère Profession abstraite qui a les trois profession comme enfant.
+-Séparation en classe: Une classe mère Profession.Profession abstraite qui a les trois profession comme enfant.
             Ces classes devront contenir principalement que des constantes qui sont propres à chaque profession. ex: cycle
-        	Séparer JSONHash -> En classe JSON et Validation.
+        	Séparer Util.JSONHash -> En classe JSON et Validation.
 
 AUTRES DÉTAILS
 -Travailler exclusivement avec des branches
