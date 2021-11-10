@@ -1,13 +1,16 @@
 package Util;
 
-import Profession.Profession;
+import Profession.*;
+import Exception.FormationContinueException;
+import java.util.*;
+
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.json.*;
 import org.apache.commons.io.IOUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -15,9 +18,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-import java.util.*;
+
 
 public class JSONHash {
+    private Declaration declaInit;
+    private Resultat resultat;
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
     private final String fichiers_entree;
     private final String fichiers_sortie;
     protected JSONObject jsonO;
@@ -61,18 +68,26 @@ public class JSONHash {
      *
      * @throws FormationContinueException
      */
-    public void chargement() throws FormationContinueException {
+    public Declaration chargement() throws FormationContinueException {
         try{
-            String stringJson = IOUtils.toString(new FileReader(fichiers_entree, StandardCharsets.UTF_8));
-            this.jsonO = (JSONObject) JSONSerializer.toJSON(stringJson);
-            activites = (JSONArray) JSONSerializer.toJSON(jsonO.getString("activites"));
-        } catch (FileNotFoundException erreur) {
+            objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
+            declaInit = objectMapper.readValue(new File(fichiers_entree), Declaration.class);
+            if (declaInit.getOrdre().equals("architectes")){
+                declaInit = objectMapper.readValue(new File(fichiers_entree), Architectes.class);
+            }else if(declaInit.getOrdre().equals("géologues")){
+                declaInit = objectMapper.readValue(new File(fichiers_entree), Geologues.class);
+            }else if(declaInit.getOrdre().equals("psychologues")){
+                declaInit = objectMapper.readValue(new File(fichiers_entree), Psychologues.class);
+            }
+        }catch(FileNotFoundException erreur) {
             throw new FormationContinueException("Le fichier donné est introuvable.");
-        } catch (JSONException erreur) {
-            throw new FormationContinueException("Ce n'est pas un fichier JSON bien formaté");
-        } catch (IOException erreur) {
+        }catch (JsonMappingException erreur){
+            throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
+        }catch (IOException erreur){
             throw new FormationContinueException("Une erreur inattendue est survenue");
         }
+        return declaInit;
     }
 
     /**
@@ -81,13 +96,15 @@ public class JSONHash {
      *
      * @throws FileNotFoundException
      */
-    public void exporterErreur() throws IOException {
-        PrintWriter sortie = new PrintWriter(fichiers_sortie, StandardCharsets.UTF_8);
-        obj.put("complet", complet);
-        obj.put("erreur", list1);
-        sortie.write(obj.toString(3));
-        sortie.flush();
-        sortie.close();
+    public void exporterErreur(Declaration decla) throws FormationContinueException {
+        try {
+            pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
+            objectMapper.writer(pp).writeValue(new File(fichiers_sortie),decla.getResultat());
+        }catch (IOException erreur){
+            throw new FormationContinueException("erreur inatendu lors de l'exportation des resultats");
+        }
+
+
     }
 
     /**
