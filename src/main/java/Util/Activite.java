@@ -35,4 +35,54 @@ public class Activite {
         this.heures = houres;
         this.date = date;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCategorie() {
+        return categorie;
+    }
+
+    public int getHeures() {
+        return heures;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCategorie(String categorie) {
+        this.categorie = categorie;
+    }
+
+    public void setHeures(int heures) {
+        this.heures = heures;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public boolean getIgnore() {
+        return ignore;
+    }
+
+    public void setIgnore(boolean ignore) {
+        this.ignore = ignore;
+    }
+
+    public int getCategorieNum(){
+        int a = 0;
+        for (int i = 0; i < validCategoryTable.length ; i++){
+            if(validCategoryTable[i].equals(categorie)){
+                a = i + 1;
+            }
+        }
+        return a;
+    }
 }
