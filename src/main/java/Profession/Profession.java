@@ -17,4 +17,12 @@ public abstract class Profession extends Declaration {
     public Resultat getResultat() {
         return resultat;
     }
+
+    public void validerPemis() throws FormationContinueException {
+        Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
+        Matcher m = p.matcher(permis);
+        if (!m.matches()){
+            lancerErreurStrut();
+        }
+    }
 }
