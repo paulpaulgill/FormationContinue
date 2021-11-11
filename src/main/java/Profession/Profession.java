@@ -25,4 +25,14 @@ public abstract class Profession extends Declaration {
             lancerErreurStrut();
         }
     }
+    
+    public void validerDescription() throws FormationContinueException {
+        for (int i = 0; i < activites.size(); i++) {
+            Pattern p = Pattern.compile(".{21,}");
+            Matcher m = p.matcher(activites.get(i).getDescription());
+            if (!m.matches()){
+                lancerErreurStrut();
+            }
+        }
+    }
 }
