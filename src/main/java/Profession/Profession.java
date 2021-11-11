@@ -80,4 +80,20 @@ public abstract class Profession extends Declaration {
         }
         return valide;
     }
+
+    private void ecrireErrDate(String finMsg, int i) {
+        resultat.ajouterErreur("La date de l'activité " +
+                activites.get(i).getDescription() + finMsg);
+        activites.get(i).setIgnore(true);
+    }
+
+    public void validerDate() {
+        for (int i = 0; i < activites.size(); i++) {
+            if (!verifierFormatDate(i)){
+                ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
+            }else if (!estEntreDate(i,mesurerInter())){
+                ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
+            }
+        }
+    }
 }
