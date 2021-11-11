@@ -121,4 +121,15 @@ public abstract class Profession extends Declaration {
         }
         return heuresCat;
     }
+
+    public void validerCycle(){
+        if (mesurerInter() == null){
+            resultat.ajouterErreur("Cycle erroné.");
+            resultat.setComplet(false);
+        }
+    }
+
+    public abstract IntervalCycle mesurerInter();
+
+    public abstract void validerHTotal();
 }
