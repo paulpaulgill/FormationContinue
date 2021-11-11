@@ -35,4 +35,16 @@ public abstract class Profession extends Declaration {
             }
         }
     }
+
+    public void validerHeure() throws FormationContinueException {
+        for (int i = 0; i < activites.size(); i++){
+            if (activites.get(i).getHeures() == 0) {
+                resultat.ajouterErreur("Le nombre d'heure minimum est de 1. L'activite "
+                        + activites.get(i).getDescription() + " sera ignoree");
+                activites.get(i).setIgnore(true);
+            }if (activites.get(i).getHeures() < 0) {
+                lancerErreurStrut();
+            }
+        }
+    }
 }
