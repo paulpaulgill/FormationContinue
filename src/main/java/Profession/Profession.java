@@ -53,4 +53,19 @@ public abstract class Profession extends Declaration {
         resultat.setComplet(false);
         throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
     }
+
+    private boolean verifierFormatDate(int i) {
+        boolean valide = false;
+        String date = activites.get(i).getDate();
+        try {
+            LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
+            valide = true;
+        } catch (IllegalArgumentException erreur) {
+            System.out.println("Une erreur est survenue lors du traitement de la date.");
+            System.exit(-1);
+        } catch (DateTimeParseException erreur) {
+            valide = false;
+        }
+        return valide;
+    }
 }
