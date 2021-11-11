@@ -1,4 +1,4 @@
-package Util;
+package util;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 public class Declaration {
+
     @JsonProperty("numero_de_permis")
     protected String permis;
     protected String cycle;
@@ -71,5 +72,4 @@ public class Declaration {
     public Resultat getResultat() {
         return null;
     }
-}
 }

@@ -1,4 +1,4 @@
-package Profession;
+package profession;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,7 +41,6 @@ public abstract class Profession extends Declaration {
             lancerErreurStrut();
         }
     }
-    
     public void validerDescription() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++) {
             Pattern p = Pattern.compile(".{21,}");
@@ -64,7 +63,7 @@ public abstract class Profession extends Declaration {
         }
     }
 
-     public void lancerErreurStrut() throws FormationContinueException {
+    public void lancerErreurStrut() throws FormationContinueException {
         resultat.ecraserErreur("Le fichier d'entrée est invalide.");
         resultat.setComplet(false);
         throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
@@ -84,6 +83,8 @@ public abstract class Profession extends Declaration {
         }
         return valide;
     }
+
+
     private boolean estEntreDate(int i, IntervalCycle interCycle) {
         boolean valide = false;
         Date max = interCycle.getMax();
@@ -96,6 +97,7 @@ public abstract class Profession extends Declaration {
         }
         return valide;
     }
+
 
     private void ecrireErrDate(String finMsg, int i) {
         resultat.ajouterErreur("La date de l'activité " +
