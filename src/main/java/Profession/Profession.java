@@ -68,4 +68,16 @@ public abstract class Profession extends Declaration {
         }
         return valide;
     }
+    private boolean estEntreDate(int i, IntervalCycle interCycle) {
+        boolean valide = false;
+        Date max = interCycle.getMax();
+        Date min = interCycle.getMin();
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(activites.get(i).getDate());
+            valide = date.getTime() >= min.getTime() && date.getTime() <= max.getTime();
+        } catch (ParseException erreur) {
+            valide = false;
+        }
+        return valide;
+    }
 }
