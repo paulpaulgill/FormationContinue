@@ -96,4 +96,29 @@ public abstract class Profession extends Declaration {
             }
         }
     }
+
+    public void validerCatAtivites(){
+        for (int i = 0; i < activites.size(); i++){
+            if (activites.get(i).getCategorieNum() == 0){
+                resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
+                        " est dans une catégorie non reconnue. Elle sera ignorée");
+                activites.get(i).setIgnore(true);
+            }else if (activites.get(i).getHeures() > 10){
+                resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
+                        " inclue plus que 10h dans la même journée. Seulement 10h" +
+                        "seront considéré dans les calculs");
+                activites.get(i).setHeures(10);
+            }
+        }
+    }
+
+    public int calculerHCat(int cat){
+        int heuresCat = 0;
+        for (int i = 0; i < activites.size(); i++ ){
+            if(activites.get(i).getCategorieNum() == (cat) && !activites.get(i).getIgnore()){
+                heuresCat = heuresCat + activites.get(i).getHeures();
+            }
+        }
+        return heuresCat;
+    }
 }
