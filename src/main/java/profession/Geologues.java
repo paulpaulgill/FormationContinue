@@ -25,22 +25,40 @@ public class Geologues extends Profession{
         super(permis, cycle, heuresTrans, ordre, activites);
     }
 
+    /**
+     * Valide que le nombre d'heures dans chaque catégorie soit respecté.
+     * Sinon un message d'erreur est produit dans le fichier de sortie et
+     * le cycle devient incomplet.
+     */
     public void validerHMin(){
         if (calculerHCat(1) < 22){
-            ecrireErruerHMin(22,calculerHCat(1),"cours");
+            ecrireErreurHMin(22,calculerHCat(1),"cours");
         }else if (calculerHCat(8) < 1){
-            ecrireErruerHMin(1,calculerHCat(8),"groupe de discussion");
+            ecrireErreurHMin(1,calculerHCat(8),"groupe de discussion");
         }else if (calculerHCat(9) < 3){
-            ecrireErruerHMin(3,calculerHCat(9),"projet de recherche");
+            ecrireErreurHMin(3,calculerHCat(9),"projet de recherche");
         }
     }
 
-    public void ecrireErruerHMin(int heuresMin, int heures, String categorie ){
+    /**
+     * Ecrit un message d'erreur dans le fichier de sortie et le cycle
+     * n'est pas complet.
+     *
+     * @param heuresMin le nombre d'heure min a respecter
+     * @param heures le nombre d'heure fait lors du cycle
+     * @param categorie la categorie non respectee
+     */
+    public void ecrireErreurHMin(int heuresMin, int heures, String categorie ){
         resultat.ajouterErreur("Il manque " + (heuresMin - heures) +
                 " pour atteindre le min de "+ heuresMin +"h pour la catégorie :" + categorie );
         resultat.setComplet(false);
     }
 
+    /**
+     * Verifie le cycle et retourne le nombre d'heure total, les bonne dates et le String du cycle
+     * qui correspondent au cycle.
+     * @return IntervalCycle qui contient le cycle, les date min et max  et le nb d'heure minimum
+     */
     @Override
     public IntervalCycle mesurerInter() {
         IntervalCycle inter;
@@ -52,6 +70,11 @@ public class Geologues extends Profession{
         return inter;
     }
 
+    /**
+     * Valide si le nombre d'heures total a ete respecte du cycle
+     * sinon un message est ecrit sur le fichier de sortie et
+     * le cycle n'est pas complet
+     */
     @Override
     public void validerHTotal() {
         int heures = 0;

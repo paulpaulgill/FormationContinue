@@ -27,6 +27,10 @@ public class Architectes extends Profession{
         super(permis, cycle, heuresTrans, ordre, activites);
     }
 
+    /**
+     * Calcule le nombre d'heures totales de chaque catégorie.
+     * @return int le nombre d'heure
+     */
     public int calculerHTCat(){
         int heures = 0;
         for (int i = 1; i <= 10; i++){
@@ -38,6 +42,11 @@ public class Architectes extends Profession{
         }
         return heures;
     }
+
+    /**
+     * Valide le nombre d'heures total compléter. Si ce n'est pas valide, un message d'erreur
+     * est ajouté au document de sortie.
+     */
     @Override
     public void validerHTotal(){
         int heures = 0;
@@ -50,6 +59,12 @@ public class Architectes extends Profession{
         validerHMin();
     }
 
+    /**
+     * Verifie si le nombre d'heure transféré est plus petit ou égal à 7
+     * S'il est plus grand, un message d'erreur est produit sur le fichier et juste 7
+     * seront considérées.
+     * @return
+     */
     private int verifierHeureTrf(){
         if (heuresTrans < 0){
             heuresTrans = 0;
@@ -63,6 +78,11 @@ public class Architectes extends Profession{
         return heuresTrans;
     }
 
+    /**
+     * Valide que le nombre d'heures dans chaque catégorie soit respecté.
+     * Sinon un message d'erreur est produit dans le fichier de sortie et
+     * le cycle devient incomplet.
+     */
     public void validerHMin(){
         int heures = 0;
         for (int i = 0; i < activites.size(); i++){
@@ -78,7 +98,11 @@ public class Architectes extends Profession{
         }
     }
 
-
+    /**
+     * Verifie le cycle et retourne le nombre d'heure total, les bonne dates et le String du cycle
+     * qui correspondent au cycle.
+     * @return IntervalCycle qui contient le cycle, les date min et max  et le nb d'heure minimum
+     */
     @Override
     public IntervalCycle mesurerInter() {
         IntervalCycle inter;
