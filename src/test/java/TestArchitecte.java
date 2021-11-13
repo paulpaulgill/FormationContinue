@@ -92,7 +92,21 @@ public class TestArchitecte {
         Assert.assertEquals(false, a1.getResultat().isComplet());
     }
 
+    @Test
+    public void testValiderHMin(){
+        arrayList.addAll(liste);
+        a1.setActivites(arrayList);
+        a1.validerHMin();
+        Assert.assertEquals(true, a1.getResultat().isComplet());
+    }
 
+    @Test
+    public void testValiderHMinPasComplet(){
+        arrayList.addAll(liste2);
+        a1.setActivites(arrayList);
+        a1.validerHMin();
+        Assert.assertEquals(false, a1.getResultat().isComplet());
+    }
 
 
 
