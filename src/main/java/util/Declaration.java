@@ -15,7 +15,6 @@ public class Declaration {
     protected String ordre;
     protected ArrayList<Activite> activites = new ArrayList<>();
 
-
     @JsonCreator
     public Declaration(@JsonProperty("numero_de_permis") String permis,
                        @JsonProperty("cycle") String cycle,

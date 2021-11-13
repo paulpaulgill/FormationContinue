@@ -30,4 +30,6 @@ public class IntervalCycle {
     public void setMin(Date min) {
         this.min = min;
     }
+
+    public String getCycle() { return cycle; }
 }
