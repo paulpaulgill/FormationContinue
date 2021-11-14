@@ -115,7 +115,7 @@ public abstract class Profession extends Declaration {
         }
     }
 
-    public void validerCatAtivites(){
+    public void validerCatActivites(){
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getCategorieNum() == 0){
                 resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +

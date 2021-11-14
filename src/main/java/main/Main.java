@@ -14,7 +14,7 @@ public class Main {
             if (declaration.getResultat().isComplet()) {
                 declaration.validerPermis();
                 declaration.validerDescription();
-                declaration.validerCatAtivites();
+                declaration.validerCatActivites();
                 declaration.validerHeure();
                 declaration.validerDate();
                 declaration.validerHTotal();
