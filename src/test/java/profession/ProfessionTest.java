@@ -34,22 +34,61 @@ class ProfessionTest{
     }
 
 
-    @Test
+    @Test //OK
     @DisplayName("Le bon resultat est retourné")
-    void resultat(){
+    void resultatCorrect(){
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        heuresTrans = 3;
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        assertEquals(true,p1.getResultat().isComplet());
+        assertEquals(0,p1.getResultat().getErreur().size());
     }
 
-    @Test
+    @Test //OK
+    @DisplayName("Le mauvais resultat est retourné")
+    void resultatIncorrect(){
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        heuresTrans = 3;
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1.resultat.ajouterErreur("err");
+        p1.resultat.setComplet(false);
+        assertNotEquals(true,p1.getResultat().isComplet());
+        assertNotEquals(0,p1.getResultat().getErreur().size());
+    }
+
+    @Test //OK
     @DisplayName("Le permis n'est pas correct")
     void validerPermisPasCorrect(){
-        permis = "faux";
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "44489";
+        cycle = "2018-2023";
+        heuresTrans = 3;
+        ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
         assertThrows(FormationContinueException.class, ()->p1.validerPermis());
     }
 
-    @Test
+    @Test //OK
     @DisplayName("Le permis est correct")
-    void validerPermisCorrect(){
+    void validerPermisCorrect() throws FormationContinueException {
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        heuresTrans = 3;
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1.validerPermis();
+        assertEquals(true, p1.resultat.isComplet());
     }
 
     @Test //OK
@@ -147,6 +186,10 @@ class ProfessionTest{
         assertEquals(1,p1.getResultat().getErreur().size());
     }
 
+    /*lancerErreurStrut();
+    validerCatAtivites();
+    calculerHCat();
+    validerCycle();*/
 
 
 }
