@@ -18,6 +18,10 @@ public class Resultat {
         this.complet = complet;
     }
 
+    public ArrayList<String>  getErreur(){
+        return erreur;
+    }
+
     public void ajouterErreur(String e){
         erreur.add(e);
     }

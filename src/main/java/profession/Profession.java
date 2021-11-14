@@ -34,7 +34,7 @@ public abstract class Profession extends Declaration {
         return resultat;
     }
 
-    public void validerPemis() throws FormationContinueException {
+    public void validerPermis() throws FormationContinueException {
         Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
         Matcher m = p.matcher(permis);
         if (!m.matches()){
@@ -115,7 +115,7 @@ public abstract class Profession extends Declaration {
         }
     }
 
-    public void validerCatAtivites(){
+    public void validerCatActivites(){
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getCategorieNum() == 0){
                 resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
