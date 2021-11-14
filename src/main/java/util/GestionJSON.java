@@ -12,17 +12,10 @@ import java.io.*;
 public class GestionJSON {
 
     private Declaration declaInit;
-    private Resultat resultat;
     private ObjectMapper objectMapper = new ObjectMapper();
     private DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
-
-
-
     private final String fichiers_entree;
     private final String fichiers_sortie;
-
-
-
 
     /**
      * Constructeur de l'objet GestionJSON qui facilite le calcul et la manipulation
@@ -42,15 +35,18 @@ public class GestionJSON {
      */
     public Declaration chargement() throws FormationContinueException {
         try{
+            declaInit = objectMapper.readValue(new File(fichiers_entree), Declaration.class);
             objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
-            declaInit = objectMapper.readValue(new File(fichiers_entree), Declaration.class);
+            objectMapper.configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT,false);
             if (declaInit.getOrdre().equals("architectes")){
-                 declaInit = objectMapper.readValue(new File(fichiers_entree), Architectes.class);
+                declaInit = objectMapper.readValue(new File(fichiers_entree), Architectes.class);
             }else if(declaInit.getOrdre().equals("géologues")){
-                 declaInit = objectMapper.readValue(new File(fichiers_entree), Geologues.class);
+                objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+                declaInit = objectMapper.readValue(new File(fichiers_entree), Geologues.class);
             }else if(declaInit.getOrdre().equals("psychologues")){
-                 declaInit = objectMapper.readValue(new File(fichiers_entree), Psychologues.class);
+                objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+                declaInit = objectMapper.readValue(new File(fichiers_entree), Psychologues.class);
             }
         }catch(FileNotFoundException erreur) {
             throw new FormationContinueException("Le fichier donné est introuvable.");
@@ -70,6 +66,8 @@ public class GestionJSON {
         try {
             pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
             objectMapper.writer(pp).writeValue(new File(fichiers_sortie),decla.getResultat());
+        }catch (FileNotFoundException erreur){
+            throw new FormationContinueException("Fichier des resultats introuvable.");
         }catch (IOException erreur){
             throw new FormationContinueException("erreur inatendu lors de l'exportation des resultats");
         }

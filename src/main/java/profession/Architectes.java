@@ -28,6 +28,8 @@ public class Architectes extends Profession{
         super(permis, cycle, heuresTrans, ordre, activites);
     }
 
+    public Architectes(){}
+
     /**
      * Calcule le nombre d'heures totales de chaque catégorie.
      * @return int le nombre d'heure
