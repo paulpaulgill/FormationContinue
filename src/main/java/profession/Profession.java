@@ -193,6 +193,12 @@ public abstract class Profession extends Declaration {
         return heuresCat;
     }
 
+    /**
+     * Cherche dans les activités si il a des activités qui se produise le
+     * meme jour ET sont dans la meme catégorie. Si il en est le cas les heures
+     * sont additionné et si elle dépasse 10h alors un message d'erreur est
+     * ajouté.
+     */
     public void validerCatJour(){
         int heures = 0;
         activites.removeIf(Activite::getIgnore);

@@ -2,6 +2,7 @@
   "numero_de_permis": "A0001",
   "cycle": "2020-2022",
   "heures_transferees_du_cycle_precedent": 7,
+  "ordre": "architectes",
   "activites": [
     {
       "description": "Cours sur la déontologie",
@@ -17,6 +18,12 @@
     },
     {
       "description": "Rédaction pour le magazine Architecture moderne",
+      "categorie": "rédaction professionnelle",
+      "heures": 6,
+      "date": "2021-10-22"
+    },
+    {
+      "description": "Rédaction pour le magazine Architecture moderne2",
       "categorie": "rédaction professionnelle",
       "heures": 6,
       "date": "2021-10-22"

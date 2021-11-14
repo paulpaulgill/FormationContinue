@@ -76,6 +76,12 @@ public class Activite {
         this.ignore = ignore;
     }
 
+    /**
+     * Compare la valeurs de type string d'une activité selon une array
+     * qui contient toute les categorie acepté. Ce qui a pour effet de valider
+     * la catégorie en retournant 0 si elle fait pas partie de l'array.
+     * @return la valeur numérique de la categorie (0 si categorie est invalide)
+     */
     public int getCategorieNum(){
         int a = 0;
         for (int i = 0; i < validCategoryTable.length ; i++){
@@ -86,6 +92,12 @@ public class Activite {
         return a;
     }
 
+    /**
+     * permet de savoir si 2 activiter on la meme date et la meme catégorie sans
+     * prendre en compte les autres variable.
+     * @param object Objet a evaluer
+     * @return le resultat
+     */
     @Override
     public boolean equals(Object object){
         boolean result = false;
