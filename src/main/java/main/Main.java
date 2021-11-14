@@ -12,7 +12,7 @@ public class Main {
             declaration = (Profession) fichier.chargement();
             declaration.validerCycle();
             if (declaration.getResultat().isComplet()) {
-                declaration.validerPemis();
+                declaration.validerPermis();
                 declaration.validerDescription();
                 declaration.validerCatAtivites();
                 declaration.validerHeure();
