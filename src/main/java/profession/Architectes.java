@@ -18,6 +18,7 @@ public class Architectes extends Profession{
     private final Date DATE_MIN3 = new GregorianCalendar(2016, Calendar.APRIL, 1).getTime();
 
     private int totalHMin = 42;
+
     @JsonCreator
     public Architectes(@JsonProperty("numero_de_permis") String permis,
                        @JsonProperty("cycle") String cycle,
@@ -26,6 +27,8 @@ public class Architectes extends Profession{
                        @JsonProperty("activites") ArrayList<Activite> activites) {
         super(permis, cycle, heuresTrans, ordre, activites);
     }
+
+    public Architectes(){}
 
     public int calculerHTCat(){
         int heures = 0;

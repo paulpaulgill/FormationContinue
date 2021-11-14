@@ -23,15 +23,21 @@ public abstract class Profession extends Declaration {
     @JsonCreator
     public Profession(@JsonProperty("numero_de_permis") String permis,
                       @JsonProperty("cycle") String cycle,
-                      @JsonProperty("heures_transferees_du_cycle_precedent") int heuresTrans,
+                      @JsonProperty(value = "heures_transferees_du_cycle_precedent" , required = false) int heuresTrans,
                       @JsonProperty("ordre") String ordre,
                       @JsonProperty("activites") ArrayList<Activite> activites) {
         super(permis, cycle, heuresTrans, ordre, activites);
     }
 
+    public Profession(){}
+
     @Override
     public Resultat getResultat() {
         return resultat;
+    }
+
+    public void setResultat(Resultat resultat){
+        this.resultat = resultat;
     }
 
     public void validerPemis() throws FormationContinueException {
@@ -138,6 +144,31 @@ public abstract class Profession extends Declaration {
             }
         }
         return heuresCat;
+    }
+
+    public void validerCatJour(){
+        int heures = 0;
+        activites.removeIf(Activite::getIgnore);
+        for (int y = 0; y < activites.size(); y++) {
+            for (int i = 0; i < activites.size(); i++) {
+                if (activites.get(i).equals(activites.get(y))) {
+                    heures = heures + activites.get(i).getHeures();
+                }
+            }
+            if (heures > 10) {
+                for (int i = 0; i < activites.size(); i++) {
+                    if (i == y) {
+                        activites.get(y).setHeures(10);
+                    } else if (activites.get(i).equals(activites.get(y))) {
+                        activites.get(i).setHeures(0);
+                    }
+                }
+                resultat.ajouterErreur("Des activités de catégorie " + activites.get(y).getCategorie() +
+                        " inclue plus que 10h dans la même journée. Seulement 10h" +
+                        "seront considéré dans les calculs de cette journée");
+            }
+            activites.removeIf(activite -> activite.getHeures() == 0);
+        }
     }
 
     public void validerCycle(){

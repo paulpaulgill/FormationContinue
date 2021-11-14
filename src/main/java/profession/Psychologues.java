@@ -1,6 +1,7 @@
 package profession;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import util.*;
 
@@ -10,6 +11,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Psychologues extends Profession{
+    @JsonIgnore
+    protected int heuresTrans;
+
     private final Date DATE_MAX = new GregorianCalendar(2023, Calendar.JANUARY, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime();
 
@@ -18,11 +22,16 @@ public class Psychologues extends Profession{
     @JsonCreator
     public Psychologues(@JsonProperty("numero_de_permis") String permis,
                         @JsonProperty("cycle") String cycle,
-                        @JsonProperty("heures_transferees_du_cycle_precedent") int heuresTrans,
                         @JsonProperty("ordre") String ordre,
                         @JsonProperty("activites") ArrayList<Activite> activites) {
-        super(permis, cycle, heuresTrans, ordre, activites);
+        this.permis = permis;
+        this.cycle = cycle;
+        this.ordre = ordre;
+        this.activites = activites;
     }
+
+    public Psychologues(){}
+
     public void validerHMin(){
         if (calculerHCat(1) < 25){
             resultat.ajouterErreur("Il manque " + (25 - calculerHCat(1)) +

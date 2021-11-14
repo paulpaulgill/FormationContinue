@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 
 public class Resultat {
-    @JsonProperty("complet1")
+    @JsonProperty("complet")
     private boolean complet = true;
     @JsonProperty("erreur")
     private ArrayList<String> erreur = new ArrayList<>();

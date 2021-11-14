@@ -1,6 +1,7 @@
 package profession;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import util.*;
 
@@ -10,20 +11,26 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Geologues extends Profession{
+    @JsonIgnore
+    protected int heuresTrans;
+
     private final Date DATE_MAX = new GregorianCalendar(2021, Calendar.JUNE, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JUNE, 1).getTime();
 
-    private int totalHMin =55;
-
+    private int totalHMin = 55;
 
     @JsonCreator
     public Geologues(@JsonProperty("numero_de_permis") String permis,
                      @JsonProperty("cycle") String cycle,
-                     @JsonProperty("heures_transferees_du_cycle_precedent") int heuresTrans,
                      @JsonProperty("ordre") String ordre,
                      @JsonProperty("activites") ArrayList<Activite> activites) {
-        super(permis, cycle, heuresTrans, ordre, activites);
+        this.permis = permis;
+        this.cycle = cycle;
+        this.ordre = ordre;
+        this.activites = activites;
     }
+
+    public Geologues(){}
 
     public void validerHMin(){
         if (calculerHCat(1) < 22){

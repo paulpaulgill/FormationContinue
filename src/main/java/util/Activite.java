@@ -28,11 +28,11 @@ public class Activite {
     @JsonCreator
     public Activite(@JsonProperty("description") String description,
                     @JsonProperty("categorie") String category,
-                    @JsonProperty("heures") int houres,
+                    @JsonProperty("heures") int heures,
                     @JsonProperty("date") String date) {
         this.description = description;
         this.categorie = category;
-        this.heures = houres;
+        this.heures = heures;
         this.date = date;
     }
 

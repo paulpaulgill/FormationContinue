@@ -29,6 +29,8 @@ public class Declaration {
         this.activites = activites;
     }
 
+    public Declaration() {}
+
     public String getPermis() {
         return permis;
     }
