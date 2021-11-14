@@ -38,8 +38,11 @@ public class GestionJSON {
             declaInit = objectMapper.readValue(new File(fichiers_entree), Declaration.class);
             objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
             objectMapper.configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT,false);
-            if (declaInit.getOrdre().equals("architectes")){
+            if (declaInit.getOrdre() == null){
+                throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
+            }else if (declaInit.getOrdre().equals("architectes")){
                 declaInit = objectMapper.readValue(new File(fichiers_entree), Architectes.class);
             }else if(declaInit.getOrdre().equals("géologues")){
                 objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);

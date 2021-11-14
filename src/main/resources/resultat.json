@@ -1,7 +1,12 @@
 {
-   "complet": true,
-   "erreur":    [
-      "La date de l'activité Cours sur la déontologie ne respecte pas le format ISO 8601. Elle sera ignoré",
-      "L'activité Visite d'établissements architecturaux est dans une catégorie non reconnue. Elle sera ignorée"
-   ]
+  "complet" : false,
+  "erreur" : [
+    "L'activité Séminaire sur l'architecture contemporaine inclue plus que 10h dans la même journée. Seulement 10h seront considéré dans les calculs",
+    "L'activité Participation à un groupe de discussion sur le partage des projets architecturaux de plus de 20 ans inclue plus que 10h dans la même journée. Seulement 10h seront considéré dans les calculs",
+    "L'activité Visite d'établissements architecturaux est dans une catégorie non reconnue. Elle sera ignorée",
+    "La date de l'activité Cours sur la déontologie ne respecte pas le format ISO 8601. Elle sera ignoré",
+    "Des activités de catégorie rédaction professionnelle inclue plus que 10h dans la même journée. Seulement 10h seront considéré dans les calculs de cette journée",
+    "Il manque 3 heures de formation pour compléter le cycle.",
+    "Il manque 7 pour atteindre le min de 17h pour la liste des 6 catégories."
+  ]
 }

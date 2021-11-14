@@ -172,7 +172,7 @@ public abstract class Profession extends Declaration {
             }else if (activites.get(i).getHeures() > 10){
                 resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
                         " inclue plus que 10h dans la même journée. Seulement 10h" +
-                        "seront considéré dans les calculs");
+                        " seront considéré dans les calculs");
                 activites.get(i).setHeures(10);
             }
         }
@@ -197,6 +197,7 @@ public abstract class Profession extends Declaration {
         int heures = 0;
         activites.removeIf(Activite::getIgnore);
         for (int y = 0; y < activites.size(); y++) {
+            heures = 0;
             for (int i = 0; i < activites.size(); i++) {
                 if (activites.get(i).equals(activites.get(y))) {
                     heures = heures + activites.get(i).getHeures();
@@ -212,7 +213,7 @@ public abstract class Profession extends Declaration {
                 }
                 resultat.ajouterErreur("Des activités de catégorie " + activites.get(y).getCategorie() +
                         " inclue plus que 10h dans la même journée. Seulement 10h" +
-                        "seront considéré dans les calculs de cette journée");
+                        " seront considéré dans les calculs de cette journée");
             }
             activites.removeIf(activite -> activite.getHeures() == 0);
         }

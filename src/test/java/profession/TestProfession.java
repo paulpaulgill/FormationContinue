@@ -35,9 +35,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         assertEquals(true,p1.getResultat().isComplet());
         assertEquals(0,p1.getResultat().getErreur().size());
     }
@@ -49,9 +48,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.resultat.ajouterErreur("err");
         p1.resultat.setComplet(false);
         assertNotEquals(true,p1.getResultat().isComplet());
@@ -65,9 +63,8 @@ class TestProfession {
         activites.add(a);
         permis = "44489";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         assertThrows(FormationContinueException.class, ()->p1.validerPermis());
     }
 
@@ -78,9 +75,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerPermis();
         assertEquals(true, p1.resultat.isComplet());
     }
@@ -92,9 +88,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerDescription();
         assertEquals(true, p1.getResultat().isComplet());
     }
@@ -106,9 +101,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         assertThrows(FormationContinueException.class, ()->p1.validerDescription());
     }
 
@@ -119,9 +113,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         assertThrows(FormationContinueException.class, ()->p1.validerHeure());
     }
 
@@ -132,9 +125,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerHeure();
         assertEquals(1,p1.getResultat().getErreur().size());
     }
@@ -146,9 +138,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerHeure();
         assertEquals(0,p1.getResultat().getErreur().size());
     }
@@ -160,9 +151,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerDate();
         assertEquals(0,p1.getResultat().getErreur().size());
     }
@@ -174,9 +164,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerDate();
         assertEquals(1,p1.getResultat().getErreur().size());
     }
@@ -188,9 +177,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerDate();
         assertEquals(1,p1.getResultat().getErreur().size());
     }
@@ -202,9 +190,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerCatActivites();
         assertEquals(1,p1.getResultat().getErreur().size());
     }
@@ -216,9 +203,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerCatActivites();
         assertEquals(0,p1.getResultat().getErreur().size());
     }
@@ -230,9 +216,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerCatActivites();
         assertEquals(1,p1.getResultat().getErreur().size());
         assertEquals(10,p1.getActivites().get(0).getHeures());
@@ -245,9 +230,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerCatActivites();
         assertEquals(0,p1.getResultat().getErreur().size());
     }
@@ -259,9 +243,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerCycle();
         assertEquals(0,p1.getResultat().getErreur().size());
     }
@@ -273,9 +256,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2017-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         p1.validerCycle();
         assertEquals(1,p1.getResultat().getErreur().size());
     }
@@ -287,9 +269,8 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2017-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         assertEquals(6,p1.calculerHCat(5));
     }
 
@@ -300,11 +281,22 @@ class TestProfession {
         activites.add(a);
         permis = "A0001";
         cycle = "2017-2023";
-        heuresTrans = 3;
         ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,heuresTrans,ordre,activites);
+        p1 = new Psychologues(permis,cycle,ordre,activites);
         assertNotEquals(6,p1.calculerHCat(4));
         assertEquals(0,p1.calculerHCat(4));
+    }
+
+    @Test
+    @DisplayName("Max de 10h par jour pour la meme categorie")
+    void validerCatJour(){
+        Activite a = new Activite("Conférence sur la déontologie", "conférence", 6, "2021-02-01");
+        Activite b = new Activite("Conférence sur la déontologie", "conférence", 6, "2021-02-01");
+        activites.add(a);
+        activites.add(b);
+        p1 = new Psychologues("A0001","2017-2023","psychologue",activites);
+        p1.validerCatJour();
+        assertEquals(1,p1.getActivites().size());
     }
 
 }

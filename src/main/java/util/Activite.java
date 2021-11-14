@@ -85,4 +85,18 @@ public class Activite {
         }
         return a;
     }
+
+    @Override
+    public boolean equals(Object object){
+        boolean result = false;
+        if (object == null || object.getClass() != getClass()) {
+            result = false;
+        }else {
+            Activite act = (Activite) object;
+            if (this.categorie.equals(act.getCategorie()) && this.date.equals(act.getDate())) {
+                result = true;
+            }
+        }
+        return result;
+    }
 }

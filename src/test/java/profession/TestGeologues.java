@@ -19,7 +19,7 @@ public class TestGeologues {
     private Activite act4 = new Activite(descr, "groupe de discussion", 10, "2021-01-02");
     private Activite act5 = new Activite(descr, "projet de recherche", 10, "2021-01-02");
     private Activite act6 = new Activite(descr, "projet de recherche", 10, "2021-01-02");
-    private Geologues g1 = new Geologues(descr,null,0, null, null);
+    private Geologues g1 = new Geologues(descr,null, null, null);
     private List<Activite> liste = Arrays.asList(act1, act2, act3, act5, act4, act6);
     private List<Activite> liste2 = Arrays.asList(act1);
     private ArrayList<Activite> arrayList;
