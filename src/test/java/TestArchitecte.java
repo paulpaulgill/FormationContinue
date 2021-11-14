@@ -20,15 +20,11 @@ public class TestArchitecte {
     private List<Activite> liste = Arrays.asList(act1, act2, act3, act5, act4);
     private List<Activite> liste2 = Arrays.asList(act1);
     private ArrayList<Activite> arrayList;
-    private Architectes a2NV;
-    private Architectes a3;
     private IntervalCycle i;
 
     @AfterEach
     public void tearDown(){
         a1 = null;
-        a2NV = null;
-        a3 = null;
         arrayList = null;
         i = null;
     }
