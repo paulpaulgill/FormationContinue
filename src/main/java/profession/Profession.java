@@ -34,6 +34,10 @@ public abstract class Profession extends Declaration {
         return resultat;
     }
 
+    /**
+     * Valide si le permis respect le format
+     * @throws FormationContinueException
+     */
     public void validerPermis() throws FormationContinueException {
         Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
         Matcher m = p.matcher(permis);
@@ -41,6 +45,11 @@ public abstract class Profession extends Declaration {
             lancerErreurStrut();
         }
     }
+
+    /**
+     * Valide que la description fait respecte la longueur demandee
+     * @throws FormationContinueException
+     */
     public void validerDescription() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++) {
             Pattern p = Pattern.compile(".{21,}");
@@ -51,6 +60,12 @@ public abstract class Profession extends Declaration {
         }
     }
 
+    /**
+     * Valide si le nombre d'heure est un entier positif plus grand que 0
+     * si == 0, msg est produit sur fichier de sortie et l'activitee est ignoree
+     * si < 0 une erreur est lancee
+     * @throws FormationContinueException
+     */
     public void validerHeure() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getHeures() == 0) {
@@ -63,12 +78,22 @@ public abstract class Profession extends Declaration {
         }
     }
 
+    /**
+     * Lance une esception, ecrit sur le fichier de sortie et met complet a faux
+     * @throws FormationContinueException
+     */
     public void lancerErreurStrut() throws FormationContinueException {
         resultat.ecraserErreur("Le fichier d'entrée est invalide.");
         resultat.setComplet(false);
         throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
     }
 
+    /**
+     * Valide que le format de la date soit respectee et respect les annees bisectiles.
+     * Si elle ne l'est pas, retourne faux
+     * @param i cpt
+     * @return boolean valide qui indique si la date est valide
+     */
     private boolean verifierFormatDate(int i) {
         boolean valide = false;
         String date = activites.get(i).getDate();
@@ -84,7 +109,12 @@ public abstract class Profession extends Declaration {
         return valide;
     }
 
-
+    /**
+     * vierifie si la date d'une activite est dans l'interval valide.
+     * @param i cpt
+     * @param interCycle contient le cycle en String, la date min et la date max
+     * @return
+     */
     private boolean estEntreDate(int i, IntervalCycle interCycle) {
         boolean valide = false;
         Date max = interCycle.getMax();
@@ -98,13 +128,20 @@ public abstract class Profession extends Declaration {
         return valide;
     }
 
-
+    /**
+     * Ecrit un msg d'erreur sur le fichier de sortie a propos de la date.
+     * @param finMsg String qui est la fin du msg
+     * @param i cpt
+     */
     private void ecrireErrDate(String finMsg, int i) {
         resultat.ajouterErreur("La date de l'activité " +
                 activites.get(i).getDescription() + finMsg);
         activites.get(i).setIgnore(true);
     }
 
+    /**
+     * si le format ou la date n'est pas valide, un msg d'erreur est produit sur fichier de sortie
+     */
     public void validerDate() {
         for (int i = 0; i < activites.size(); i++) {
             if (!verifierFormatDate(i)){
@@ -115,6 +152,11 @@ public abstract class Profession extends Declaration {
         }
     }
 
+    /**
+     * Verifie si les activites sont dans une categorie valide ou qu'une categorie
+     * n'est pas plus de 10 heures dans la meme journee. Un message d'erreur est produit
+     * si cela n'est pas respecte.
+     */
     public void validerCatActivites(){
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getCategorieNum() == 0){
@@ -130,6 +172,11 @@ public abstract class Profession extends Declaration {
         }
     }
 
+    /**
+     * Calcul le nombre d'heure d'une categorie
+     * @param cat
+     * @return
+     */
     public int calculerHCat(int cat){
         int heuresCat = 0;
         for (int i = 0; i < activites.size(); i++ ){
@@ -140,6 +187,10 @@ public abstract class Profession extends Declaration {
         return heuresCat;
     }
 
+    /**
+     * verifie si le IntervalCycle est null. Si il l'est un msg d'erreur est
+     * produit sur le fichier de sortie.
+     */
     public void validerCycle(){
         if (mesurerInter() == null){
             resultat.ajouterErreur("Cycle erroné.");
@@ -147,7 +198,14 @@ public abstract class Profession extends Declaration {
         }
     }
 
+    /**
+     * Trouve quel interval est mentionne
+     * @return IntervalCycle contenant les infos du cycle
+     */
     public abstract IntervalCycle mesurerInter();
 
+    /**
+     * Valide si le nombre d'heure total respecte le minimum demande
+     */
     public abstract void validerHTotal();
 }

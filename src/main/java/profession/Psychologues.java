@@ -23,6 +23,12 @@ public class Psychologues extends Profession{
                         @JsonProperty("activites") ArrayList<Activite> activites) {
         super(permis, cycle, heuresTrans, ordre, activites);
     }
+
+    /**
+     * Valide si le nombre d'heure minimum pour la categorie cours est respecte
+     * Si ce ne l'est pas, un message d'erreur est produit dans le fichier de sortie
+     * et complet devient faux
+     */
     public void validerHMin(){
         if (calculerHCat(1) < 25){
             resultat.ajouterErreur("Il manque " + (25 - calculerHCat(1)) +
@@ -31,6 +37,11 @@ public class Psychologues extends Profession{
         }
     }
 
+    /**
+     * Verifie le cycle et retourne le nombre d'heure total, les bonne dates et le String du cycle
+     * qui correspondent au cycle.
+     * @return IntervalCycle qui contient le cycle, les date min et max  et le nb d'heure minimum
+     */
     @Override
     public IntervalCycle mesurerInter() {
         IntervalCycle inter;
@@ -42,6 +53,10 @@ public class Psychologues extends Profession{
         return inter;
     }
 
+    /**
+     * Valide si le nombre d'heure minimum est respecte. Si ce ne l'est pas
+     * un message d'erreur est produit et complet devient faux.
+     */
     @Override
     public void validerHTotal() {
         int heures = 0;
