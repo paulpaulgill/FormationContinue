@@ -40,7 +40,6 @@ public abstract class Profession extends Declaration {
         this.resultat = resultat;
     }
 
-    public void validerPemis() throws FormationContinueException {
     /**
      * Valide si le permis respect le format
      * @throws FormationContinueException
