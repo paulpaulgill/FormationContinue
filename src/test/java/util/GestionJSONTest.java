@@ -8,8 +8,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import profession.Architectes;
 import profession.Geologues;
 import profession.Psychologues;
-import util.GestionJSON;
-import util.Resultat;
 
 import java.io.File;
 import java.io.IOException;
