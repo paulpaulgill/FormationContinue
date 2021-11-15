@@ -50,6 +50,8 @@ public class GestionJSON {
             }else if(declaInit.getOrdre().equals("psychologues")){
                 objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
                 declaInit = objectMapper.readValue(new File(fichiers_entree), Psychologues.class);
+            }else {
+                throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
             }
         }catch(FileNotFoundException erreur) {
             throw new FormationContinueException("Le fichier donné est introuvable.");
