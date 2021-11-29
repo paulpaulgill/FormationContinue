@@ -36,6 +36,19 @@ public class Podiatres extends Profession{
     public Podiatres(){}
 
     /**
+     * Valide si le permis respect le format
+     * @throws FormationContinueException
+     */
+    @Override
+    public void validerPermis() throws FormationContinueException {
+        Pattern p = Pattern.compile("\\b[0-9]{5}\\b");
+        Matcher m = p.matcher(permis);
+        if (!m.matches()){
+            lancerErreurStrut();
+        }
+    }
+
+    /**
      * Valide que le nombre d'heures dans chaque catégorie soit respecté.
      * Sinon un message d'erreur est produit dans le fichier de sortie et
      * le cycle devient incomplet.
