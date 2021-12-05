@@ -1,0 +1,10 @@
+default:
+image: maven:3.6.3-jdk-11
+
+build-job:
+  stage: build
+  script: "mvn package -B"
+
+test-job1:
+  stage: test
+  script: "mvn test"
