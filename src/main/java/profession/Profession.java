@@ -46,11 +46,13 @@ public abstract class Profession extends Declaration {
      * @return
      */
     public boolean validerPermis() throws FormationContinueException {
+        boolean valide = true;
         Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
         Matcher m = p.matcher(permis);
         if (!m.matches()){
-            lancerErreurStrut();
+            valide = false;
         }
+        return valide;
     }
 
     /**
@@ -94,9 +96,11 @@ public abstract class Profession extends Declaration {
      * @throws FormationContinueException
      */
     public void lancerErreurStrut() throws FormationContinueException {
-        resultat.ecraserErreur("Le fichier d'entrée est invalide.");
-        resultat.setComplet(false);
-        throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
+        if (!validerPermis() || !validerHeure() || !validerDescription()) {
+            resultat.ecraserErreur("Le fichier d'entrée est invalide.");
+            resultat.setComplet(false);
+            throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
+        }
     }
 
     /**
