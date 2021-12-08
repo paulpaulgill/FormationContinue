@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Architectes extends Profession{
     private final Date DATE_MAX1 = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
@@ -122,5 +124,20 @@ public class Architectes extends Profession{
             inter = null;
         }
         return inter;
+    }
+
+    /**
+     * Valide si le permis respect le format
+     * @return
+     */
+    @Override
+    public boolean validerPermis(){
+        boolean valide = true;
+        Pattern p = Pattern.compile("\\b[AT][0-9]{4}\\b");
+        Matcher m = p.matcher(permis);
+        if (!m.matches()){
+            valide = false;
+        }
+        return valide;
     }
 }

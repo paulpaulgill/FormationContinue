@@ -43,8 +43,9 @@ public abstract class Profession extends Declaration {
     /**
      * Valide si le permis respect le format
      * @throws FormationContinueException
+     * @return
      */
-    public void validerPermis() throws FormationContinueException {
+    public boolean validerPermis() throws FormationContinueException {
         Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
         Matcher m = p.matcher(permis);
         if (!m.matches()){
