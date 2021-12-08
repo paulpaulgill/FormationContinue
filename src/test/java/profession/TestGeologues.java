@@ -1,15 +1,15 @@
 package profession;
 
-import org.junit.Assert;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import profession.Architectes;
-import profession.Geologues;
 import util.Activite;
 import util.IntervalCycle;
 
 import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestGeologues {
     private String descr = "qwertyuiopqwertyuiopqwwq";
@@ -43,23 +43,23 @@ public class TestGeologues {
         arrayList.addAll(liste);
         g1.setActivites(arrayList);
         g1.validerHMin();
-        Assert.assertEquals(true, g1.getResultat().isComplet());
+        assertEquals(true, g1.getResultat().isComplet());
     }
 
     @Test
     public void testMesurerInter(){
         g1.setCycle("2018-2021");
         i = g1.mesurerInter();
-        Assert.assertEquals(new GregorianCalendar(2021, Calendar.JUNE, 1).getTime(), i.getMax());
-        Assert.assertEquals(new GregorianCalendar(2018, Calendar.JUNE, 1).getTime(), i.getMin());
-        Assert.assertEquals("2018-2021", i.getCycle());
+        assertEquals(new GregorianCalendar(2021, Calendar.JUNE, 1).getTime(), i.getMax());
+        assertEquals(new GregorianCalendar(2018, Calendar.JUNE, 1).getTime(), i.getMin());
+        assertEquals("2018-2021", i.getCycle());
     }
 
     @Test
     public void testMesurerInterNonVal(){
         g1.setCycle("2552-2558");
         i = g1.mesurerInter();
-        Assert.assertEquals(null, i);
+        assertEquals(null, i);
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TestGeologues {
         arrayList.addAll(liste);
         g1.setActivites(arrayList);
         g1.validerHTotal();
-        Assert.assertEquals(true, g1.getResultat().isComplet());
+        assertEquals(true, g1.getResultat().isComplet());
     }
 
     @Test
@@ -75,7 +75,7 @@ public class TestGeologues {
         arrayList.addAll(liste2);
         g1.setActivites(arrayList);
         g1.validerHTotal();
-        Assert.assertEquals(false, g1.getResultat().isComplet());
+        assertEquals(false, g1.getResultat().isComplet());
     }
 
 }

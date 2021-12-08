@@ -1,6 +1,5 @@
 package profession;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,8 @@ import util.IntervalCycle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestPsychologues {
     private String descr = "qwertyuiopqwertyuiopqwwq";
@@ -46,7 +47,7 @@ public class TestPsychologues {
         arrayList.addAll(liste);
         p1.setActivites(arrayList);
         p1.validerHTotal();
-        Assert.assertEquals(true, p1.getResultat().isComplet());
+        assertEquals(true, p1.getResultat().isComplet());
     }
 
     @Test
@@ -54,6 +55,6 @@ public class TestPsychologues {
         arrayList.addAll(liste2);
         p1.setActivites(arrayList);
         p1.validerHTotal();
-        Assert.assertEquals(false, p1.getResultat().isComplet());
+        assertEquals(false, p1.getResultat().isComplet());
     }
 }

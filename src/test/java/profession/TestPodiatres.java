@@ -1,12 +1,9 @@
 package profession;
 
 import exception.FormationContinueException;
-import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import profession.Podiatres;
 import util.Activite;
 import util.IntervalCycle;
 
@@ -52,7 +49,7 @@ public class TestPodiatres {
         arrayList.addAll(liste);
         p1.setActivites(arrayList);
         p1.validerHMin();
-        Assert.assertEquals(true, p1.getResultat().isComplet());
+        assertEquals(true, p1.getResultat().isComplet());
     }
 
     @Test
@@ -75,16 +72,16 @@ public class TestPodiatres {
     public void testMesurerInter(){
         p1.setCycle("2018-2021");
         i = p1.mesurerInter();
-        Assert.assertEquals(new GregorianCalendar(2021, Calendar.JUNE, 1).getTime(), i.getMax());
-        Assert.assertEquals(new GregorianCalendar(2018, Calendar.JUNE, 1).getTime(), i.getMin());
-        Assert.assertEquals("2018-2021", i.getCycle());
+        assertEquals(new GregorianCalendar(2021, Calendar.JUNE, 1).getTime(), i.getMax());
+        assertEquals(new GregorianCalendar(2018, Calendar.JUNE, 1).getTime(), i.getMin());
+        assertEquals("2018-2021", i.getCycle());
     }
 
     @Test
     public void testMesurerInterNonVal(){
         p1.setCycle("2552-2558");
         i = p1.mesurerInter();
-        Assert.assertEquals(null, i);
+        assertEquals(null, i);
     }
 
     @Test
@@ -92,7 +89,7 @@ public class TestPodiatres {
         arrayList.addAll(liste);
         p1.setActivites(arrayList);
         p1.validerHTotal();
-        Assert.assertEquals(true, p1.getResultat().isComplet());
+        assertEquals(true, p1.getResultat().isComplet());
     }
 
     @Test
@@ -100,7 +97,7 @@ public class TestPodiatres {
         arrayList.addAll(liste2);
         p1.setActivites(arrayList);
         p1.validerHTotal();
-        Assert.assertEquals(false, p1.getResultat().isComplet());
+        assertEquals(false, p1.getResultat().isComplet());
     }
 
 }
