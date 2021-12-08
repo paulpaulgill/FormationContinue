@@ -9,7 +9,7 @@ import util.IntervalCycle;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGeologues {
     private String descr = "qwertyuiopqwertyuiopqwwq";

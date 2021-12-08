@@ -8,7 +8,7 @@ import util.IntervalCycle;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestArchitecte {
     private String descr = "qwertyuiopqwertyuiopqwwq";

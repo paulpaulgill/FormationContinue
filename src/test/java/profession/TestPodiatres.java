@@ -9,8 +9,7 @@ import util.IntervalCycle;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPodiatres {
     private String descr = "qwertyuiopqwertyuiopqwwq";
