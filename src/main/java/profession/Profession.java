@@ -56,14 +56,16 @@ public abstract class Profession extends Declaration {
      * Valide que la description fait respecte la longueur demandee
      * @throws FormationContinueException
      */
-    public void validerDescription() throws FormationContinueException {
+    public boolean validerDescription() throws FormationContinueException {
+        boolean valide = true;
         for (int i = 0; i < activites.size(); i++) {
             Pattern p = Pattern.compile(".{21,}");
             Matcher m = p.matcher(activites.get(i).getDescription());
             if (!m.matches()){
-                lancerErreurStrut();
+                valide = false;
             }
         }
+        return valide;
     }
 
     /**
