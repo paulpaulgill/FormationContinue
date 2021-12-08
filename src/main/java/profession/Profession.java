@@ -74,16 +74,18 @@ public abstract class Profession extends Declaration {
      * si < 0 une erreur est lancee
      * @throws FormationContinueException
      */
-    public void validerHeure() throws FormationContinueException {
+    public boolean validerHeure() throws FormationContinueException {
+        boolean valide = true;
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getHeures() == 0) {
                 resultat.ajouterErreur("Le nombre d'heure minimum est de 1. L'activite "
                         + activites.get(i).getDescription() + " sera ignoree");
                 activites.get(i).setIgnore(true);
             }if (activites.get(i).getHeures() < 0) {
-                lancerErreurStrut();
+                valide = false;
             }
         }
+        return valide;
     }
 
     /**
