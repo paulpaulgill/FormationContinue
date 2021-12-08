@@ -210,27 +210,29 @@ public abstract class Profession extends Declaration {
      */
     public void validerCatJour(){
         int heures = 0;
-        activites.removeIf(Activite::getIgnore);
         for (int y = 0; y < activites.size(); y++) {
             heures = 0;
-            for (int i = 0; i < activites.size(); i++) {
-                if (activites.get(i).equals(activites.get(y))) {
-                    heures = heures + activites.get(i).getHeures();
-                }
-            }
-            if (heures > 10) {
+            if (!activites.get(y).getIgnore()){
                 for (int i = 0; i < activites.size(); i++) {
-                    if (i == y) {
-                        activites.get(y).setHeures(10);
-                    } else if (activites.get(i).equals(activites.get(y))) {
-                        activites.get(i).setHeures(0);
+                    if (activites.get(i).equals(activites.get(y)) &&
+                            !activites.get(i).getIgnore()) {
+                        heures = heures + activites.get(i).getHeures();
                     }
                 }
-                resultat.ajouterErreur("Des activités de catégorie " + activites.get(y).getCategorie() +
-                        " inclue plus que 10h dans la même journée. Seulement 10h" +
-                        " seront considéré dans les calculs de cette journée");
+                if (heures > 10) {
+                    for (int i = 0; i < activites.size(); i++) {
+                        if (i == y) {
+                            activites.get(y).setHeures(10);
+                        } else if (activites.get(i).equals(activites.get(y)) &&
+                                !activites.get(i).getIgnore()) {
+                            activites.get(i).setIgnore(true);
+                        }
+                    }
+                    resultat.ajouterErreur("Des activités de catégorie " + activites.get(y).getCategorie() +
+                            " inclue plus que 10h dans la même journée. Seulement 10h" +
+                            " seront considéré dans les calculs de cette journée");
+                }
             }
-            activites.removeIf(activite -> activite.getHeures() == 0);
         }
     }
 
