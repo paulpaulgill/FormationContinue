@@ -15,8 +15,11 @@ class TestProfession {
     Profession p1;
     String permis;
     String cycle;
+    String nom;
+    String prenom;
     int heuresTrans;
     String ordre;
+    int sexe;
     ArrayList<Activite> activites = new ArrayList<>();
 
 
