@@ -23,7 +23,7 @@ public class TestPsychologues {
     private Activite act4 = new Activite(descr, "groupe de discussion", 10, "2021-01-02");
     private Activite act5 = new Activite(descr, "séminaire", 10, "2021-01-02");
     private Activite act10 = new Activite(descr, "séminaire", 10, "2021-01-04");
-    private Psychologues p1 = new Psychologues(descr,null, null, null);
+    private Psychologues p1 = new Psychologues(descr,null, null, null, 0,null, null);
     private List<Activite> liste = Arrays.asList(act1, act2, act3, act5, act4, act7, act8, act9, act10);
     private List<Activite> liste2 = Arrays.asList(act1);
     private ArrayList<Activite> arrayList;
