@@ -17,7 +17,7 @@ public class TestArchitecte {
     private Activite act3 = new Activite(descr, "cours", 10, "2021-01-02");
     private Activite act4 = new Activite(descr, "groupe de discussion", 10, "2021-01-02");
     private Activite act5 = new Activite(descr, "séminaire", 10, "2021-01-02");
-    private Architectes a1 = new Architectes(descr,null,0, null, null);
+    private Architectes a1 = new Architectes(descr,null,0, null, null,0, null, null);
     private List<Activite> liste = Arrays.asList(act1, act2, act3, act5, act4);
     private List<Activite> liste2 = Arrays.asList(act1);
     private ArrayList<Activite> arrayList;
