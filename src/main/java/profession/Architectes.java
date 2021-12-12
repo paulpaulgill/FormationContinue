@@ -23,9 +23,12 @@ public class Architectes extends Profession{
     public Architectes(@JsonProperty("numero_de_permis") String permis,
                        @JsonProperty("cycle") String cycle,
                        @JsonProperty("heures_transferees_du_cycle_precedent") int heuresTrans,
+                       @JsonProperty("nom") String nom,
+                       @JsonProperty("prenom") String prenom,
+                       @JsonProperty("sexe") int sexe,
                        @JsonProperty("ordre") String ordre,
                        @JsonProperty("activites") ArrayList<Activite> activites) {
-        super(permis, cycle, heuresTrans, ordre, activites);
+        super(permis, cycle, heuresTrans, nom, prenom, sexe, ordre, activites);
     }
 
     public Architectes(){}
