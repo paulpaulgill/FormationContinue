@@ -299,7 +299,7 @@ class TestProfession {
     }
 
     @Test
-    @DisplayName("Le permis n'est pas correct")
+    @DisplayName("Le prenom n'est pas correct")
     void validerPrenomPasCorrect(){
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);
