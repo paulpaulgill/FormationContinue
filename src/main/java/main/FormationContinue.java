@@ -14,6 +14,8 @@ public class FormationContinue {
             declaration.validerCycle();
             if (declaration.getResultat().isComplet()) {
                 declaration.validerPermis();
+                declaration.validerPrenom();
+                declaration.validerNom();
                 declaration.validerDescription();
                 declaration.validerCatActivites();
                 declaration.validerHeure();
