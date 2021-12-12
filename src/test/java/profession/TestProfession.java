@@ -298,4 +298,60 @@ class TestProfession {
         assertEquals(1,p1.getActivites().size());
     }
 
+    @Test
+    @DisplayName("Le permis n'est pas correct")
+    void validerPrenomPasCorrect(){
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        prenom= "";
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        assertThrows(FormationContinueException.class, ()->p1.validerPrenom());
+    }
+
+    @Test
+    @DisplayName("Le prenom est correct")
+    void validerPrenomCorrect() throws FormationContinueException {
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        prenom = "Serge";
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        p1.validerPrenom();
+        assertEquals(true, p1.resultat.isComplet());
+    }
+
+    @Test
+    @DisplayName("Le nom n'est pas correct")
+    void validerNomPasCorrect(){
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        prenom = "Serge";
+        nom = "";
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        assertThrows(FormationContinueException.class, ()->p1.validerNom());
+    }
+
+    @Test
+    @DisplayName("Le nom est correct")
+    void validerNomCorrect() throws FormationContinueException {
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        prenom = "Serge";
+        nom = "Dogny";
+        ordre = "psychologue";
+        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        p1.validerPrenom();
+        assertEquals(true, p1.resultat.isComplet());
+    }
+
 }
