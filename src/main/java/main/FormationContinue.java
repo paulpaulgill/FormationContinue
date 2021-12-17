@@ -13,15 +13,7 @@ public class FormationContinue {
             declaration = (Profession) fichier.chargement();
             declaration.validerCycle();
             if (declaration.getResultat().isComplet()) {
-                declaration.validerPermis();
-                declaration.validerPrenom();
-                declaration.validerNom();
-                declaration.validerDescription();
-                declaration.validerCatActivites();
-                declaration.validerHeure();
-                declaration.validerDate();
-                declaration.validerCatJour(); // emplacement tres important ne pas deplacer
-                declaration.validerHTotal();
+                testerPara(declaration);
             }
             fichier.exporterErreur(declaration);
         }catch (FormationContinueException e){
@@ -31,6 +23,18 @@ public class FormationContinue {
             fichier.exporterErreur(declaration);
             System.exit(-1);
         }
+    }
+
+    public static void testerPara(Profession declaration) throws FormationContinueException{
+        declaration.validerPermis();
+        declaration.validerPrenom();
+        declaration.validerNom();
+        declaration.validerDescription();
+        declaration.validerCatActivites();
+        declaration.validerHeure();
+        declaration.validerDate();
+        declaration.validerCatJour(); // emplacement tres important ne pas deplacer
+        declaration.validerHTotal();
     }
 }
 
