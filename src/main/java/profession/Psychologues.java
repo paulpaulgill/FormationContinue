@@ -24,10 +24,16 @@ public class Psychologues extends Profession{
     @JsonCreator
     public Psychologues(@JsonProperty("numero_de_permis") String permis,
                         @JsonProperty("cycle") String cycle,
+                        @JsonProperty("prenom") String prenom,
+                        @JsonProperty("nom") String nom,
+                        @JsonProperty("sexe") int sexe,
                         @JsonProperty("ordre") String ordre,
                         @JsonProperty("activites") ArrayList<Activite> activites) {
         this.permis = permis;
         this.cycle = cycle;
+        this.prenom = prenom;
+        this.nom = nom;
+        this.sexe = sexe;
         this.ordre = ordre;
         this.activites = activites;
     }
