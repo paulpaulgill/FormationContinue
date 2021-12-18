@@ -192,9 +192,6 @@ public abstract class Profession extends Declaration {
                         " est dans une catégorie non reconnue. Elle sera ignorée");
                 activites.get(i).setIgnore(true);
             }else if (activites.get(i).getHeures() > 10){
-                resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
-                        " inclue plus que 10h dans la même journée. Seulement 10h" +
-                        " seront considéré dans les calculs");
                 activites.get(i).setHeures(10);
             }
         }
