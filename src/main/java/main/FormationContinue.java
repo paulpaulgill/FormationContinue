@@ -4,6 +4,7 @@ import exception.FormationContinueException;
 import profession.Architectes;
 import profession.Profession;
 import util.GestionJSON;
+import util.Statistiques;
 
 public class FormationContinue {
     public static void main(String[] args) throws FormationContinueException {
@@ -11,10 +12,7 @@ public class FormationContinue {
         Profession declaration = new Architectes();
         try {
             declaration = (Profession) fichier.chargement();
-            declaration.validerCycle();
-            if (declaration.getResultat().isComplet()) {
-                testerPara(declaration);
-            }
+            testerPara(declaration);
             fichier.exporterErreur(declaration);
         }catch (FormationContinueException e){
             System.err.println(e);
@@ -26,6 +24,7 @@ public class FormationContinue {
     }
 
     public static void testerPara(Profession declaration) throws FormationContinueException{
+        declaration.validerCycle();
         declaration.validerPermis();
         declaration.validerPrenom();
         declaration.validerNom();

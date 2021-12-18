@@ -247,10 +247,11 @@ public abstract class Profession extends Declaration {
      * verifie si le IntervalCycle est null. Si il l'est un msg d'erreur est
      * produit sur le fichier de sortie.
      */
-    public void validerCycle(){
+    public void validerCycle() throws FormationContinueException {
         if (mesurerInter() == null){
             resultat.ajouterErreur("Cycle erroné.");
             resultat.setComplet(false);
+            throw new FormationContinueException("Cycle invalide");
         }
     }
 
@@ -263,5 +264,5 @@ public abstract class Profession extends Declaration {
     /**
      * Valide si le nombre d'heure total respecte le minimum demande
      */
-    public abstract void validerHTotal();
+    public abstract void validerHTotal() throws FormationContinueException;
 }

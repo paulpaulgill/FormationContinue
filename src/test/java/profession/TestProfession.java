@@ -241,7 +241,7 @@ class TestProfession {
 
     @Test
     @DisplayName("Le cyle est correct")
-    void validerCycleCorrect() {
+    void validerCycleCorrect() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 9, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -254,7 +254,7 @@ class TestProfession {
 
     @Test
     @DisplayName("Le cyle est incorrect")
-    void validerCycleIncorrect() {
+    void validerCycleIncorrect() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 9, "2021-02-01");
         activites.add(a);
         permis = "A0001";

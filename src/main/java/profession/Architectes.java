@@ -2,6 +2,7 @@ package profession;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import exception.FormationContinueException;
 import util.*;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class Architectes extends Profession{
      * est ajouté au document de sortie.
      */
     @Override
-    public void validerHTotal(){
+    public void validerHTotal() throws FormationContinueException {
         int heures = 0;
         heures = calculerHTCat() + verifierHeureTrf();
         if (heures < totalHMin){
@@ -73,11 +74,9 @@ public class Architectes extends Profession{
      * seront considérées.
      * @return
      */
-    private int verifierHeureTrf(){
+    private int verifierHeureTrf() throws FormationContinueException {
         if (heuresTrans < 0){
-            heuresTrans = 0;
-            resultat.ajouterErreur("Le nombre d'heures transférées ne peut être négatif. " +
-                    "0 heures seront considérées." );
+            throw new FormationContinueException("Cycle invalide");
         }else if(heuresTrans > 7){
             heuresTrans = 7;
             resultat.ajouterErreur("Le nombre d'heures transférées ne peut être supérieur à "+
