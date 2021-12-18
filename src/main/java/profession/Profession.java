@@ -48,15 +48,7 @@ public abstract class Profession extends Declaration {
      * @throws FormationContinueException
      * @return
      */
-    public boolean validerPermis() throws FormationContinueException {
-        boolean valide = true;
-        Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
-        Matcher m = p.matcher(permis);
-        if (!m.matches()){
-            valide = false;
-        }
-        return valide;
-    }
+    public abstract boolean validerPermis();
 
     public void validerPrenom() throws FormationContinueException{
         Pattern p = Pattern.compile(".{3,}");
@@ -98,7 +90,7 @@ public abstract class Profession extends Declaration {
      * si < 0 une erreur est lancee
      * @throws FormationContinueException
      */
-    public boolean validerHeure() throws FormationContinueException {
+    public boolean validerHeure() {
         boolean valide = true;
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getHeures() == 0) {

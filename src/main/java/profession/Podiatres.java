@@ -37,11 +37,10 @@ public class Podiatres extends Profession{
 
     /**
      * Valide si le permis respect le format
-     * @throws FormationContinueException
      * @return
      */
     @Override
-    public boolean validerPermis() throws FormationContinueException {
+    public boolean validerPermis() {
         boolean valide = true;
         Pattern p = Pattern.compile("\\b[0-9]{5}\\b");
         Matcher m = p.matcher(permis);

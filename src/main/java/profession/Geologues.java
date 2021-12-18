@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Geologues extends Profession{
     @JsonIgnore
@@ -95,5 +97,22 @@ public class Geologues extends Profession{
             resultat.setComplet(false);
         }
         validerHMin();
+    }
+
+    /**
+     * Valide si le permis respect le format
+     */
+    public boolean validerPermis(){
+        boolean valide = true;
+        Pattern p = Pattern.compile("^[A-B]{2}[0-9]{4}$");
+        Matcher m = p.matcher(permis);
+        if (!(m.matches() && valideNomPrenomPermis())){
+            valide = false;
+        }
+        return valide;
+    }
+
+    public boolean valideNomPrenomPermis(){
+        return nom.charAt(0) == permis.charAt(0) && prenom.charAt(0) == permis.charAt(1);
     }
 }
