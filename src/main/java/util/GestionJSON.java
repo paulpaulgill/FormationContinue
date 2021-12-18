@@ -36,23 +36,14 @@ public class GestionJSON {
     public Declaration chargement() throws FormationContinueException {
         try{
             declaInit = objectMapper.readValue(new File(fichiers_entree), Declaration.class);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-            objectMapper.configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT,false);
-            if (declaInit.getOrdre() == null){
-                throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
-            }else if (declaInit.getOrdre().equals("architectes")){
-                declaInit = objectMapper.readValue(new File(fichiers_entree), Architectes.class);
-            }else if(declaInit.getOrdre().equals("géologues")){
-                objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-                declaInit = objectMapper.readValue(new File(fichiers_entree), Geologues.class);
-            }else if(declaInit.getOrdre().equals("psychologues")){
-                objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
-                declaInit = objectMapper.readValue(new File(fichiers_entree), Psychologues.class);
-            }else {
-                throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
+            switch (declaInit.getOrdre()) {
+                case "architectes" -> declaInit = new Architectes();
+                case "géologues" -> declaInit = new Geologues();
+                case "psychologues" -> declaInit = new Psychologues();
+                case "podiatres" -> declaInit = new Podiatres();
+                default -> throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
             }
+            return chargerType(declaInit.getClass());
         }catch(FileNotFoundException erreur) {
             throw new FormationContinueException("Le fichier donné est introuvable.");
         }catch (JsonMappingException erreur){
@@ -60,8 +51,17 @@ public class GestionJSON {
         }catch (IOException erreur){
             throw new FormationContinueException("Une erreur inattendue est survenue");
         }
-        return declaInit;
     }
+
+    public <E> E chargerType(Class<E> eClass) throws IOException {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        objectMapper.configure(DeserializationFeature.ACCEPT_FLOAT_AS_INT,false);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
+        return objectMapper.readValue(new File(fichiers_entree), eClass);
+    }
+
     /**
      * Écris dans le fichier résultat si le cycle est complet et les erreurs
      * dans le fichier d'entré.
