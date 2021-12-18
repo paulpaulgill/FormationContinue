@@ -43,9 +43,11 @@ public class Geologues extends Profession{
     public void validerHMin(){
         if (calculerHCat(1) < 22){
             ecrireErreurHMin(22,calculerHCat(1),"cours");
-        }else if (calculerHCat(8) < 1){
+        }
+        if (calculerHCat(8) < 1){
             ecrireErreurHMin(1,calculerHCat(8),"groupe de discussion");
-        }else if (calculerHCat(9) < 3){
+        }
+        if (calculerHCat(9) < 3){
             ecrireErreurHMin(3,calculerHCat(9),"projet de recherche");
         }
     }
