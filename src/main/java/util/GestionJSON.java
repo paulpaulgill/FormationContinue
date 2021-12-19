@@ -67,14 +67,16 @@ public class GestionJSON {
      * dans le fichier d'entré.
      * @throws FileNotFoundException
      */
-    public void exporterErreur(Declaration decla) throws FormationContinueException {
+    public void exporterErreur(Declaration decla) {
         try {
             pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
             objectMapper.writer(pp).writeValue(new File(fichiers_sortie),decla.getResultat());
         }catch (FileNotFoundException erreur){
-            throw new FormationContinueException("Fichier des resultats introuvable.");
+            System.err.println("Fichier des resultats introuvable.");
+            System.exit(-1);
         }catch (IOException erreur){
-            throw new FormationContinueException("erreur inatendu lors de l'exportation des resultats");
+            System.err.println("erreur inatendu lors de l'exportation des resultats");
+            System.exit(-1);
         }
 
 

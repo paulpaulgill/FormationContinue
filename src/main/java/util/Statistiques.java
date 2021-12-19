@@ -15,17 +15,17 @@ import java.util.ArrayList;
 
 public class Statistiques {
 
-    int declarationTraitees = 0;
-    int declarationCompletes = 0;
-    int declarationIncompletesInvalides = 0;
-    int declarationHomme = 0;
-    int declarationFemme = 0;
-    int declarationSexeInconnu = 0;
-    int totalActivites = 0;
-    ArrayList<Integer> activitesParCat;
-    ArrayList<Integer> declarationCompletesParOrdre;
-    ArrayList<Integer> declarationIncompletesParOrdre;
-    int declarationPermisInvalide = 0;
+    private int declarationTraitees = 0;
+    private int declarationCompletes = 0;
+    private int declarationIncompletesInvalides = 0;
+    private int declarationHomme = 0;
+    private int declarationFemme = 0;
+    private int declarationSexeInconnu = 0;
+    private int totalActivites = 0;
+    private int[] activitesParCat = new int[10];
+    private int[] declarationCompletesParOrdre = new int[4];
+    private int[] declarationIncompletesParOrdre = new int[4];
+    private int declarationPermisInvalide = 0;
 
     private ObjectMapper objectMapper = new ObjectMapper();
     private DefaultPrettyPrinter pp = new DefaultPrettyPrinter();
@@ -38,9 +38,9 @@ public class Statistiques {
                         @JsonProperty("declarationFemme")int declarationFemme,
                         @JsonProperty("declarationSexeInconnu")int declarationSexeInconnu,
                         @JsonProperty("totalActivites")int totalActivites,
-                        @JsonProperty("activitesParCat")ArrayList<Integer> activitesParCat,
-                        @JsonProperty("declarationCompletesParOrdre")ArrayList<Integer> declarationCompletesParOrdre,
-                        @JsonProperty("declarationIncompletesParOrdre")ArrayList<Integer> declarationIncompletesParOrdre,
+                        @JsonProperty("activitesParCat")int[] activitesParCat,
+                        @JsonProperty("declarationCompletesParOrdre")int[] declarationCompletesParOrdre,
+                        @JsonProperty("declarationIncompletesParOrdre")int[] declarationIncompletesParOrdre,
                         @JsonProperty("declarationPermisInvalide")int declarationPermisInvalide) {
         this.declarationTraitees = declarationTraitees;
         this.declarationCompletes = declarationCompletes;
@@ -114,27 +114,27 @@ public class Statistiques {
         this.totalActivites = totalActivites;
     }
 
-    public ArrayList<Integer> getActivitesParCat() {
+    public int[] getActivitesParCat() {
         return activitesParCat;
     }
 
-    public void setActivitesParCat(ArrayList<Integer> activitesParCat) {
+    public void setActivitesParCat(int[] activitesParCat) {
         this.activitesParCat = activitesParCat;
     }
 
-    public ArrayList<Integer> getDeclarationCompletesParOrdre() {
+    public int[] getDeclarationCompletesParOrdre() {
         return declarationCompletesParOrdre;
     }
 
-    public void setDeclarationCompletesParOrdre(ArrayList<Integer> declarationCompletesParOrdre) {
+    public void setDeclarationCompletesParOrdre(int[] declarationCompletesParOrdre) {
         this.declarationCompletesParOrdre = declarationCompletesParOrdre;
     }
 
-    public ArrayList<Integer> getDeclarationIncompletesParOrdre() {
+    public int[] getDeclarationIncompletesParOrdre() {
         return declarationIncompletesParOrdre;
     }
 
-    public void setDeclarationIncompletesParOrdre(ArrayList<Integer> declarationIncompletesParOrdre) {
+    public void setDeclarationIncompletesParOrdre(int[] declarationIncompletesParOrdre) {
         this.declarationIncompletesParOrdre = declarationIncompletesParOrdre;
     }
 
@@ -146,37 +146,66 @@ public class Statistiques {
         this.declarationPermisInvalide = declarationPermisInvalide;
     }
 
-    public Statistiques chargerStat() throws FormationContinueException {
+    public Statistiques chargerStat(boolean reinitialise) {
         Statistiques stat = new Statistiques();
         try {
-            stat = objectMapper.readValue(new File("src/main/resources/stat.json"), Statistiques.class);
+            if (reinitialise){creerFichierStat();}
+            stat = objectMapper.readValue(new File("stat.json"), Statistiques.class);
         }catch (FileNotFoundException e){
             stat = creerFichierStat();
         }catch (IOException e){
-            throw new FormationContinueException("erreur inatendu lors de l'importation des statistique");
+            System.err.println("erreur inatendu lors de l'importation des statistique");
+            System.exit(-1);
         }
         return stat;
     }
 
-    public Statistiques creerFichierStat() throws FormationContinueException {
-        Statistiques stat = new Statistiques(0,0,0,0,0,0,0,null,null,null,0);
-        pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
-        try {
-            objectMapper.writer(pp).writeValue(new File("src/main/resources/stat.json"),stat);
-        } catch (IOException e) {
-            throw new FormationContinueException("erreur inatendu lors de l'importation des statistique");
-        }
-        return stat;
-    }
-
-    public void exporterStat(Statistiques stat) throws FormationContinueException {
+    public Statistiques creerFichierStat() {
+        Statistiques stat = new Statistiques();
         try {
             pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
-            objectMapper.writer(pp).writeValue(new File("src/main/resources/stat.json"),stat);
+            objectMapper.writer(pp).writeValue(new File("stat.json"),stat);
+        } catch (IOException e) {
+            System.err.println("erreur inatendu lors de l'importation des statistique");
+            System.exit(-1);
+        }
+        return stat;
+    }
+
+    public void exporterStat() {
+        try {
+            pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
+            objectMapper.writer(pp).writeValue(new File("stat.json"),this);
         }catch (FileNotFoundException erreur){
-            throw new FormationContinueException("Fichier des statistiques introuvable.");
+            System.err.println("Fichier des statistiques introuvable.");
+            System.exit(-1);
         }catch (IOException erreur){
-            throw new FormationContinueException("erreur inatendu lors de l'exportation des statistique");
+            System.err.println("erreur inatendu lors de l'exportation des statistique");
+            System.exit(-1);
+        }
+    }
+
+    public void genererStat(Profession declaration) throws FormationContinueException {
+        declarationTraitees ++;
+        compterValideEtInvalide(declaration);
+        compterSexe(declaration);
+        totalActivites = totalActivites + declaration.getActivites().size();
+        compterActivitesParCat(declaration);
+        compterCompletOuIncompletOrdre(declaration);
+        if(!declaration.validerPermis()){
+            declarationPermisInvalide++;
+        }
+    }
+
+    public void genererStatInvalid(Profession declaration) {
+        declarationTraitees ++;
+        declarationIncompletesInvalides ++;
+        try {
+            declaration.validerPermis();
+        }catch (FormationContinueException e){
+            declarationPermisInvalide++;
+        }catch (Exception e){
+            System.exit(-1);
         }
     }
 
@@ -198,22 +227,57 @@ public class Statistiques {
         }
     }
 
-    public void compterActivites(Profession declaration){
+    public void compterActivitesParCat(Profession declaration){
         int x;
-        int y;
         for (int i = 0; i < declaration.getActivites().size(); i++){
             x = declaration.getActivites().get(i).getCategorieNum() - 1;
-            activitesParCat.set(x,activitesParCat.get(x) + 1);
+            activitesParCat[x] = activitesParCat[x] + 1;
         }
     }
 
     public void compterCompletOuIncompletOrdre(Profession declaration){
         int x = declaration.getOrdreNum();
         if(declaration.getResultat().isComplet()){
-            declarationCompletesParOrdre.set(x,declarationCompletesParOrdre.get(x) + 1);
+            declarationCompletesParOrdre[x] = declarationCompletesParOrdre[x] + 1;
         }else {
-            declarationIncompletesParOrdre.set(x,declarationIncompletesParOrdre.get(x) + 1);
+            declarationIncompletesParOrdre[x] = declarationIncompletesParOrdre[x] + 1;
         }
+    }
+
+    @Override
+    public String toString(){
+        String affichage;
+        affichage =
+        "\nnombre total de déclarations traitées : " + declarationTraitees +
+        "\nnombre total de déclarations complètes : " + declarationCompletes +
+        "\nnombre total de déclarations incomplètes ou invalides : " + declarationIncompletesInvalides +
+        "\nnombre total de déclarations faites par des hommes : " + declarationHomme +
+        "\nnombre total de déclarations faites par des femmes : " + declarationFemme +
+        "\nnombre total de déclarations faites par des gens de sexe inconnu : " + declarationSexeInconnu +
+        "\nnombre total d'activités dans les déclarations : " + totalActivites +
+        "\nnombre d'activités par catégorie :" +
+                "\n\tcours : " + activitesParCat[0] +
+                "\n\tatelier : " + activitesParCat[1] +
+                "\n\tséminaire : " + activitesParCat[2] +
+                "\n\tcolloque : " + activitesParCat[3] +
+                "\n\tconférence : " + activitesParCat[4] +
+                "\n\tlecture dirigée : " + activitesParCat[5] +
+                "\n\tprésentation : " + activitesParCat[6] +
+                "\n\tgroupe de discussion : " + activitesParCat[7] +
+                "\n\tprojet de recherche : " + activitesParCat[8] +
+                "\n\trédaction professionnell : " + activitesParCat[9] +
+        "\nnombre total de déclarations valides et complètes par type d'ordre professionnel : " +
+                "\n\tarchitectes : " + declarationCompletesParOrdre[0] +
+                "\n\tgéologues : " + declarationCompletesParOrdre[1] +
+                "\n\tpsychologues : " + declarationCompletesParOrdre[2] +
+                "\n\tpodiatres : " + declarationCompletesParOrdre[3] +
+        "\nnombre total de déclarations valides et incomplètes par type d'ordre professionnel : " +
+                "\n\tarchitectes : " + declarationIncompletesParOrdre[0] +
+                "\n\tgéologues : " + declarationIncompletesParOrdre[1] +
+                "\n\tpsychologues : " + declarationIncompletesParOrdre[2] +
+                "\n\tpodiatres : " + declarationIncompletesParOrdre[3] +
+        "\nnombre de déclarations soumises avec un numéro de permis invalide : " + declarationPermisInvalide;
+        return affichage;
     }
 
 }
