@@ -37,10 +37,10 @@ public class GestionJSON {
         try{
             declaInit = objectMapper.readValue(new File(fichiers_entree), Declaration.class);
             String ordre = declaInit.getOrdre();
-            if (ordre == "architectes"){ declaInit = new Architectes();}
-            else if (ordre == "géologues" ){ declaInit = new Geologues();}
-            else if (ordre == "psychologues"){  declaInit = new Psychologues();}
-            else if (ordre == "podiatres" ){ declaInit = new Podiatres();}
+            if (ordre.equals("architectes")){ declaInit = new Architectes();}
+            else if (ordre.equals("géologues")){ declaInit = new Geologues();}
+            else if (ordre.equals("psychologues")){  declaInit = new Psychologues();}
+            else if (ordre.equals("podiatres")){ declaInit = new Podiatres();}
             else{ throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");}
             return chargerType(declaInit.getClass());
         }catch(FileNotFoundException erreur) {
