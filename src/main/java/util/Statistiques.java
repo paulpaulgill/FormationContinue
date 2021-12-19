@@ -169,6 +169,17 @@ public class Statistiques {
         return stat;
     }
 
+    public void exporterStat(Statistiques stat) throws FormationContinueException {
+        try {
+            pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
+            objectMapper.writer(pp).writeValue(new File("src/main/resources/stat.json"),stat);
+        }catch (FileNotFoundException erreur){
+            throw new FormationContinueException("Fichier des statistiques introuvable.");
+        }catch (IOException erreur){
+            throw new FormationContinueException("erreur inatendu lors de l'exportation des statistique");
+        }
+    }
+
     public void compterSexe(Profession declaration){
         if (declaration.getSexe() == 1){
             declarationHomme ++;
