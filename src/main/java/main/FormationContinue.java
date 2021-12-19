@@ -28,6 +28,7 @@ public class FormationContinue {
         declaration.validerPermis();
         declaration.validerPrenom();
         declaration.validerNom();
+        declaration.validerSexe();
         declaration.validerDescription();
         declaration.validerCatActivites();
         declaration.validerHeure();

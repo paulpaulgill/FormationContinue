@@ -76,7 +76,7 @@ public class Architectes extends Profession{
      */
     private int verifierHeureTrf() throws FormationContinueException {
         if (heuresTrans < 0){
-            throw new FormationContinueException("Cycle invalide");
+            throw new FormationContinueException("Heures Transféré invalide");
         }else if(heuresTrans > 7){
             heuresTrans = 7;
             resultat.ajouterErreur("Le nombre d'heures transférées ne peut être supérieur à "+

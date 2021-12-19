@@ -149,7 +149,7 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est correcte")
-    void validerDateCorrecte(){
+    void validerDateCorrecte() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -162,7 +162,7 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est incorrecte")
-    void validerDateIncorrecte(){
+    void validerDateIncorrecte() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "D");
         activites.add(a);
         permis = "A0001";
@@ -175,7 +175,7 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est n'est pas dans l'intervalle exigé")
-    void validerDateIncorrecte2(){
+    void validerDateIncorrecte2() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2016-02-01");
         activites.add(a);
         permis = "A0001";

@@ -51,20 +51,22 @@ public abstract class Profession extends Declaration {
     public abstract boolean validerPermis();
 
     public void validerPrenom() throws FormationContinueException{
-        Pattern p = Pattern.compile(".{3,}");
-        Matcher m = p.matcher(prenom);
-        if (!m.matches())
+        if (prenom.isEmpty())
         {
-            lancerErreurStrut();
+            throw new FormationContinueException("Prenom invalide");
         }
     }
 
     public void validerNom() throws FormationContinueException{
-        Pattern instru = Pattern.compile(".{3,}");
-        Matcher mettre = instru.matcher(nom);
-        if (!mettre.matches())
+        if (nom.isEmpty())
         {
-            lancerErreurStrut();
+            throw new FormationContinueException("Nom invalide");
+        }
+    }
+
+    public void validerSexe() throws FormationContinueException{
+        if(sexe != 0 && sexe != 1 && sexe != 2){
+            throw new FormationContinueException("Sexe invalide");
         }
     }
 
@@ -78,7 +80,7 @@ public abstract class Profession extends Declaration {
             Pattern p = Pattern.compile(".{21,}");
             Matcher m = p.matcher(activites.get(i).getDescription());
             if (!m.matches()){
-                valide = false;
+                throw new FormationContinueException("Description invalide");
             }
         }
         return valide;
@@ -90,15 +92,11 @@ public abstract class Profession extends Declaration {
      * si < 0 une erreur est lancee
      * @throws FormationContinueException
      */
-    public boolean validerHeure() {
+    public boolean validerHeure() throws FormationContinueException {
         boolean valide = true;
         for (int i = 0; i < activites.size(); i++){
-            if (activites.get(i).getHeures() == 0) {
-                resultat.ajouterErreur("Le nombre d'heure minimum est de 1. L'activite "
-                        + activites.get(i).getDescription() + " sera ignoree");
-                activites.get(i).setIgnore(true);
-            }if (activites.get(i).getHeures() < 0) {
-                valide = false;
+            if (activites.get(i).getHeures() <= 0){
+                throw new FormationContinueException("Declaration Invalide: Heure d'une activité est negative ou 0.");
             }
         }
         return valide;
@@ -119,22 +117,15 @@ public abstract class Profession extends Declaration {
     /**
      * Valide que le format de la date soit respectee et respect les annees bisectiles.
      * Si elle ne l'est pas, retourne faux
-     * @param i cpt
-     * @return boolean valide qui indique si la date est valide
+     * @return vérifie si la date est valide
      */
-    private boolean verifierFormatDate(int i) {
-        boolean valide = false;
-        String date = activites.get(i).getDate();
-        try {
-            LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
-            valide = true;
-        } catch (IllegalArgumentException erreur) {
-            System.out.println("Une erreur est survenue lors du traitement de la date.");
-            System.exit(-1);
-        } catch (DateTimeParseException erreur) {
-            valide = false;
-        }
-        return valide;
+    private void verifierFormatDate(int i) throws FormationContinueException {
+            String date = activites.get(i).getDate();
+            try {
+                LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
+            } catch (DateTimeParseException erreur) {
+                throw new FormationContinueException("Une date n'est pas en format ISO8601.");
+            }
     }
 
     /**
@@ -157,25 +148,16 @@ public abstract class Profession extends Declaration {
     }
 
     /**
-     * Ecrit un msg d'erreur sur le fichier de sortie a propos de la date.
-     * @param finMsg String qui est la fin du msg
-     * @param i cpt
-     */
-    private void ecrireErrDate(String finMsg, int i) {
-        resultat.ajouterErreur("La date de l'activité " +
-                activites.get(i).getDescription() + finMsg);
-        activites.get(i).setIgnore(true);
-    }
-
-    /**
      * si le format ou la date n'est pas valide, un msg d'erreur est produit sur fichier de sortie
      */
-    public void validerDate() {
+    public void validerDate() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++) {
-            if (!verifierFormatDate(i)){
-                ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
-            }else if (!estEntreDate(i,mesurerInter())){
-                ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
+            verifierFormatDate(i);
+            if (!estEntreDate(i,mesurerInter())){
+                resultat.ajouterErreur("La date de l'activité " +
+                        activites.get(i).getDescription() +" " +
+                        "n'est pas dans l'intervalle exigée. Elle sera ignoré");
+                activites.get(i).setIgnore(true);
             }
         }
     }

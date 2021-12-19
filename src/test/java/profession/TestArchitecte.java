@@ -1,5 +1,6 @@
 package profession;
 
+import exception.FormationContinueException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,7 +73,7 @@ public class TestArchitecte {
     }
 
     @Test
-    public void testValiderHTotal(){
+    public void testValiderHTotal() throws FormationContinueException {
         arrayList.addAll(liste);
         a1.setHeuresTrans(4);
         a1.setActivites(arrayList);
@@ -81,7 +82,7 @@ public class TestArchitecte {
     }
 
     @Test
-    public void testValiderHTotalNonValide(){
+    public void testValiderHTotalNonValide() throws FormationContinueException {
         arrayList.addAll(liste2);
         a1.setHeuresTrans(0);
         a1.setActivites(arrayList);
