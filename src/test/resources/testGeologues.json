@@ -1,6 +1,9 @@
 {
   "numero_de_permis": "A0001",
   "cycle": "2018-2020",
+  "nom": "English",
+  "prenom" : "Johny",
+  "sexe" : 1,
   "ordre": "géologues",
   "activites": [
     {

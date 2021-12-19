@@ -26,7 +26,7 @@ public abstract class Profession extends Declaration {
                       @JsonProperty(value = "heures_transferees_du_cycle_precedent" , required = false) int heuresTrans,
                       @JsonProperty("nom") String nom,
                       @JsonProperty("prenom") String prenom,
-                      @JsonProperty(value = "sexe", required = false) int sexe,
+                      @JsonProperty("sexe") int sexe,
                       @JsonProperty("ordre") String ordre,
                       @JsonProperty("activites") ArrayList<Activite> activites) {
         super(permis, cycle, heuresTrans, nom, prenom, sexe, ordre, activites);

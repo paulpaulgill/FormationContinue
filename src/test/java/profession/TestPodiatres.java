@@ -19,7 +19,7 @@ public class TestPodiatres {
     private Activite act4 = new Activite(descr, "groupe de discussion", 10, "2021-01-02");
     private Activite act5 = new Activite(descr, "projet de recherche", 10, "2021-01-02");
     private Activite act6 = new Activite(descr, "projet de recherche", 10, "2021-01-02");
-    private Podiatres p1 = new Podiatres(descr,null, null, null);
+    private Podiatres p1 = new Podiatres(descr,null, null, null,0, null, null);
     private List<Activite> liste = Arrays.asList(act1, act2, act3, act5, act4, act6);
     private List<Activite> liste2 = Arrays.asList(act1);
     private ArrayList<Activite> arrayList;
@@ -54,16 +54,16 @@ public class TestPodiatres {
     @Test
     void validerPermisPasCorrect(){
         arrayList.addAll(liste);
-        p1 = new Podiatres(permis2,cycle,ordre,arrayList);
+        p1 = new Podiatres(permis2,cycle,null,null,0,ordre,arrayList);
         assertThrows(FormationContinueException.class, ()->p1.validerPermis());
-        p1 = new Podiatres(permis3,cycle,ordre,arrayList);
+        p1 = new Podiatres(permis3,cycle,null,null,0,ordre,arrayList);
         assertThrows(FormationContinueException.class, ()->p1.validerPermis());
     }
 
     @Test
     void validerPermisCorrect() throws FormationContinueException {
         arrayList.addAll(liste);
-        p1 = new Podiatres(permis1,cycle,ordre,arrayList);
+        p1 = new Podiatres(permis1,cycle,null,null,0,ordre,arrayList);
         assertEquals(true, p1.resultat.isComplet());
     }
 

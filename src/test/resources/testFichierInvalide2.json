@@ -1,6 +1,9 @@
 {
   "cycle": "2018-2020",
   "heures_transferees_du_cycle_precedent": 7,
+  "nom": "English",
+  "prenom" : "Johny",
+  "sexe" : 1,
   "ordre": "géologues",
   "activites": [
     {

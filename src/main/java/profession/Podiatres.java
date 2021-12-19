@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 
 public class Podiatres extends Profession{
     @JsonIgnore
+    protected int heuresTrans;
 
     private final Date DATE_MAX = new GregorianCalendar(2021, Calendar.JUNE, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JUNE, 1).getTime();
@@ -24,10 +25,16 @@ public class Podiatres extends Profession{
     @JsonCreator
     public Podiatres(@JsonProperty("numero_de_permis") String permis,
                      @JsonProperty("cycle") String cycle,
+                     @JsonProperty("nom") String nom,
+                     @JsonProperty("prenom") String prenom,
+                     @JsonProperty("sexe") int sexe,
                      @JsonProperty("ordre") String ordre,
                      @JsonProperty("activites") ArrayList<Activite> activites) {
         this.permis = permis;
         this.cycle = cycle;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.sexe = sexe;
         this.ordre = ordre;
         this.activites = activites;
     }
