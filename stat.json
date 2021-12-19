@@ -1,0 +1,34 @@
+{
+  "declarationTraitees" : 0,
+  "declarationCompletes" : 0,
+  "declarationIncompletesInvalides" : 0,
+  "declarationHomme" : 0,
+  "declarationFemme" : 0,
+  "declarationSexeInconnu" : 0,
+  "totalActivites" : 0,
+  "activitesParCat" : [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "declarationCompletesParOrdre" : [
+    0,
+    0,
+    0,
+    0
+  ],
+  "declarationIncompletesParOrdre" : [
+    0,
+    0,
+    0,
+    0
+  ],
+  "declarationPermisInvalide" : 0
+}

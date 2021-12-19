@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 public class Psychologues extends Profession{
     @JsonIgnore
-    protected int heuresTrans;
 
     private final Date DATE_MAX = new GregorianCalendar(2023, Calendar.JANUARY, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime();

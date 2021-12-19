@@ -17,7 +17,6 @@ class TestProfession {
     String cycle;
     String nom;
     String prenom;
-    int heuresTrans;
     String ordre;
     int sexe;
     ArrayList<Activite> activites = new ArrayList<>();
@@ -73,7 +72,7 @@ class TestProfession {
 
     @Test
     @DisplayName("Le permis est correct")
-    void validerPermisCorrect() throws FormationContinueException {
+    void validerPermisCorrect() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -110,7 +109,7 @@ class TestProfession {
 
     @Test
     @DisplayName("L'heure est négative")
-    void validerHeureNegative(){
+    void validerHeureNegative() {
         Activite a = new Activite("Cours sur la déontologie", "cours", -2, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -122,7 +121,7 @@ class TestProfession {
 
     @Test
     @DisplayName("L'heure est nulle")
-    void validerHeureNulle() throws FormationContinueException {
+    void validerHeureNulle() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 0, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -160,7 +159,7 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est incorrecte")
-    void validerDateIncorrecte() throws FormationContinueException {
+    void validerDateIncorrecte() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "D");
         activites.add(a);
         permis = "A0001";
@@ -172,7 +171,7 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est n'est pas dans l'intervalle exigé")
-    void validerDateIncorrecte2() throws FormationContinueException {
+    void validerDateIncorrecte2() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2016-02-01");
         activites.add(a);
         permis = "A0001";
@@ -247,7 +246,7 @@ class TestProfession {
 
     @Test
     @DisplayName("Le cyle est incorrect")
-    void validerCycleIncorrect() throws FormationContinueException {
+    void validerCycleIncorrect() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 9, "2021-02-01");
         activites.add(a);
         permis = "A0001";
