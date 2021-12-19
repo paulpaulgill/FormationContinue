@@ -187,4 +187,22 @@ public class Statistiques {
         }
     }
 
+    public void compterActivites(Profession declaration){
+        int x;
+        int y;
+        for (int i = 0; i < declaration.getActivites().size(); i++){
+            x = declaration.getActivites().get(i).getCategorieNum() - 1;
+            activitesParCat.set(x,activitesParCat.get(x) + 1);
+        }
+    }
+
+    public void compterCompletOuIncompletOrdre(Profession declaration){
+        int x = declaration.getOrdreNum();
+        if(declaration.getResultat().isComplet()){
+            declarationCompletesParOrdre.set(x,declarationCompletesParOrdre.get(x) + 1);
+        }else {
+            declarationIncompletesParOrdre.set(x,declarationIncompletesParOrdre.get(x) + 1);
+        }
+    }
+
 }
