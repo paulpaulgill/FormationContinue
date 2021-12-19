@@ -21,9 +21,19 @@ public class FormationContinue {
             System.err.println("Erreur lors de la lecture des options de la commande");
             System.exit(-1);
         }
-        if(cmd.hasOption("S") || cmd.hasOption("SR")){argX = argX + 1;}
-        System.out.println(args[argX] + args[argX + 1]);
+        if(cmd.hasOption("S") && cmd.hasOption("SR")){argX = argX + 2;}
+        else if(cmd.hasOption("S") || cmd.hasOption("SR")){argX = argX + 1;}
         GestionJSON fichier = new GestionJSON(args[argX], args[argX + 1]);
+        evaluerDeclaration( fichier, cmd);
+    }
+
+
+    /**
+     * Évalue et donner les résultats de l'évaluation de la déclration.
+     * @param fichier l'instance de gestion de fichier JSON
+     * @param cmd   pour evaluer la presence d'option de ligne de commande
+     */
+    public static void evaluerDeclaration(GestionJSON fichier , CommandLine cmd){
         Profession declaration = new Architectes();
         Statistiques stat = new Statistiques();
         try {
@@ -46,6 +56,11 @@ public class FormationContinue {
         }
     }
 
+    /**
+     * Valide la completion du cycle de la déclaration et la validité du format
+     * @param declaration instance de déclaration a évaluer
+     * @throws FormationContinueException lancer si declaration est invalide
+     */
     public static void testerPara(Profession declaration) throws FormationContinueException{
         declaration.validerCycle();
         declaration.validerPermis();
