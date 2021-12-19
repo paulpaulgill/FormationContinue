@@ -179,8 +179,7 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerDate();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerDate());
     }
 
     @Test
@@ -192,8 +191,7 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCatActivites();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerCatActivites());
     }
 
     @Test
@@ -205,13 +203,12 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCatActivites();
-        assertEquals(0,p1.getResultat().getErreur().size());
+        assertDoesNotThrow(() -> p1.validerCatActivites());
     }
 
     @Test
     @DisplayName("L'activité a plus de 10h")
-    void validerCatActivitesPlusDe10h() {
+    void validerCatActivitesPlusDe10h() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 15, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -219,6 +216,7 @@ class TestProfession {
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
         p1.validerCatActivites();
+        assertDoesNotThrow(() -> p1.validerCatActivites());
         assertEquals(10,p1.getActivites().get(0).getHeures());
     }
 
@@ -231,8 +229,7 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCatActivites();
-        assertEquals(0,p1.getResultat().getErreur().size());
+        assertDoesNotThrow(() -> p1.validerCatActivites());
     }
 
     @Test

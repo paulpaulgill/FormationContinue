@@ -129,11 +129,13 @@ public abstract class Profession extends Declaration {
         Date min = interCycle.getMin();
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(activites.get(i).getDate());
-            valide = date.getTime() >= min.getTime() && date.getTime() <= max.getTime();
+            if (!(date.getTime() >= min.getTime() && date.getTime() <= max.getTime())){
+                throw new FormationContinueException("La date de l'activité " +
+                        activites.get(i).getDescription() +" " +
+                        "n'est pas dans l'intervalle exigée.");
+            }
         } catch (ParseException erreur) {
-            throw new FormationContinueException("La date de l'activité " +
-                    activites.get(i).getDescription() +" " +
-                    "n'est pas dans l'intervalle exigée.");
+            throw new FormationContinueException(erreur.getMessage());
         }
         return valide;
     }
@@ -153,12 +155,11 @@ public abstract class Profession extends Declaration {
      * n'est pas plus de 10 heures dans la meme journee. Un message d'erreur est produit
      * si cela n'est pas respecte.
      */
-    public void validerCatActivites(){
+    public void validerCatActivites() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getCategorieNum() == 0){
-                resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
-                        " est dans une catégorie non reconnue. Elle sera ignorée");
-                activites.get(i).setIgnore(true);
+                throw new FormationContinueException("L'activité " + activites.get(i).getDescription() +
+                        " est dans une catégorie non reconnue.");
             }else if (activites.get(i).getHeures() > 10){
                 activites.get(i).setHeures(10);
             }
