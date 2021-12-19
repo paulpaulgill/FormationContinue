@@ -146,14 +146,15 @@ public class Statistiques {
         this.declarationPermisInvalide = declarationPermisInvalide;
     }
 
-    public Statistiques chargerStat(boolean reinitialise) {
+    public Statistiques chargerStat(String nomFichierStat, boolean reinitialise) {
         Statistiques stat = new Statistiques();
         try {
             if (reinitialise){
-                creerFichierStat();
+                stat = creerFichierStat();
                 System.out.println("Statistique réinitialiser");
+            }else {
+                stat = objectMapper.readValue(new File(nomFichierStat), Statistiques.class);
             }
-            stat = objectMapper.readValue(new File("stat.json"), Statistiques.class);
         }catch (FileNotFoundException e){
             stat = creerFichierStat();
         }catch (IOException e){

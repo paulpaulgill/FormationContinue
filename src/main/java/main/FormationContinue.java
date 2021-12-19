@@ -37,7 +37,7 @@ public class FormationContinue {
         Profession declaration = new Architectes();
         Statistiques stat = new Statistiques();
         try {
-            stat = stat.chargerStat(cmd.hasOption("SR"));
+            stat = stat.chargerStat("stat.json",cmd.hasOption("SR"));
             declaration = (Profession) fichier.chargement();
             testerPara(declaration);
             fichier.exporterErreur(declaration);
