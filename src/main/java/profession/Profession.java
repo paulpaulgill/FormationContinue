@@ -123,7 +123,7 @@ public abstract class Profession extends Declaration {
      * @param interCycle contient le cycle en String, la date min et la date max
      * @return
      */
-    private boolean estEntreDate(int i, IntervalCycle interCycle) {
+    private boolean estEntreDate(int i, IntervalCycle interCycle) throws FormationContinueException {
         boolean valide = false;
         Date max = interCycle.getMax();
         Date min = interCycle.getMin();
@@ -131,7 +131,9 @@ public abstract class Profession extends Declaration {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(activites.get(i).getDate());
             valide = date.getTime() >= min.getTime() && date.getTime() <= max.getTime();
         } catch (ParseException erreur) {
-            valide = false;
+            throw new FormationContinueException("La date de l'activité " +
+                    activites.get(i).getDescription() +" " +
+                    "n'est pas dans l'intervalle exigée.");
         }
         return valide;
     }
@@ -142,12 +144,7 @@ public abstract class Profession extends Declaration {
     public void validerDate() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++) {
             verifierFormatDate(i);
-            if (!estEntreDate(i,mesurerInter())){
-                resultat.ajouterErreur("La date de l'activité " +
-                        activites.get(i).getDescription() +" " +
-                        "n'est pas dans l'intervalle exigée. Elle sera ignoré");
-                activites.get(i).setIgnore(true);
-            }
+            estEntreDate(i,mesurerInter());
         }
     }
 
