@@ -149,7 +149,10 @@ public class Statistiques {
     public Statistiques chargerStat(boolean reinitialise) {
         Statistiques stat = new Statistiques();
         try {
-            if (reinitialise){creerFichierStat();}
+            if (reinitialise){
+                creerFichierStat();
+                System.out.println("Statistique réinitialiser");
+            }
             stat = objectMapper.readValue(new File("stat.json"), Statistiques.class);
         }catch (FileNotFoundException e){
             stat = creerFichierStat();
