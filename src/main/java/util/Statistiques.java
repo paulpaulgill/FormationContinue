@@ -169,4 +169,22 @@ public class Statistiques {
         return stat;
     }
 
+    public void compterSexe(Profession declaration){
+        if (declaration.getSexe() == 1){
+            declarationHomme ++;
+        }else if (declaration.getSexe() == 2){
+            declarationFemme ++;
+        }else if (declaration.getSexe() == 0){
+            declarationSexeInconnu++;
+        }
+    }
+
+    public void compterValideEtInvalide(Profession declaration){
+        if (declaration.getResultat().isComplet()){
+            declarationCompletes ++;
+        }else {
+            declarationIncompletesInvalides ++;
+        }
+    }
+
 }
