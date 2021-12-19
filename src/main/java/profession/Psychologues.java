@@ -14,6 +14,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Psychologues extends Profession{
+    /**
+     * @JsonIgnore
+     * protected int heuresTrans;
+     *
+     * tres important a la verification des champs manquand parce que certaine ordre ne continne pas le champ
+     * heures_transferees_du_cycle_precedent (comme geologue) meme si il aparais comme un variable non utiliser
+     * Jackson l'utilise pour ignorer les erreurs quand il est manquand.
+     */
     @JsonIgnore
     protected int heuresTrans;
 
