@@ -2,12 +2,15 @@ package profession;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import exception.FormationContinueException;
 import util.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Architectes extends Profession{
     private final Date DATE_MAX1 = new GregorianCalendar(2022, Calendar.APRIL, 1).getTime();
@@ -54,7 +57,7 @@ public class Architectes extends Profession{
      * est ajouté au document de sortie.
      */
     @Override
-    public void validerHTotal(){
+    public void validerHTotal() throws FormationContinueException {
         int heures = 0;
         heures = calculerHTCat() + verifierHeureTrf();
         if (heures < totalHMin){
@@ -71,11 +74,9 @@ public class Architectes extends Profession{
      * seront considérées.
      * @return
      */
-    private int verifierHeureTrf(){
+    private int verifierHeureTrf() throws FormationContinueException {
         if (heuresTrans < 0){
-            heuresTrans = 0;
-            resultat.ajouterErreur("Le nombre d'heures transférées ne peut être négatif. " +
-                    "0 heures seront considérées." );
+            throw new FormationContinueException("Heures Transféré invalide");
         }else if(heuresTrans > 7){
             heuresTrans = 7;
             resultat.ajouterErreur("Le nombre d'heures transférées ne peut être supérieur à "+
@@ -125,5 +126,20 @@ public class Architectes extends Profession{
             inter = null;
         }
         return inter;
+    }
+
+    /**
+     * Valide si le permis respect le format
+     * @return
+     */
+    @Override
+    public boolean validerPermis() throws FormationContinueException {
+        boolean valide = true;
+        Pattern p = Pattern.compile("\\b[AT][0-9]{4}\\b");
+        Matcher m = p.matcher(permis);
+        if (!m.matches()){
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
+        }
+        return valide;
     }
 }

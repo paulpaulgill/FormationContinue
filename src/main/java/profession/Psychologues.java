@@ -3,16 +3,18 @@ package profession;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import exception.FormationContinueException;
 import util.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Psychologues extends Profession{
     @JsonIgnore
-    protected int heuresTrans;
 
     private final Date DATE_MAX = new GregorianCalendar(2023, Calendar.JANUARY, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JANUARY, 1).getTime();
@@ -86,5 +88,19 @@ public class Psychologues extends Profession{
             resultat.setComplet(false);
         }
         validerHMin();
+    }
+
+    /**
+     * Valide si le permis respect le format
+     */
+    @Override
+    public boolean validerPermis() throws FormationContinueException {
+        boolean valide = true;
+        Pattern p = Pattern.compile("^[0-9]{5}-[0-9]{2}$");
+        Matcher m = p.matcher(permis);
+        if (!m.matches()){
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
+        }
+        return valide;
     }
 }

@@ -17,7 +17,6 @@ class TestProfession {
     String cycle;
     String nom;
     String prenom;
-    int heuresTrans;
     String ordre;
     int sexe;
     ArrayList<Activite> activites = new ArrayList<>();
@@ -73,15 +72,14 @@ class TestProfession {
 
     @Test
     @DisplayName("Le permis est correct")
-    void validerPermisCorrect() throws FormationContinueException {
+    void validerPermisCorrect() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerPermis();
-        assertEquals(true, p1.resultat.isComplet());
+        assertThrows(FormationContinueException.class,() -> p1.validerPermis());
     }
 
     @Test
@@ -111,7 +109,7 @@ class TestProfession {
 
     @Test
     @DisplayName("L'heure est négative")
-    void validerHeureNegative(){
+    void validerHeureNegative() {
         Activite a = new Activite("Cours sur la déontologie", "cours", -2, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -123,15 +121,14 @@ class TestProfession {
 
     @Test
     @DisplayName("L'heure est nulle")
-    void validerHeureNulle() throws FormationContinueException {
+    void validerHeureNulle() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 0, "2021-02-01");
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerHeure();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerHeure());
     }
 
     @Test
@@ -149,7 +146,7 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est correcte")
-    void validerDateCorrecte(){
+    void validerDateCorrecte() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -162,28 +159,26 @@ class TestProfession {
 
     @Test
     @DisplayName("La date est incorrecte")
-    void validerDateIncorrecte(){
+    void validerDateIncorrecte() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "D");
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerDate();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerDate());
     }
 
     @Test
     @DisplayName("La date est n'est pas dans l'intervalle exigé")
-    void validerDateIncorrecte2(){
+    void validerDateIncorrecte2() {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2016-02-01");
         activites.add(a);
         permis = "A0001";
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerDate();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerDate());
     }
 
     @Test
@@ -195,8 +190,7 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCatActivites();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerCatActivites());
     }
 
     @Test
@@ -208,13 +202,12 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCatActivites();
-        assertEquals(0,p1.getResultat().getErreur().size());
+        assertDoesNotThrow(() -> p1.validerCatActivites());
     }
 
     @Test
     @DisplayName("L'activité a plus de 10h")
-    void validerCatActivitesPlusDe10h() {
+    void validerCatActivitesPlusDe10h() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 15, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -222,7 +215,7 @@ class TestProfession {
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
         p1.validerCatActivites();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertDoesNotThrow(() -> p1.validerCatActivites());
         assertEquals(10,p1.getActivites().get(0).getHeures());
     }
 
@@ -235,13 +228,12 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCatActivites();
-        assertEquals(0,p1.getResultat().getErreur().size());
+        assertDoesNotThrow(() -> p1.validerCatActivites());
     }
 
     @Test
     @DisplayName("Le cyle est correct")
-    void validerCycleCorrect() {
+    void validerCycleCorrect() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 9, "2021-02-01");
         activites.add(a);
         permis = "A0001";
@@ -261,8 +253,7 @@ class TestProfession {
         cycle = "2017-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerCycle();
-        assertEquals(1,p1.getResultat().getErreur().size());
+        assertThrows(FormationContinueException.class,() -> p1.validerCycle());
     }
 
     @Test
@@ -299,7 +290,7 @@ class TestProfession {
         activites.add(b);
         p1 = new Psychologues("A0001","2017-2023", "Johanson", "Dogny",2,"psychologue",activites);
         p1.validerCatJour();
-        assertEquals(1,p1.getActivites().size());
+        assertEquals(10,p1.calculerHCat(5));
     }
 
     @Test

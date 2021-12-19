@@ -46,30 +46,27 @@ public abstract class Profession extends Declaration {
     /**
      * Valide si le permis respect le format
      * @throws FormationContinueException
+     * @return
      */
-    public void validerPermis() throws FormationContinueException {
-        Pattern p = Pattern.compile("\\b[ARSZ][0-9]{4}\\b");
-        Matcher m = p.matcher(permis);
-        if (!m.matches()){
-            lancerErreurStrut();
-        }
-    }
+    public abstract boolean validerPermis() throws FormationContinueException;
 
     public void validerPrenom() throws FormationContinueException{
-        Pattern p = Pattern.compile(".{3,}");
-        Matcher m = p.matcher(prenom);
-        if (!m.matches())
+        if (prenom.isEmpty())
         {
-            lancerErreurStrut();
+            throw new FormationContinueException("Prenom invalide");
         }
     }
 
     public void validerNom() throws FormationContinueException{
-        Pattern instru = Pattern.compile(".{3,}");
-        Matcher mettre = instru.matcher(nom);
-        if (!mettre.matches())
+        if (nom.isEmpty())
         {
-            lancerErreurStrut();
+            throw new FormationContinueException("Nom invalide");
+        }
+    }
+
+    public void validerSexe() throws FormationContinueException{
+        if(sexe != 0 && sexe != 1 && sexe != 2){
+            throw new FormationContinueException("Sexe invalide");
         }
     }
 
@@ -77,14 +74,16 @@ public abstract class Profession extends Declaration {
      * Valide que la description fait respecte la longueur demandee
      * @throws FormationContinueException
      */
-    public void validerDescription() throws FormationContinueException {
+    public boolean validerDescription() throws FormationContinueException {
+        boolean valide = true;
         for (int i = 0; i < activites.size(); i++) {
             Pattern p = Pattern.compile(".{21,}");
             Matcher m = p.matcher(activites.get(i).getDescription());
             if (!m.matches()){
-                lancerErreurStrut();
+                throw new FormationContinueException("Description invalide");
             }
         }
+        return valide;
     }
 
     /**
@@ -93,47 +92,29 @@ public abstract class Profession extends Declaration {
      * si < 0 une erreur est lancee
      * @throws FormationContinueException
      */
-    public void validerHeure() throws FormationContinueException {
+    public boolean validerHeure() throws FormationContinueException {
+        boolean valide = true;
         for (int i = 0; i < activites.size(); i++){
-            if (activites.get(i).getHeures() == 0) {
-                resultat.ajouterErreur("Le nombre d'heure minimum est de 1. L'activite "
-                        + activites.get(i).getDescription() + " sera ignoree");
-                activites.get(i).setIgnore(true);
-            }if (activites.get(i).getHeures() < 0) {
-                lancerErreurStrut();
+            if (activites.get(i).getHeures() <= 0){
+                throw new FormationContinueException("Declaration Invalide: Heure d'une activité est negative ou 0.");
             }
         }
+        return valide;
     }
 
-    /**
-     * Lance une esception, ecrit sur le fichier de sortie et met complet a faux
-     * @throws FormationContinueException
-     */
-    public void lancerErreurStrut() throws FormationContinueException {
-        resultat.ecraserErreur("Le fichier d'entrée est invalide.");
-        resultat.setComplet(false);
-        throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
-    }
 
     /**
      * Valide que le format de la date soit respectee et respect les annees bisectiles.
      * Si elle ne l'est pas, retourne faux
-     * @param i cpt
-     * @return boolean valide qui indique si la date est valide
+     * @return vérifie si la date est valide
      */
-    private boolean verifierFormatDate(int i) {
-        boolean valide = false;
-        String date = activites.get(i).getDate();
-        try {
-            LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
-            valide = true;
-        } catch (IllegalArgumentException erreur) {
-            System.out.println("Une erreur est survenue lors du traitement de la date.");
-            System.exit(-1);
-        } catch (DateTimeParseException erreur) {
-            valide = false;
-        }
-        return valide;
+    private void verifierFormatDate(int i) throws FormationContinueException {
+            String date = activites.get(i).getDate();
+            try {
+                LocalDate.parse(date, DateTimeFormatter.ofPattern("uuuu-M-d").withResolverStyle(ResolverStyle.STRICT));
+            } catch (DateTimeParseException erreur) {
+                throw new FormationContinueException("Une date n'est pas en format ISO8601.");
+            }
     }
 
     /**
@@ -142,40 +123,30 @@ public abstract class Profession extends Declaration {
      * @param interCycle contient le cycle en String, la date min et la date max
      * @return
      */
-    private boolean estEntreDate(int i, IntervalCycle interCycle) {
+    private boolean estEntreDate(int i, IntervalCycle interCycle) throws FormationContinueException {
         boolean valide = false;
         Date max = interCycle.getMax();
         Date min = interCycle.getMin();
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(activites.get(i).getDate());
-            valide = date.getTime() >= min.getTime() && date.getTime() <= max.getTime();
+            if (!(date.getTime() >= min.getTime() && date.getTime() <= max.getTime())){
+                throw new FormationContinueException("La date de l'activité " +
+                        activites.get(i).getDescription() +" " +
+                        "n'est pas dans l'intervalle exigée.");
+            }
         } catch (ParseException erreur) {
-            valide = false;
+            throw new FormationContinueException(erreur.getMessage());
         }
         return valide;
     }
 
     /**
-     * Ecrit un msg d'erreur sur le fichier de sortie a propos de la date.
-     * @param finMsg String qui est la fin du msg
-     * @param i cpt
-     */
-    private void ecrireErrDate(String finMsg, int i) {
-        resultat.ajouterErreur("La date de l'activité " +
-                activites.get(i).getDescription() + finMsg);
-        activites.get(i).setIgnore(true);
-    }
-
-    /**
      * si le format ou la date n'est pas valide, un msg d'erreur est produit sur fichier de sortie
      */
-    public void validerDate() {
+    public void validerDate() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++) {
-            if (!verifierFormatDate(i)){
-                ecrireErrDate(" ne respecte pas le format ISO 8601. Elle sera ignoré", i);
-            }else if (!estEntreDate(i,mesurerInter())){
-                ecrireErrDate(" n'est pas dans l'intervalle exigée. Elle sera ignoré", i);
-            }
+            verifierFormatDate(i);
+            estEntreDate(i,mesurerInter());
         }
     }
 
@@ -184,16 +155,12 @@ public abstract class Profession extends Declaration {
      * n'est pas plus de 10 heures dans la meme journee. Un message d'erreur est produit
      * si cela n'est pas respecte.
      */
-    public void validerCatActivites(){
+    public void validerCatActivites() throws FormationContinueException {
         for (int i = 0; i < activites.size(); i++){
             if (activites.get(i).getCategorieNum() == 0){
-                resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
-                        " est dans une catégorie non reconnue. Elle sera ignorée");
-                activites.get(i).setIgnore(true);
+                throw new FormationContinueException("L'activité " + activites.get(i).getDescription() +
+                        " est dans une catégorie non reconnue.");
             }else if (activites.get(i).getHeures() > 10){
-                resultat.ajouterErreur("L'activité " + activites.get(i).getDescription() +
-                        " inclue plus que 10h dans la même journée. Seulement 10h" +
-                        " seront considéré dans les calculs");
                 activites.get(i).setHeures(10);
             }
         }
@@ -222,27 +189,26 @@ public abstract class Profession extends Declaration {
      */
     public void validerCatJour(){
         int heures = 0;
-        activites.removeIf(Activite::getIgnore);
         for (int y = 0; y < activites.size(); y++) {
             heures = 0;
-            for (int i = 0; i < activites.size(); i++) {
-                if (activites.get(i).equals(activites.get(y))) {
-                    heures = heures + activites.get(i).getHeures();
-                }
-            }
-            if (heures > 10) {
+            if (!activites.get(y).getIgnore()){
                 for (int i = 0; i < activites.size(); i++) {
-                    if (i == y) {
-                        activites.get(y).setHeures(10);
-                    } else if (activites.get(i).equals(activites.get(y))) {
-                        activites.get(i).setHeures(0);
+                    if (activites.get(i).equals(activites.get(y)) &&
+                            !activites.get(i).getIgnore()) {
+                        heures = heures + activites.get(i).getHeures();
                     }
                 }
-                resultat.ajouterErreur("Des activités de catégorie " + activites.get(y).getCategorie() +
-                        " inclue plus que 10h dans la même journée. Seulement 10h" +
-                        " seront considéré dans les calculs de cette journée");
+                if (heures > 10) {
+                    for (int i = 0; i < activites.size(); i++) {
+                        if (i == y) {
+                            activites.get(y).setHeures(10);
+                        } else if (activites.get(i).equals(activites.get(y)) &&
+                                !activites.get(i).getIgnore()) {
+                            activites.get(i).setIgnore(true);
+                        }
+                    }
+                }
             }
-            activites.removeIf(activite -> activite.getHeures() == 0);
         }
     }
 
@@ -250,10 +216,11 @@ public abstract class Profession extends Declaration {
      * verifie si le IntervalCycle est null. Si il l'est un msg d'erreur est
      * produit sur le fichier de sortie.
      */
-    public void validerCycle(){
+    public void validerCycle() throws FormationContinueException {
         if (mesurerInter() == null){
             resultat.ajouterErreur("Cycle erroné.");
             resultat.setComplet(false);
+            throw new FormationContinueException("Cycle invalide");
         }
     }
 
@@ -266,5 +233,5 @@ public abstract class Profession extends Declaration {
     /**
      * Valide si le nombre d'heure total respecte le minimum demande
      */
-    public abstract void validerHTotal();
+    public abstract void validerHTotal() throws FormationContinueException;
 }

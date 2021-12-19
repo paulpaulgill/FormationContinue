@@ -3,16 +3,18 @@ package profession;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import exception.FormationContinueException;
 import util.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Geologues extends Profession{
     @JsonIgnore
-    protected int heuresTrans;
 
     private final Date DATE_MAX = new GregorianCalendar(2021, Calendar.JUNE, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JUNE, 1).getTime();
@@ -41,9 +43,11 @@ public class Geologues extends Profession{
     public void validerHMin(){
         if (calculerHCat(1) < 22){
             ecrireErreurHMin(22,calculerHCat(1),"cours");
-        }else if (calculerHCat(8) < 1){
+        }
+        if (calculerHCat(8) < 1){
             ecrireErreurHMin(1,calculerHCat(8),"groupe de discussion");
-        }else if (calculerHCat(9) < 3){
+        }
+        if (calculerHCat(9) < 3){
             ecrireErreurHMin(3,calculerHCat(9),"projet de recherche");
         }
     }
@@ -95,5 +99,22 @@ public class Geologues extends Profession{
             resultat.setComplet(false);
         }
         validerHMin();
+    }
+
+    /**
+     * Valide si le permis respect le format
+     */
+    public boolean validerPermis() throws FormationContinueException {
+        boolean valide = true;
+        Pattern p = Pattern.compile("^[A-B]{2}[0-9]{4}$");
+        Matcher m = p.matcher(permis);
+        if (!(m.matches() && valideNomPrenomPermis())){
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
+        }
+        return valide;
+    }
+
+    public boolean valideNomPrenomPermis(){
+        return nom.charAt(0) == permis.charAt(0) && prenom.charAt(0) == permis.charAt(1);
     }
 }

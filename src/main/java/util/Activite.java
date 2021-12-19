@@ -92,6 +92,10 @@ public class Activite {
         return a;
     }
 
+    public String getCatNumToString(int i){
+        return validCategoryTable[i];
+    }
+
     /**
      * permet de savoir si 2 activiter on la meme date et la meme catégorie sans
      * prendre en compte les autres variable.

@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 public class Podiatres extends Profession{
     @JsonIgnore
-    protected int heuresTrans;
 
     private final Date DATE_MAX = new GregorianCalendar(2021, Calendar.JUNE, 1).getTime();
     private final Date DATE_MIN = new GregorianCalendar(2018, Calendar.JUNE, 1).getTime();
@@ -37,15 +36,17 @@ public class Podiatres extends Profession{
 
     /**
      * Valide si le permis respect le format
-     * @throws FormationContinueException
+     * @return
      */
     @Override
-    public void validerPermis() throws FormationContinueException {
+    public boolean validerPermis() throws FormationContinueException {
+        boolean valide = true;
         Pattern p = Pattern.compile("\\b[0-9]{5}\\b");
         Matcher m = p.matcher(permis);
         if (!m.matches()){
-            lancerErreurStrut();
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
         }
+        return valide;
     }
 
     /**

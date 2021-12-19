@@ -96,5 +96,19 @@ public class Declaration {
         return null;
     }
 
+    public int getOrdreNum(){
+        int ordreNum = -1;
+        if(ordre.equals("architectes")){
+            ordreNum = 0;
+        }else if(ordre.equals("géologues")){
+            ordreNum = 1;
+        }else if(ordre.equals("psychologues")){
+            ordreNum = 2;
+        }else if(ordre.equals("podiatres")){
+            ordreNum = 3;
+        }
+        return ordreNum;
+    }
+
 
 }
