@@ -345,7 +345,7 @@ class TestProfession {
         nom = "Dogny";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        p1.validerPrenom();
+        p1.validerNom();
         assertEquals(true, p1.resultat.isComplet());
     }
 }
