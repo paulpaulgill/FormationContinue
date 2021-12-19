@@ -3,6 +3,7 @@ package profession;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import exception.FormationContinueException;
 import util.*;
 
 import java.util.ArrayList;
@@ -94,12 +95,12 @@ public class Psychologues extends Profession{
      * Valide si le permis respect le format
      */
     @Override
-    public boolean validerPermis() {
+    public boolean validerPermis() throws FormationContinueException {
         boolean valide = true;
         Pattern p = Pattern.compile("^[0-9]{5}-[0-9]{2}$");
         Matcher m = p.matcher(permis);
         if (!m.matches()){
-            valide = false;
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
         }
         return valide;
     }

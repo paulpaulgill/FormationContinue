@@ -48,7 +48,7 @@ public abstract class Profession extends Declaration {
      * @throws FormationContinueException
      * @return
      */
-    public abstract boolean validerPermis();
+    public abstract boolean validerPermis() throws FormationContinueException;
 
     public void validerPrenom() throws FormationContinueException{
         if (prenom.isEmpty())
@@ -102,17 +102,6 @@ public abstract class Profession extends Declaration {
         return valide;
     }
 
-    /**
-     * Lance une esception, ecrit sur le fichier de sortie et met complet a faux
-     * @throws FormationContinueException
-     */
-    public void lancerErreurStrut() throws FormationContinueException {
-        if (!validerPermis() || !validerHeure() || !validerDescription()) {
-            resultat.ecraserErreur("Le fichier d'entrée est invalide.");
-            resultat.setComplet(false);
-            throw new FormationContinueException("La structure du fichier d'entrée n'est pas respecté");
-        }
-    }
 
     /**
      * Valide que le format de la date soit respectee et respect les annees bisectiles.

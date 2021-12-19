@@ -3,6 +3,7 @@ package profession;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import exception.FormationContinueException;
 import util.*;
 
 import java.util.ArrayList;
@@ -104,12 +105,12 @@ public class Geologues extends Profession{
     /**
      * Valide si le permis respect le format
      */
-    public boolean validerPermis(){
+    public boolean validerPermis() throws FormationContinueException {
         boolean valide = true;
         Pattern p = Pattern.compile("^[A-B]{2}[0-9]{4}$");
         Matcher m = p.matcher(permis);
         if (!(m.matches() && valideNomPrenomPermis())){
-            valide = false;
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
         }
         return valide;
     }

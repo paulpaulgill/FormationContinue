@@ -68,7 +68,7 @@ class TestProfession {
         prenom = "DOGNY";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        assertThrows(FormationContinueException.class, ()->p1.lancerErreurStrut());
+        assertThrows(FormationContinueException.class, ()->p1.validerPermis());
     }
 
     @Test
@@ -106,7 +106,7 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        assertThrows(FormationContinueException.class, ()->p1.lancerErreurStrut());
+        assertThrows(FormationContinueException.class, ()->p1.validerDescription());
     }
 
     @Test
@@ -118,7 +118,7 @@ class TestProfession {
         cycle = "2018-2023";
         ordre = "psychologue";
         p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        assertThrows(FormationContinueException.class, ()->p1.lancerErreurStrut());
+        assertThrows(FormationContinueException.class, ()->p1.validerHeure());
     }
 
     @Test

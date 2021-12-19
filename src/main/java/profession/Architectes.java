@@ -133,12 +133,12 @@ public class Architectes extends Profession{
      * @return
      */
     @Override
-    public boolean validerPermis(){
+    public boolean validerPermis() throws FormationContinueException {
         boolean valide = true;
         Pattern p = Pattern.compile("\\b[AT][0-9]{4}\\b");
         Matcher m = p.matcher(permis);
         if (!m.matches()){
-            valide = false;
+            throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
         }
         return valide;
     }

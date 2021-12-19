@@ -55,9 +55,9 @@ public class TestPodiatres {
     void validerPermisPasCorrect(){
         arrayList.addAll(liste);
         p1 = new Podiatres(permis2,cycle,ordre,arrayList);
-        assertThrows(FormationContinueException.class, ()->p1.lancerErreurStrut());
+        assertThrows(FormationContinueException.class, ()->p1.validerPermis());
         p1 = new Podiatres(permis3,cycle,ordre,arrayList);
-        assertThrows(FormationContinueException.class, ()->p1.lancerErreurStrut());
+        assertThrows(FormationContinueException.class, ()->p1.validerPermis());
     }
 
     @Test
