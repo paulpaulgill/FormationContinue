@@ -62,7 +62,7 @@ class StatistiquesTest {
     }
 
     @Test
-    void genererStat() throws FormationContinueException {
+    void genererStat() {
         arrayList.addAll(liste);
         p1 = new Podiatres("83453","2018-2021", "Serge", "Dogny",0, "podiatres", arrayList);
         Statistiques stat = new Statistiques();
@@ -73,7 +73,19 @@ class StatistiquesTest {
     }
 
     @Test
-    void genererStatInvalid() throws FormationContinueException {
+    void genererStatIncomplet() {
+        arrayList.addAll(liste);
+        p1 = new Podiatres("83453","2018-2021", "Serge", "Dogny",0, "podiatres", arrayList);
+        p1.getResultat().setComplet(false);
+        Statistiques stat = new Statistiques();
+        stat = stat.chargerStat("src/test/resources/testStat1.json",false);
+        stat.genererStat(p1);
+        assertEquals(1,stat.getDeclarationIncompletesInvalides());
+
+    }
+
+    @Test
+    void genererStatInvalid() {
         arrayList.addAll(liste);
         p1 = new Podiatres("834A53","2018-2021", "Serge", "Dogny",0, "podiatres", arrayList);
         Statistiques stat = new Statistiques();

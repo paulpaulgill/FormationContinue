@@ -211,7 +211,7 @@ public class Statistiques {
         }
     }
 
-    public void compterSexe(Profession declaration){
+    private void compterSexe(Profession declaration){
         if (declaration.getSexe() == 1){
             declarationHomme ++;
         }else if (declaration.getSexe() == 2){
@@ -221,7 +221,7 @@ public class Statistiques {
         }
     }
 
-    public void compterValideEtInvalide(Profession declaration){
+    private void compterValideEtInvalide(Profession declaration){
         if (declaration.getResultat().isComplet()){
             declarationCompletes ++;
         }else {
@@ -229,7 +229,7 @@ public class Statistiques {
         }
     }
 
-    public void compterActivitesParCat(Profession declaration){
+    private void compterActivitesParCat(Profession declaration){
         int x;
         for (int i = 0; i < declaration.getActivites().size(); i++){
             x = declaration.getActivites().get(i).getCategorieNum() - 1;
@@ -237,7 +237,7 @@ public class Statistiques {
         }
     }
 
-    public void compterCompletOuIncompletOrdre(Profession declaration){
+    private void compterCompletOuIncompletOrdre(Profession declaration){
         int x = declaration.getOrdreNum();
         if(declaration.getResultat().isComplet()){
             declarationCompletesParOrdre[x] = declarationCompletesParOrdre[x] + 1;
