@@ -58,7 +58,7 @@ public class Architectes extends Profession{
      */
     @Override
     public void validerHTotal() throws FormationContinueException {
-        int heures = 0;
+        int heures;
         heures = calculerHTCat() + verifierHeureTrf();
         if (heures < totalHMin){
             resultat.ajouterErreur("Il manque " + (totalHMin - heures) +

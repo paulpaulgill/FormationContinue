@@ -109,7 +109,7 @@ public class Activite {
             result = false;
         }else {
             Activite act = (Activite) object;
-            if (this.categorie.equals(act.getCategorie()) && this.date.equals(act.getDate())) {
+            if (this.date.equals(act.getDate())) {
                 result = true;
             }
         }

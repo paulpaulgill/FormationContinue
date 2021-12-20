@@ -65,7 +65,6 @@ public class GestionJSON {
     /**
      * Écris dans le fichier résultat si le cycle est complet et les erreurs
      * dans le fichier d'entré.
-     * @throws FileNotFoundException
      */
     public void exporterErreur(Declaration decla) {
         try {

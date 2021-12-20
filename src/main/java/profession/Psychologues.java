@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class Psychologues extends Profession{
     /**
-     * @JsonIgnore
+     * JsonIgnore
      * protected int heuresTrans;
      *
      * tres important a la verification des champs manquand parce que certaine ordre ne continne pas le champ
