@@ -72,18 +72,21 @@ class TestProfession {
 
     @Test
     @DisplayName("Le permis est correct")
-    void validerPermisCorrect() {
+    void validerPermisCorrect() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
-        activites.add(a);
-        permis = "A0001";
-        cycle = "2018-2023";
-        ordre = "psychologue";
-        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
-        assertThrows(FormationContinueException.class,() -> p1.validerPermis());
+        permis = "DS0201";
+        cycle = "2018-2021";
+        ordre = "géologues";
+        nom = "Dogny";
+        prenom = "Serge";
+        sexe = 1;
+        p1 = new Geologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        p1.validerPermis();
+        assertDoesNotThrow(() -> p1.validerPermis());
     }
 
     @Test
-    @DisplayName("Le permis est correct")
+    @DisplayName("Le sexe est correct")
     void validerSexeCorrect() throws  FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);
@@ -97,7 +100,7 @@ class TestProfession {
     }
 
     @Test
-    @DisplayName("Le permis est incorrect")
+    @DisplayName("Le sexe est incorrect")
     void validerSexeIncorrect() throws  FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
         activites.add(a);

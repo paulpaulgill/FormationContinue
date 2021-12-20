@@ -121,9 +121,9 @@ public class Geologues extends Profession{
      */
     public boolean validerPermis() throws FormationContinueException {
         boolean valide = true;
-        Pattern p = Pattern.compile("^[A-B]{2}[0-9]{4}$");
+        Pattern p = Pattern.compile("^[A-Z]{2}[0-9]{4}$");
         Matcher m = p.matcher(permis);
-        if (!(m.matches() && valideNomPrenomPermis())){
+        if (!(m.matches() || !valideNomPrenomPermis())){
             throw new FormationContinueException("Le numéro de permis n'a pas le bon format.");
         }
         return valide;
