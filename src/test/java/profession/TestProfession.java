@@ -83,6 +83,34 @@ class TestProfession {
     }
 
     @Test
+    @DisplayName("Le permis est correct")
+    void validerSexeCorrect() throws  FormationContinueException {
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        ordre = "psychologue";
+        sexe = 1;
+        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        p1.validerDescription();
+        assertEquals(true, p1.getResultat().isComplet());
+    }
+
+    @Test
+    @DisplayName("Le permis est incorrect")
+    void validerSexeIncorrect() throws  FormationContinueException {
+        Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
+        activites.add(a);
+        permis = "A0001";
+        cycle = "2018-2023";
+        ordre = "psychologue";
+        sexe = 8;
+        p1 = new Psychologues(permis,cycle,prenom, nom, sexe,ordre,activites);
+        p1.validerDescription();
+        assertEquals(true, p1.getResultat().isComplet());
+    }
+
+    @Test
     @DisplayName("La description est correct")
     void validerDescriptionCorrect() throws FormationContinueException {
         Activite a = new Activite("Cours sur la déontologie", "cours", 4, "2021-02-01");
