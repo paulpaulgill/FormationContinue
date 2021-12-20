@@ -158,7 +158,7 @@ public class Statistiques {
             stat = creerFichierStat();
         }catch (IOException e){
             System.err.println("erreur inatendu lors de l'importation des statistique");
-            System.exit(-1);
+            stat = null;
         }
         return stat;
     }
@@ -170,34 +170,33 @@ public class Statistiques {
             objectMapper.writer(pp).writeValue(new File("stat.json"),stat);
         } catch (IOException e) {
             System.err.println("erreur inatendu lors de l'importation des statistique");
-            System.exit(-1);
+            stat = null;
         }
         return stat;
     }
 
-    public void exporterStat() {
+    public boolean exporterStat(String nomFichierStat) {
+        boolean echouer = false;
         try {
             pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE );
-            objectMapper.writer(pp).writeValue(new File("stat.json"),this);
+            objectMapper.writer(pp).writeValue(new File(nomFichierStat),this);
         }catch (FileNotFoundException erreur){
             System.err.println("Fichier des statistiques introuvable.");
-            System.exit(-1);
+            echouer = true;
         }catch (IOException erreur){
             System.err.println("erreur inatendu lors de l'exportation des statistique");
-            System.exit(-1);
+            echouer = true;
         }
+        return echouer;
     }
 
-    public void genererStat(Profession declaration) throws FormationContinueException {
+    public void genererStat(Profession declaration){
         declarationTraitees ++;
         compterValideEtInvalide(declaration);
         compterSexe(declaration);
         totalActivites = totalActivites + declaration.getActivites().size();
         compterActivitesParCat(declaration);
         compterCompletOuIncompletOrdre(declaration);
-        if(!declaration.validerPermis()){
-            declarationPermisInvalide++;
-        }
     }
 
     public void genererStatInvalid(Profession declaration) {

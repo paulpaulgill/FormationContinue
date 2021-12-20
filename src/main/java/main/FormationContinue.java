@@ -42,7 +42,7 @@ public class FormationContinue {
             testerPara(declaration);
             fichier.exporterErreur(declaration);
             stat.genererStat(declaration);
-            stat.exporterStat();
+            stat.exporterStat("stat.json");
             if(cmd.hasOption("S")) System.out.println(stat.toString());
         }catch (FormationContinueException e){
             System.err.println(e);
@@ -50,7 +50,7 @@ public class FormationContinue {
             declaration.getResultat().setComplet(false);
             fichier.exporterErreur(declaration);
             stat.genererStatInvalid(declaration);
-            stat.exporterStat();
+            stat.exporterStat("stat.json");
             if(cmd.hasOption("S")) System.out.println(stat.toString());
             System.exit(-1);
         }
