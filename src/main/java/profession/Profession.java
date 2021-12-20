@@ -207,6 +207,9 @@ public abstract class Profession extends Declaration {
                             activites.get(i).setIgnore(true);
                         }
                     }
+                    resultat.ajouterErreur("Des activités inclue plus que 10h" +
+                            " dans la même journée. Seulement 10h" +
+                            " seront considéré dans les calculs de cette journée");
                 }
             }
         }
